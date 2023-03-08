@@ -6,12 +6,12 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    // "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "isolatedModules": true,
     "incremental": true,
     "baseUrl": ".",
+    "jsx": "react-jsx",
     "paths": {
       "~/*": ["./src/*"]
     }

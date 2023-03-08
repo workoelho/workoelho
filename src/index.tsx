@@ -1,5 +1,9 @@
 import { createServer, IncomingMessage, ServerResponse } from "http";
 import "urlpattern-polyfill";
+import { renderToStaticMarkup } from "react-dom/server";
+import { ReactElement } from "react";
+import Projects from "~/templates/projects";
+import Project from "~/templates/project";
 
 /**
  * Type that might be a promise.
@@ -33,6 +37,13 @@ type Handler = (context: Context) => Awaitable<Result>;
 // ---
 
 /**
+ * Render Component to HTML.
+ */
+function render(component: ReactElement) {
+  return renderToStaticMarkup(component);
+}
+
+/**
  * Router map.
  */
 const router = new Map<string, Handler>();
@@ -46,7 +57,7 @@ router.set(
     }
 
     return {
-      body: `all projects`,
+      body: render(<Projects />),
     };
   }
 );
@@ -59,8 +70,10 @@ router.set(
       return { statusCode: 405 };
     }
 
+    const projectId = parseInt(String(context.route.pathname.groups.id), 10);
+
     return {
-      body: `project ${context.route.pathname.groups.id}`,
+      body: render(<Project id={projectId} />),
     };
   }
 );
@@ -69,7 +82,10 @@ router.set(
  * Find matching route.
  */
 async function findMatchingRoute(request: IncomingMessage): Promise<Result> {
-  const url = new URL(request.url ?? "/", `http://${request.headers.host}`);
+  const url = new URL(
+    request.url ?? "/",
+    `http://${String(request.headers.host)}`
+  );
 
   for await (const [pattern, handler] of router) {
     const route = new URLPattern(pattern, url.href).exec(url);
@@ -111,16 +127,18 @@ async function handler(request: IncomingMessage, response: ServerResponse) {
   const { duration } = performance.measure("request", "request");
 
   console.info(
-    `${new Date().toISOString()} ${request.method} ${request.url} ${
-      response.statusCode
-    } ${result.body?.length ?? 0}B ${duration.toFixed(0)}ms`
+    `${new Date().toISOString()} ${String(request.method)} ${String(
+      request.url
+    )} ${response.statusCode} ${result.body?.length ?? 0}B ${duration.toFixed(
+      0
+    )}ms`
   );
 }
 
 /**
  * Web server.
  */
-const server = createServer(handler);
+const server = createServer((...a) => void handler(...a));
 server.listen(3000, "localhost", () => {
   console.log("⚡ Listening on http://localhost:3000");
 });
