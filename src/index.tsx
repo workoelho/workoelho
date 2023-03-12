@@ -1,31 +1,32 @@
 import { createServer, IncomingMessage, ServerResponse } from "http";
 import "urlpattern-polyfill";
-import { routes } from "~/routes";
-import { Result } from "~/shared";
+import { findMatchingHandler } from "~/router";
 
 /**
- * Find matching route.
+ * Get request protocol.
  */
-async function findMatchingRoute(request: IncomingMessage): Promise<Result> {
-  const url = new URL(
-    request.url ?? "/",
-    `http://${String(request.headers.host)}`
-  );
+function getRequestUrl(request: IncomingMessage) {
+  const url = new URL(request.url ?? "/", "http://localhost");
 
-  for await (const [pattern, handler] of routes) {
-    const route = new URLPattern(pattern, url.href).exec(url);
+  if ("encrypted" in request.socket) {
+    url.protocol = "https";
+  }
 
-    if (route) {
-      try {
-        return await handler({ request, route });
-      } catch (error) {
-        console.error(error);
-        return { statusCode: 500 };
-      }
+  const forwardedProtocol = request.headers["x-forwarded-proto"];
+
+  if (forwardedProtocol) {
+    if (Array.isArray(forwardedProtocol)) {
+      url.protocol = forwardedProtocol[0];
+    } else {
+      url.protocol = forwardedProtocol;
     }
   }
 
-  return { statusCode: 404 };
+  if (request.headers.host) {
+    url.host = request.headers.host;
+  }
+
+  return url;
 }
 
 /**
@@ -34,7 +35,15 @@ async function findMatchingRoute(request: IncomingMessage): Promise<Result> {
 async function handler(request: IncomingMessage, response: ServerResponse) {
   performance.mark("request");
 
-  const result = await findMatchingRoute(request);
+  const url = getRequestUrl(request);
+
+  const context = {
+    url: new URLPattern().exec(url.href)!,
+    headers: request.headers,
+    method: request.method ?? "GET",
+  };
+
+  const result = await findMatchingHandler(context);
 
   if (result.headers) {
     for (const [key, value] of Object.entries(result.headers)) {

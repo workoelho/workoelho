@@ -3,6 +3,7 @@
   "author": "Arthur <arthur@corenzan.com>",
   "version": "0.0.0",
   "license": "AGPL-3.0",
+  "type": "module",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint .",
@@ -13,6 +14,8 @@
   "dependencies": {
     "@prisma/client": "^4.11.0",
     "esbuild-runner": "^2.2.2",
+    "mime": "^3.0.0",
+    "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "superstruct": "^1.0.3",
     "tsx": "^3.12.3",
@@ -20,6 +23,7 @@
     "urlpattern-polyfill": "^6.0.2"
   },
   "devDependencies": {
+    "@types/mime": "^3.0.1",
     "@types/node": "^18.14.6",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",

@@ -9,6 +9,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
     "incremental": true,
     "baseUrl": ".",
     "jsx": "react-jsx",

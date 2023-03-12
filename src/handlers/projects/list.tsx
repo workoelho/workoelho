@@ -1,10 +1,10 @@
-import { Context, render } from "~/shared";
+import { render, Context } from "~/shared";
 import Layout from "~/layout";
 
 export const url = "/projects";
 
 export function handler(context: Context) {
-  if (context.request.method !== "GET") {
+  if (context.method !== "GET") {
     return { statusCode: 405 };
   }
 

@@ -5,10 +5,11 @@
 ## Development
 
 - Bespoke Node web server.
-- esbuild via tsx as runtime.
+- URLPattern for matching routes.
+- esbuild via tsx.
 - JSX via ReactDOM for templating.
 - Prisma for handling the database.
-- Superstruct for data validation.
+- Superstruct for coercing and validation.
 
 ## Legal
 

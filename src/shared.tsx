@@ -1,7 +1,8 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { ReactElement } from "react";
-import { IncomingMessage } from "http";
+import { IncomingHttpHeaders } from "http";
 import * as superstruct from "superstruct";
+import { ObjectSchema } from "superstruct/dist/utils";
 
 /**
  * Type that might be a promise.
@@ -12,12 +13,13 @@ export type Awaitable<T> = Promise<T> | T;
  * Handler context.
  */
 export type Context = {
-  request: IncomingMessage;
-  route: URLPatternResult;
+  headers: IncomingHttpHeaders;
+  url: URLPatternResult;
+  method: string;
 };
 
 /**
- * Route handler result.
+ * Handler result.
  */
 export type Result = {
   statusCode?: number;
@@ -29,6 +31,13 @@ export type Result = {
  * Route handler.
  */
 export type Handler = (context: Context) => Awaitable<Result>;
+
+/**
+ * Route module type.
+ */
+export type Route =
+  | { url: string; handler: Handler }
+  | { statusCode: number; handler: Handler };
 
 /**
  * Render Component to HTML.
@@ -45,3 +54,17 @@ export const Id = superstruct.coerce(
   superstruct.string(),
   (value) => parseInt(value, 10)
 );
+
+/**
+ * Validate and coerce object against schema, returning compatible object but with nullified values on failure.
+ */
+export function validate<
+  T extends Record<string, unknown>,
+  S extends ObjectSchema
+>(data: T, schema: S) {
+  try {
+    return superstruct.create(data, superstruct.object(schema));
+  } catch (error) {
+    return {} as { [K in keyof T]: null };
+  }
+}
