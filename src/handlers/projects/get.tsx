@@ -1,13 +1,13 @@
-import { Id, render, validate } from "~/shared";
+import { HttpError, Id, render, validate } from "~/shared";
 import Layout from "~/layout";
 import { Context } from "~/types";
+import { Project, database } from "~/database";
 
 export const url = "/projects/:id(\\d+)";
 
 export async function handler(context: Context) {
   if (context.request.method !== "GET") {
-    context.response.statusCode = 405;
-    return;
+    throw new HttpError(405);
   }
 
   const { id: projectId } = validate(context.url.pathname.groups, {
@@ -15,31 +15,29 @@ export async function handler(context: Context) {
   });
 
   if (projectId === null) {
-    context.response.statusCode = 400;
-    return;
+    throw new HttpError(400);
   }
 
-  if (projectId === 3) {
-    throw new Error();
+  const project = await database.project.findUnique({
+    where: { id: projectId },
+  });
+
+  if (!project) {
+    throw new HttpError(404);
   }
 
-  render(context.response, <Page projectId={projectId} />);
+  render(context.response, <Page project={project} />);
 }
 
 type Props = {
-  projectId: number;
+  project: Project;
 };
 
-function Page({ projectId }: Props) {
+function Page({ project }: Props) {
   return (
-    <Layout title={`Project #${projectId}`}>
-      <h1>Project #{projectId}</h1>
-      <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente
-        aperiam eaque necessitatibus illo impedit nulla minima nostrum inventore
-        tempore. Ea placeat eaque architecto debitis dolor consectetur
-        voluptatibus odio explicabo illo.
-      </p>
+    <Layout title={project.name}>
+      <h1>{project.name}</h1>
+      <p>{project.description}</p>
     </Layout>
   );
 }

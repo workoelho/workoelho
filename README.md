@@ -14,9 +14,8 @@
 ### Missing
 
 - Session
-- Models
 - Client bundle
 
 ## Legal
 
-AGPL-3.0 © Workoelho contributors.
+AGPL-3.0 © Arthur Corenzan and Workoelho collaborators.

@@ -1,30 +1,35 @@
-import { render } from "~/shared";
+import { HttpError, render } from "~/shared";
 import Layout from "~/layout";
 import { Context } from "~/types";
+import { Project, database } from "~/database";
 
 export const url = "/projects";
 
 export async function handler(context: Context) {
   if (context.request.method !== "GET") {
-    context.response.statusCode = 405;
-    return;
+    throw new HttpError(405);
   }
 
-  render(context.response, <Page />);
+  const projects = await database.project.findMany();
+
+  render(context.response, <Page projects={projects} />);
 }
 
-// type Props = {};
+type Props = {
+  projects: Project[];
+};
 
-function Page() {
+function Page({ projects }: Props) {
   return (
     <Layout>
       <h1>All projects</h1>
-      <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente
-        aperiam eaque necessitatibus illo impedit nulla minima nostrum inventore
-        tempore. Ea placeat eaque architecto debitis dolor consectetur
-        voluptatibus odio explicabo illo.
-      </p>
+      <ul>
+        {projects.map(({ id, name }) => (
+          <li key={id}>
+            <a href={`/projects/${id}`}>{name}</a>
+          </li>
+        ))}
+      </ul>
     </Layout>
   );
 }

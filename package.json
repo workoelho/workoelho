@@ -11,6 +11,9 @@
     "start:production": "tsx src/index.ts",
     "start:development": "tsx --watch src/index.ts"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^4.11.0",
     "esbuild-runner": "^2.2.2",

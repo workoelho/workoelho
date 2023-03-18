@@ -24,15 +24,6 @@ export default function Layout({ title, children }: Props) {
             <li>
               <a href="/projects">All projects</a>
             </li>
-            <li>
-              <a href="/projects/1">Project #1</a>
-            </li>
-            <li>
-              <a href="/projects/2">Project #2</a>
-            </li>
-            <li>
-              <a href="/projects/3">Project #3</a>
-            </li>
           </ul>
         </nav>
 
