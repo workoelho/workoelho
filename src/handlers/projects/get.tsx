@@ -23,9 +23,7 @@ export async function handler(context: Context) {
     throw new Error();
   }
 
-  context.response.statusCode = 200;
-  context.response.setHeader("Content-Type", "text/html; charset=utf-8");
-  context.response.end(render(<Page projectId={projectId} />));
+  render(context.response, <Page projectId={projectId} />);
 }
 
 type Props = {

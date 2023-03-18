@@ -1,4 +1,6 @@
-import { renderToStaticMarkup } from "react-dom/server";
+import { ServerResponse } from "http";
+
+import { renderToStaticNodeStream } from "react-dom/server";
 import { ReactElement } from "react";
 import * as superstruct from "superstruct";
 import { ObjectSchema } from "superstruct/dist/utils";
@@ -6,8 +8,11 @@ import { ObjectSchema } from "superstruct/dist/utils";
 /**
  * Render Component to HTML.
  */
-export function render(root: ReactElement) {
-  return renderToStaticMarkup(root);
+export function render(response: ServerResponse, root: ReactElement) {
+  response.statusCode ??= 200;
+  response.setHeader("Content-Type", "text/html; charset=utf-8");
+  const stream = renderToStaticNodeStream(root);
+  stream.pipe(response);
 }
 
 /**
