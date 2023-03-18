@@ -11,6 +11,12 @@
 - Prisma for handling the database.
 - Superstruct for coercing and validation.
 
+### Missing
+
+- Session
+- Models
+- Client bundle
+
 ## Legal
 
 AGPL-3.0 © Workoelho contributors.
