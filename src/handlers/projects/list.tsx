@@ -1,17 +1,21 @@
-import { render, Context } from "~/shared";
+import { render } from "~/shared";
 import Layout from "~/layout";
+import { Context } from "~/types";
 
 export const url = "/projects";
 
-export function handler(context: Context) {
-  if (context.method !== "GET") {
-    return { statusCode: 405 };
+export async function handler(context: Context) {
+  if (context.request.method !== "GET") {
+    context.response.statusCode = 405;
+    return;
   }
 
-  return {
-    body: render(
+  context.response.statusCode = 200;
+  context.response.setHeader("Content-Type", "text/html; charset=utf-8");
+  context.response.end(
+    render(
       <Layout>
-        <h1>All project</h1>
+        <h1>All projects</h1>
         <p>
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente
           aperiam eaque necessitatibus illo impedit nulla minima nostrum
@@ -19,6 +23,6 @@ export function handler(context: Context) {
           consectetur voluptatibus odio explicabo illo.
         </p>
       </Layout>
-    ),
-  };
+    )
+  );
 }

@@ -19,6 +19,9 @@ export default function Layout({ title, children }: Props) {
         <nav>
           <ul>
             <li>
+              <a href="/">Not found</a>
+            </li>
+            <li>
               <a href="/projects">All projects</a>
             </li>
             <li>

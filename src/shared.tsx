@@ -1,43 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { ReactElement } from "react";
-import { IncomingHttpHeaders } from "http";
 import * as superstruct from "superstruct";
 import { ObjectSchema } from "superstruct/dist/utils";
-
-/**
- * Type that might be a promise.
- */
-export type Awaitable<T> = Promise<T> | T;
-
-/**
- * Handler context.
- */
-export type Context = {
-  headers: IncomingHttpHeaders;
-  url: URLPatternResult;
-  method: string;
-};
-
-/**
- * Handler result.
- */
-export type Result = {
-  statusCode?: number;
-  headers?: Record<string, string>;
-  body?: string;
-};
-
-/**
- * Route handler.
- */
-export type Handler = (context: Context) => Awaitable<Result>;
-
-/**
- * Route module type.
- */
-export type Route =
-  | { url: string; handler: Handler }
-  | { statusCode: number; handler: Handler };
 
 /**
  * Render Component to HTML.
@@ -66,5 +30,30 @@ export function validate<
     return superstruct.create(data, superstruct.object(schema));
   } catch (error) {
     return {} as { [K in keyof T]: null };
+  }
+}
+
+/**
+ * Extract status code from error.
+ */
+export function getErrorStatusCode(error: unknown) {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "statusCode" in error &&
+    typeof error.statusCode === "number"
+  ) {
+    return error.statusCode;
+  }
+}
+
+/**
+ * Error with a status code.
+ */
+export class HttpError extends Error {
+  public statusCode: number;
+  constructor(statusCode: number, ...error: Parameters<typeof Error>) {
+    super(...error);
+    this.statusCode = statusCode;
   }
 }

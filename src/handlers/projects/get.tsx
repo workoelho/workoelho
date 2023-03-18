@@ -1,11 +1,13 @@
-import { Context, Id, render, validate } from "~/shared";
+import { Id, render, validate } from "~/shared";
 import Layout from "~/layout";
+import { Context } from "~/types";
 
 export const url = "/projects/:id(\\d+)";
 
-export function handler(context: Context) {
-  if (context.method !== "GET") {
-    return { statusCode: 405 };
+export async function handler(context: Context) {
+  if (context.request.method !== "GET") {
+    context.response.statusCode = 405;
+    return;
   }
 
   const { id: projectId } = validate(context.url.pathname.groups, {
@@ -13,16 +15,17 @@ export function handler(context: Context) {
   });
 
   if (projectId === null) {
-    return { statusCode: 400 };
+    context.response.statusCode = 400;
+    return;
   }
 
   if (projectId === 3) {
     throw new Error();
   }
 
-  return {
-    body: render(<Page projectId={projectId} />),
-  };
+  context.response.statusCode = 200;
+  context.response.setHeader("Content-Type", "text/html; charset=utf-8");
+  context.response.end(render(<Page projectId={projectId} />));
 }
 
 type Props = {
