@@ -24,5 +24,7 @@ export function getErrorHandler(routes: Map<number, Handler>): Handler {
     if (handler) {
       return await handler(context, next);
     }
+
+    context.response.end();
   };
 }
