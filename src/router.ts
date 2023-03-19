@@ -22,5 +22,6 @@ function register(module: Route) {
 register(await import("~/handlers/404"));
 register(await import("~/handlers/500"));
 
-register(await import("~/handlers/projects/get"));
-register(await import("~/handlers/projects/list"));
+register(await import("~/handlers/projects/id"));
+register(await import("~/handlers/projects/index"));
+register(await import("~/handlers/projects/new"));

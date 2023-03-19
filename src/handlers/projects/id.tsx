@@ -5,11 +5,7 @@ import { Project, database } from "~/database";
 
 export const url = "/projects/:id(\\d+)";
 
-export async function handler(context: Context) {
-  if (context.request.method !== "GET") {
-    throw new HttpError(405);
-  }
-
+async function handleGet(context: Context) {
   const { id: projectId } = validate(context.url.pathname.groups, {
     id: Id,
   });
@@ -27,6 +23,15 @@ export async function handler(context: Context) {
   }
 
   render(context.response, <Page project={project} />);
+}
+
+export async function handler(context: Context) {
+  switch (context.request.method) {
+    case "GET":
+      return handleGet(context);
+    default:
+      throw new HttpError(405);
+  }
 }
 
 type Props = {
