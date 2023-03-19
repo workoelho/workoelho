@@ -16,9 +16,12 @@
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",
+    "content-type": "^1.0.5",
     "esbuild-runner": "^2.2.2",
+    "iconv-lite": "^0.6.3",
     "mime": "^3.0.0",
     "npmlog": "^7.0.1",
+    "parse-multipart-data": "^1.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "send": "^0.18.0",
@@ -28,6 +31,7 @@
     "urlpattern-polyfill": "^6.0.2"
   },
   "devDependencies": {
+    "@types/content-type": "^1.1.5",
     "@types/mime": "^3.0.1",
     "@types/node": "^18.15.3",
     "@types/npmlog": "^4.1.4",
