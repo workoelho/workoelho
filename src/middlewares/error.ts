@@ -1,7 +1,7 @@
 import log from "npmlog";
 
-import { getErrorStatusCode } from "~/shared";
-import { Handler } from "~/types";
+import { HttpError } from "~/src/shared";
+import { Handler } from "~/src/types";
 
 /**
  * ...
@@ -11,11 +11,11 @@ export function getErrorHandler(routes: Map<number, Handler>): Handler {
     try {
       return await next();
     } catch (error) {
-      const statusCode = getErrorStatusCode(error);
+      const statusCode = HttpError.getStatusCode(error);
       context.response.statusCode = statusCode ?? 500;
 
       if (!statusCode) {
-        log.error("router", "Error handled:", error);
+        log.error("router", "Error handled", error);
       }
     }
 

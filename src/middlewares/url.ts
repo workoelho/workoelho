@@ -1,5 +1,5 @@
-import { HttpError } from "~/shared";
-import { Handler } from "~/types";
+import { HttpError } from "~/src/shared";
+import { Handler } from "~/src/types";
 
 /**
  * ...

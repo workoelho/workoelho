@@ -2,8 +2,8 @@ import path from "path";
 
 import send from "send";
 
-import { getErrorStatusCode } from "~/shared";
-import { Context, Next } from "~/types";
+import { HttpError } from "~/src/shared";
+import { Context, Next } from "~/src/types";
 
 /**
  * Static file handler.
@@ -13,12 +13,12 @@ export function getStaticHandler(root = "static") {
     try {
       return await next();
     } catch (error) {
-      if (getErrorStatusCode(error) !== 404) {
+      if (HttpError.getStatusCode(error) !== 404) {
         throw error;
       }
     }
 
-    return await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       const file = path.join(root, context.url.pathname.input);
 
       send(context.request, file)

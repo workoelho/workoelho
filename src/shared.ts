@@ -5,7 +5,6 @@ import { ReactElement } from "react";
 import * as superstruct from "superstruct";
 import { ObjectSchema } from "superstruct/dist/utils";
 import * as contentType from "content-type";
-// eslint-disable-next-line import/default
 import iconv from "iconv-lite";
 
 const supportedRequestTypes = [
@@ -129,26 +128,27 @@ export function validate<
 }
 
 /**
- * Extract status code from error.
- */
-export function getErrorStatusCode(error: unknown) {
-  if (
-    typeof error === "object" &&
-    error !== null &&
-    "statusCode" in error &&
-    typeof error.statusCode === "number"
-  ) {
-    return error.statusCode;
-  }
-}
-
-/**
- * Error with a status code.
+ * Error with an HTTP status code.
  */
 export class HttpError extends Error {
   public statusCode: number;
+
   constructor(statusCode: number, ...error: Parameters<typeof Error>) {
     super(...error);
     this.statusCode = statusCode;
+  }
+
+  /**
+   * Extract HTTP status code from an error object.
+   */
+  static getStatusCode(error: unknown) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "statusCode" in error &&
+      typeof error.statusCode === "number"
+    ) {
+      return error.statusCode;
+    }
   }
 }

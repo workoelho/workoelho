@@ -1,9 +1,10 @@
-import { render } from "~/shared";
-import Layout from "~/layout";
-import { Context } from "~/types";
+import { render } from "~/src/shared";
+import Layout from "~/src/pages/layout";
+import { Context } from "~/src/types";
 
 export const statusCode = 404;
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function handler(context: Context) {
   render(context.response, <Page url={context.url.pathname.input} />);
 }

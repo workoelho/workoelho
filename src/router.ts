@@ -1,27 +1,21 @@
-import { Handler, Route } from "~/types";
+import { Handler, Route } from "~/src/types";
 
-/**
- * Router.
- */
-export const router = {
-  urls: new Map<string, Handler>(),
-  statusCodes: new Map<number, Handler>(),
-};
+export class Router {
+  statusCodeRoutes = new Map<number, Handler>();
+  urlRoutes = new Map<string, Handler>();
 
-/**
- * Register route module.
- */
-function register(module: Route) {
-  if ("statusCode" in module) {
-    router.statusCodes.set(module.statusCode, module.handler);
-  } else {
-    router.urls.set(module.url, module.handler);
+  /**
+   * Push route to routes table.
+   */
+  push(route: Route) {
+    if ("statusCode" in route) {
+      this.statusCodeRoutes.set(route.statusCode, route.handler);
+    } else if ("url" in route) {
+      this.urlRoutes.set(route.url, route.handler);
+    } else {
+      throw new Error(
+        `Expected route module to export either a "url" or a "statusCode"`
+      );
+    }
   }
 }
-
-register(await import("~/handlers/404"));
-register(await import("~/handlers/500"));
-
-register(await import("~/handlers/projects/id"));
-register(await import("~/handlers/projects/index"));
-register(await import("~/handlers/projects/new"));

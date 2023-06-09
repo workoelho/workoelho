@@ -1,11 +1,12 @@
 import { useId } from "react";
 
-import Layout from "~/layout";
-import { HttpError, render } from "~/shared";
-import type { Context } from "~/types";
+import { HttpError, render } from "~/src/shared";
+import Layout from "~/src/pages/layout";
+import { Context } from "~/src/types";
 
 export const url = "/projects/new";
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function handler(context: Context) {
   if (context.request.method !== "GET") {
     throw new HttpError(405);

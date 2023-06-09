@@ -13,7 +13,7 @@
     "incremental": true,
     "baseUrl": ".",
     "jsx": "react-jsx",
-    "paths": { "~/*": ["./src/*"] }
+    "paths": { "~/*": ["./*"] }
   },
   "include": ["."],
   "exclude": ["node_modules"]
