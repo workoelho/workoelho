@@ -1,9 +1,9 @@
 import * as superstruct from "superstruct";
 
 import { HttpError, getBody, render } from "~/src/shared";
-import Layout from "~/src/pages/layout";
+import Layout from "~/src/routes/layout";
 import { Project, database } from "~/src/database";
-import { Context } from "~/src/types";
+import { Context } from "~/src/handler";
 
 export const url = "/projects";
 

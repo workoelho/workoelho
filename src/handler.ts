@@ -2,7 +2,24 @@ import "urlpattern-polyfill";
 
 import { IncomingMessage, ServerResponse } from "http";
 
-import { Handler, Next } from "~/src/types";
+/**
+ * Request context.
+ */
+export type Context = {
+  request: IncomingMessage;
+  url: URLPatternResult;
+  response: ServerResponse;
+};
+
+/**
+ * Handle is closure containing the next handler in the chain.
+ */
+export type Handle = () => Promise<void>;
+
+/**
+ * Handler takes the request context and a handle for the next handler.
+ */
+export type Handler = (context: Context, next: Handle) => Promise<void>;
 
 /**
  * Create initial URL match result.
@@ -42,11 +59,11 @@ export function getInitialHandler(handlers: Handler[]) {
     const url = createInitialUrl(request);
     const context = { request, response, url };
 
-    const next = handlers.reduceRight<Next>(
-      (next, handler) => () => handler(context, next),
+    const handle = handlers.reduceRight<Handle>(
+      (handle, middleware) => () => middleware(context, handle),
       () => Promise.reject(new Error("No handler was found"))
     );
 
-    void next();
+    void handle();
   };
 }

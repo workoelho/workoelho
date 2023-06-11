@@ -90,7 +90,7 @@ export async function getBody<T extends ObjectSchema>(
       superstruct.object(schema)
     );
   } catch (cause) {
-    throw new HttpError(400, undefined, { cause });
+    throw new HttpError(400, "Invalid request body", { cause });
   }
 }
 

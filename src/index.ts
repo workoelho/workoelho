@@ -6,34 +6,29 @@ import { getLoggerHandler } from "~/src/middlewares/logger";
 import { getErrorHandler } from "~/src/middlewares/error";
 import { getStaticHandler } from "~/src/middlewares/static";
 import { getUrlHandler } from "~/src/middlewares/url";
-import { getInitialHandler } from "~/src/handler";
+import { Handler, getInitialHandler } from "~/src/handler";
 import { getConfig } from "~/src/config";
-import { Handler } from "~/src/types";
-import { Router } from "~/src/router";
+import { statusCodeHandlers, urlHandlers } from "~/src/routes";
 
 const config = getConfig();
 
-log.verbose("config", "Configuration loaded", config);
+if (config.verbose) {
+  log.level = "verbose";
+}
 
-const router = new Router();
+log.verbose("config", "Configuration", config);
 
-router.push(await import("~/src/pages/500"));
-router.push(await import("~/src/pages/404"));
-
-router.push(await import("~/src/pages/projects/id"));
-router.push(await import("~/src/pages/projects/new"));
-router.push(await import("~/src/pages/projects/index"));
-
-log.verbose("router", "Routes loaded", router);
+log.verbose("handler", "Status code handlers", statusCodeHandlers);
+log.verbose("handler", "URL handlers", urlHandlers);
 
 const handlers: Handler[] = [];
 
 handlers.push(getLoggerHandler());
-handlers.push(getErrorHandler(router.statusCodeRoutes));
+handlers.push(getErrorHandler(statusCodeHandlers));
 handlers.push(getStaticHandler());
-handlers.push(getUrlHandler(router.urlRoutes));
+handlers.push(getUrlHandler(urlHandlers));
 
-log.verbose("handler", "Handlers loaded", handlers);
+log.verbose("handler", "Handlers", handlers);
 
 const server = createServer(getInitialHandler(handlers));
 

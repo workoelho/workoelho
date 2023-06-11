@@ -1,12 +1,12 @@
 import log from "npmlog";
 
-import { Context, Next } from "~/src/types";
+import { Context, Handle } from "~/src/handler";
 
 /**
- * Log requests.
+ * Log incoming requests.
  */
 export function getLoggerHandler() {
-  return async ({ request, response, url }: Context, next: Next) => {
+  return async ({ request, response, url }: Context, next: Handle) => {
     performance.mark("request");
 
     await next();

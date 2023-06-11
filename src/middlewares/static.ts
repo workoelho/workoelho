@@ -3,13 +3,13 @@ import path from "path";
 import send from "send";
 
 import { HttpError } from "~/src/shared";
-import { Context, Next } from "~/src/types";
+import { Context, Handle } from "~/src/handler";
 
 /**
- * Static file handler.
+ * Handle static files, but only if previous handler threw 404.
  */
 export function getStaticHandler(root = "static") {
-  return async (context: Context, next: Next) => {
+  return async (context: Context, next: Handle) => {
     try {
       return await next();
     } catch (error) {

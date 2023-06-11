@@ -1,8 +1,8 @@
 import { HttpError } from "~/src/shared";
-import { Handler } from "~/src/types";
+import { Handler } from "~/src/handler";
 
 /**
- * ...
+ * Handle URL routes.
  */
 export function getUrlHandler(routes: Map<string, Handler>): Handler {
   return async (context, next) => {

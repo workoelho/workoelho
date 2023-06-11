@@ -1,6 +1,6 @@
 import { render } from "~/src/shared";
-import Layout from "~/src/pages/layout";
-import { Context } from "~/src/types";
+import Layout from "~/src/routes/layout";
+import { Context } from "~/src/handler";
 
 export const statusCode = 404;
 

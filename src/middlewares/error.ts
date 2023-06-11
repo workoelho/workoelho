@@ -1,10 +1,10 @@
 import log from "npmlog";
 
 import { HttpError } from "~/src/shared";
-import { Handler } from "~/src/types";
+import { Handler } from "~/src/handler";
 
 /**
- * ...
+ * Handle uncaught errors.
  */
 export function getErrorHandler(routes: Map<number, Handler>): Handler {
   return async (context, next) => {
