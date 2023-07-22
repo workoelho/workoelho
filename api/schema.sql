@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS users (
 	deleted_at TIMESTAMP WITH TIME ZONE,
 	status ENUM ('unconfirmed', 'active', 'blocked') NOT NULL DEFAULT 'unconfirmed',
 	email TEXT NOT NULL UNIQUE,
-	password TEXT NOT NULL,
-	company_id INTEGER NOT NULL REFERENCES companies(id),
-	person_id INTEGER NOT NULL REFERENCES people(id),
+	password_digest TEXT NOT NULL,
+	company_id INTEGER REFERENCES companies(id),
+	person_id INTEGER REFERENCES people(id),
 );
 
 CREATE TABLE IF NOT EXISTS sessions (

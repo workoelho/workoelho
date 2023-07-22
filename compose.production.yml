@@ -1,0 +1,13 @@
+services:
+  proxy:
+    restart: unless-stopped
+    labels:
+      - traefik.http.routers.proxy.tls=true
+
+  api:
+    restart: unless-stopped
+    labels:
+      - traefik.http.routers.api.tls=true
+
+  db:
+    restart: unless-stopped

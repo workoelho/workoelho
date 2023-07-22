@@ -1,12 +1,15 @@
-NAME=workoelho
 CGO_ENABLED=0
 GOOS=linux
-static: lint test
-	@go build -a -ldflags '-extldflags "-static"' -o $(NAME) .
+
+build: lint test
+	@go build -a -ldflags '-extldflags "-static"' -o build/cli .
+
 test: lint
 	@go test ./...
+
 lint: main.go
 	@go fmt ./...
 	@go vet ./...
 	@go fix ./...
+
 .PHONY: lint

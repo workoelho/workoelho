@@ -1,0 +1,30 @@
+api: {}
+serversTransport:
+  insecureSkipVerify: true
+accessLog: {}
+log:
+  level: INFO
+entryPoints:
+  http:
+    address: ":80"
+    # http:
+    #   redirections:
+    #     entryPoint:
+    #       to: https
+    #       permanent: true
+  https:
+    address: ":443"
+    # http:
+    #   tls:
+    #     certResolver: default
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    filename: /etc/traefik/dynamic.yml
+certificatesResolvers:
+  default:
+    acme:
+      email: me@example.org
+      storage: /etc/acme.json
+      tlsChallenge: {}

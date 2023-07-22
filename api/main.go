@@ -2,223 +2,178 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"errors"
+	"fmt"
 	"log"
-	"net/http"
+	"net/mail"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/haggen/workoelho/web"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Record ID type.
+// Database can execute queries.
+type Database interface {
+	QueryRow(ctx context.Context, sql string, args ...interface{}) pgx.Row
+	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
+	Exec(ctx context.Context, sql string, args ...interface{}) (pgconn.CommandTag, error)
+}
+
+// Database primary and foreign key type.
 type Id int
 
-// Violation ...
-type Violation struct {
-	Field string `json:"field"`
-	Error string `json:"error"`
+// ValidationError describes a validation error on a JSON field.
+type ValidationError struct {
+	Field  string                 `json:"field"`
+	Rule   string                 `json:"rule"`
+	Detail map[string]interface{} `json:"detail,omitempty"`
 }
 
-// Database tables.
+// Error returns the validation error as a string.
+func (v *ValidationError) Error() error {
+	return fmt.Errorf("%v", v)
+}
+
+// ValidationErrors is a list of validation errors.
+type ValidationErrors []ValidationError
+
+// Validation rules.
 const (
-	TableUsers     = "users"
-	TableCompanies = "companies"
-	TableSessions  = "sessions"
+	RuleRequired = "required"
+	RuleFormat   = "format"
+	RuleUnique   = "unique"
+	RuleLength   = "length"
 )
 
-// Session ...
-type Session struct {
-	Id         Id         `json:"id" db:"id"`
-	CreatedAt  *time.Time `json:"createdAt" db:"created_at"`
-	ExpiresAt  *time.Time `json:"expiresAt" db:"expires_at"`
-	UserId     int        `json:"userId" db:"user_id"`
-	RemoteAddr string     `json:"remoteAddr" db:"remote_addr"`
-	UserAgent  string     `json:"userAgent" db:"user_agent"`
+// Append appens a new validation error to the list.
+func (v *ValidationErrors) Append(field, rule string, detail map[string]interface{}) {
+	*v = append(*v, ValidationError{
+		Field:  field,
+		Rule:   rule,
+		Detail: detail,
+	})
 }
 
-// Company ...
-type Company struct {
-	Id        Id         `json:"id" db:"id"`
-	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
-	UpdatedAt *time.Time `json:"updatedAt" db:"updated_at"`
-	DeletedAt *time.Time `json:"deletedAt" db:"deleted_at"`
-	Name      string     `json:"name" db:"name"`
-}
+// Table names of the database schema.
+const (
+	TableUsers = "users"
+)
 
-// Validate ...
-func (c *Company) Validate() []error {
-	e := []error{}
-
-	if c.Name == "" {
-		e = append(e, errors.New("name is required"))
-	}
-
-	return e
-}
-
-// Create ...
-func (c *Company) Create(tx pgx.Tx) error {
-	q, _, err := squirrel.
-		Insert(TableCompanies).Columns("name").
-		Values(c.Name).
-		Suffix(`RETURNING "id"`).ToSql()
-
-	if err != nil {
-		return err
-	}
-
-	if err := tx.QueryRow(context.Background(), q).Scan(&c.Id); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// Person ...
-type Person struct {
-	Id        Id         `json:"id" db:"id"`
-	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
-	UpdatedAt *time.Time `json:"updatedAt" db:"updated_at"`
-	DeletedAt *time.Time `json:"deletedAt" db:"deleted_at"`
-	Name      string     `json:"name" db:"name"`
-}
-
-// Validate ...
-func (p *Person) Validate() []error {
-	return []error{}
-}
-
-// Create ...
-func (p *Person) Create(tx pgx.Tx) error {
-	q, _, err := squirrel.
-		Insert("people").Columns("name").
-		Values(p.Name).
-		Suffix(`RETURNING "id"`).ToSql()
-
-	if err != nil {
-		return err
-	}
-
-	if err := tx.QueryRow(context.Background(), q).Scan(&p.Id); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// User ...
+// User holds credentials and controls which people has access to which companies.
 type User struct {
-	Id        Id         `json:"id" db:"id"`
-	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
-	UpdatedAt *time.Time `json:"updatedAt" db:"updated_at"`
-	DeletedAt *time.Time `json:"deletedAt" db:"deleted_at"`
-	Status    string     `json:"status" db:"status"`
-	Email     string     `json:"email" db:"email"`
-	Password  string     `json:"-" db:"password"`
-	CompanyId int        `json:"companyId" db:"company_id"`
-	PersonId  int        `json:"personId" db:"person_id"`
+	Id             Id         `json:"id" db:"id"`
+	CreatedAt      *time.Time `json:"createdAt" db:"created_at"`
+	UpdatedAt      *time.Time `json:"updatedAt" db:"updated_at"`
+	DeletedAt      *time.Time `json:"deletedAt" db:"deleted_at"`
+	Status         string     `json:"status" db:"status"`
+	Email          string     `json:"email" db:"email"`
+	Password       string     `json:"password" db:"-"`
+	PasswordDigest string     `json:"-" db:"password_digest"`
+	CompanyId      int        `json:"companyId" db:"company_id"`
+	PersonId       int        `json:"personId" db:"person_id"`
 }
 
-// UserStatus ...
+// UserStatus indicates the status of a user.
 const (
 	UserStatusUnconfirmed = "unconfirmed"
 	UserStatusActive      = "active"
 	UserStatusBlocked     = "blocked"
 )
 
-// CreatePassword save password digest
-func (u *User) CreatePassword(password string) error {
-	digest, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+// CreatePassword digests given password and assigns it to the user.
+func (u *User) CreatePassword() error {
+	h, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
-	u.Password = string(digest)
+	u.PasswordDigest = string(h)
+	u.Password = ""
 	return nil
 }
 
-// ComparePassword compares given password with the user's password digest.
-func (u *User) ComparePassword(password string) error {
-	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+// ComparePassword compares incoming password with the existing digest.
+func (u *User) ComparePassword(pwd string) error {
+	return bcrypt.CompareHashAndPassword([]byte(u.PasswordDigest), []byte(pwd))
 }
 
-// Validate ...
-func (u *User) Validate() []error {
-	return []error{}
+// Validate user data.
+func (u *User) Validate(db Database) ([]ValidationError, error) {
+	ve := ValidationErrors{}
+
+	if u.Email == "" {
+		ve.Append("email", RuleRequired, nil)
+	} else if _, err := mail.ParseAddress(u.Email); err != nil {
+		ve.Append("email", RuleFormat, map[string]interface{}{"format": "email"})
+	} else {
+		qb := squirrel.Select("1").From(TableUsers).
+			Where(squirrel.Eq{"email": u.Email}).Limit(1)
+
+		if u.Id != 0 {
+			qb = qb.Where(squirrel.NotEq{"id": u.Id})
+		}
+
+		q, _, err := qb.ToSql()
+		if err != nil {
+			return nil, err
+		}
+
+		if _, err := db.Query(context.Background(), q); err != nil {
+			if err == pgx.ErrNoRows {
+				ve.Append("email", RuleUnique, nil)
+			} else {
+				return nil, err
+			}
+		}
+	}
+
+	minimum := 12
+
+	if u.PasswordDigest == "" {
+		if u.Password == "" {
+			ve.Append("password", RuleRequired, nil)
+		} else if len(u.Password) < minimum {
+			ve.Append("password", RuleLength, map[string]interface{}{"minimum": minimum})
+		}
+	}
+
+	return ve, nil
 }
 
 // Create ...
-func (u *User) Create(tx pgx.Tx) error {
+func (u *User) Create(db Database) error {
+	if err := u.CreatePassword(); err != nil {
+		return err
+	}
+
 	q, _, err := squirrel.
-		Insert("users").Columns("email", "password").
+		Insert(TableUsers).Columns("email", "password").
 		Values(u.Email, u.Password).
-		Suffix(`RETURNING "id"`).ToSql()
+		Suffix(`RETURNING *`).ToSql()
 
 	if err != nil {
 		return err
 	}
 
-	if err := tx.QueryRow(context.Background(), q).Scan(&u.Id); err != nil {
+	r, err := db.Query(context.Background(), q)
+
+	if err != nil {
+		return err
+	}
+
+	*u, err = pgx.CollectOneRow(r, pgx.RowToStructByNameLax[User])
+
+	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func v1APIHandler(db *pgxpool.Pool) web.Middleware {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/v1/users", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-
-		switch r.Method {
-		case http.MethodPost:
-			u := &User{}
-
-			if err := json.NewDecoder(r.Body).Decode(u); err != nil {
-				panic(err)
-			}
-
-			tx, err := db.Begin(r.Context())
-			if err != nil {
-				panic(err)
-			}
-			defer tx.Rollback(r.Context())
-
-			if err := u.Create(tx); err != nil {
-				panic(err)
-			}
-
-			if err := tx.Commit(r.Context()); err != nil {
-				panic(err)
-			}
-
-			w.WriteHeader(http.StatusCreated)
-
-			if err := json.NewEncoder(w).Encode(u); err != nil {
-				panic(err)
-			}
-		default:
-			w.Header().Set("Allow", "POST")
-			w.WriteHeader(http.StatusMethodNotAllowed)
-		}
-	})
-
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if !strings.HasPrefix(r.URL.Path, "/v1/") {
-				next.ServeHTTP(w, r)
-				return
-			}
-			mux.ServeHTTP(w, r)
-		})
-	}
 }
 
 func main() {
@@ -228,15 +183,33 @@ func main() {
 	}
 	defer db.Close()
 
-	w := web.New()
+	f := fiber.New()
 
-	w.Use(web.RecoverHandler())
-	w.Use(web.RequestIDHandler())
-	w.Use(web.RemoteAddrHandler())
-	w.Use(web.LoggingHandler())
-	w.Use(web.RateLimiterHandler())
-	w.Use(web.CORSHandler())
-	w.Use(v1APIHandler(db))
+	f.Use(logger.New())
+	f.Use(recover.New())
+	f.Use(requestid.New())
 
-	w.Listen(":" + os.Getenv("PORT"))
+	v1 := f.Group("/v1")
+
+	v1.Post("/users", func(c *fiber.Ctx) error {
+		u := &User{}
+
+		if ve, err := u.Validate(db); err != nil {
+			return err
+		} else {
+			c.JSON(ve)
+		}
+
+		if err := pgx.BeginFunc(c.Context(), db, func(tx pgx.Tx) error {
+			return u.Create(tx)
+		}); err != nil {
+			return err
+		}
+
+		c.Status(fiber.StatusCreated).JSON(u)
+
+		return nil
+	})
+
+	f.Listen(":1234")
 }
