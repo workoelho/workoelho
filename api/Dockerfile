@@ -8,7 +8,7 @@ RUN apk add --no-cache make
 RUN go install github.com/cosmtrek/air@latest
 
 # Set working directory.
-WORKDIR /root
+WORKDIR /app
 
 # Copy manifest and download dependencies.
 COPY go.* ./
@@ -24,4 +24,4 @@ RUN make
 EXPOSE 1234
 
 # Run the application.
-CMD [ "build/cli" ]
+CMD [ "make", "start" ]

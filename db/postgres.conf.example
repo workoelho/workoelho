@@ -11,5 +11,5 @@ effective_io_concurrency = 200
 work_mem = 13107kB
 min_wal_size = 1GB
 max_wal_size = 4GB
-log_statement = 'all'
-log_min_duration_statement = 0
+log_statement = 'none'
+log_min_duration_statement = 20

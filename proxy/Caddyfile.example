@@ -1,0 +1,41 @@
+https://workoelho.com {
+	# Compress everything.
+	encode gzip
+
+	# Throttle abusers.
+	route {
+		rate_limit {remote.ip} 100r/m
+	}
+
+	# Remove server signature.
+	header -Server
+
+	# For versioned immutable files set maximum cache time.
+	@immutable {
+		path *.css *.js *.jpg *.jpeg *.png *.gif *.ico *.svg *.json
+	}
+	header @immutable Cache-Control "immutable, max-age=31536000"
+
+	# Short and private cache for everything else.
+	header Cache-Control "private, max-age=300, must-revalidate"
+
+	# Client named matcher.
+	@client not path /api/*
+
+	# Client security headers.
+	header @client {
+		X-Frame-Options "DENY"
+		X-Content-Type-Options "nosniff"
+	}
+
+	# Proxy to the client application.
+	reverse_proxy client:3000
+
+	# Proxy to the API application, stripping the /api prefix.
+	handle_path /api/* {
+		reverse_proxy api:1234
+
+		# Don't cache API responses.
+		header Cache-Control "no-store"
+	}
+}

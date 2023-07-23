@@ -1,8 +1,14 @@
 CGO_ENABLED=0
 GOOS=linux
 
-build: lint test
-	@go build -a -ldflags '-extldflags "-static"' -o build/cli .
+workoelho: lint test
+	@go build -a -ldflags '-extldflags "-static"' -o workoelho .
+
+start: workoelho
+	@./workoelho
+
+watch:
+	@air
 
 test: lint
 	@go test ./...
@@ -12,4 +18,4 @@ lint: main.go
 	@go vet ./...
 	@go fix ./...
 
-.PHONY: lint
+.PHONY: lint test

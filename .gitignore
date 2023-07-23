@@ -1,6 +1,1 @@
-tmp
-build
-node_modules
 .env
-.eslintcache
-.htpasswd

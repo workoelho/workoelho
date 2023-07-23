@@ -1,13 +1,14 @@
 services:
   proxy:
     restart: unless-stopped
-    labels:
-      - traefik.http.routers.proxy.tls=true
 
   api:
     restart: unless-stopped
-    labels:
-      - traefik.http.routers.api.tls=true
+
+  client:
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
 
   db:
     restart: unless-stopped

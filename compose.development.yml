@@ -1,5 +1,11 @@
 services:
   api:
     volumes:
-      - ./api:/root
-    command: air
+      - ./api:/app
+    command:
+      - make
+      - watch
+
+  client:
+    volumes:
+      - ./client:/app
