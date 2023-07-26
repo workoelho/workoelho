@@ -74,10 +74,10 @@ type User struct {
 	DeletedAt      *time.Time `json:"deletedAt" db:"deleted_at"`
 	Status         string     `json:"status" db:"status"`
 	Email          string     `json:"email" db:"email"`
-	Password       string     `json:"password" db:"-"`
+	Password       string     `json:"password,omitempty" db:"-"`
 	PasswordDigest string     `json:"-" db:"password_digest"`
-	CompanyId      int        `json:"companyId" db:"company_id"`
-	PersonId       int        `json:"personId" db:"person_id"`
+	CompanyId      *Id        `json:"companyId" db:"company_id"`
+	PersonId       *Id        `json:"personId" db:"person_id"`
 }
 
 // UserStatus indicates the status of a user.
@@ -107,6 +107,10 @@ func (u *User) ComparePassword(pwd string) error {
 func (u *User) Validate(db Database) ([]ValidationError, error) {
 	ve := ValidationErrors{}
 
+	if u.Status == "" {
+		ve.Append("status", RuleRequired, nil)
+	}
+
 	if u.Email == "" {
 		ve.Append("email", RuleRequired, nil)
 	} else if _, err := mail.ParseAddress(u.Email); err != nil {
@@ -119,17 +123,16 @@ func (u *User) Validate(db Database) ([]ValidationError, error) {
 			qb = qb.Where(squirrel.NotEq{"id": u.Id})
 		}
 
-		q, _, err := qb.ToSql()
+		q, args, err := qb.ToSql()
+
 		if err != nil {
 			return nil, err
 		}
 
-		if _, err := db.Query(context.Background(), q); err != nil {
-			if err == pgx.ErrNoRows {
-				ve.Append("email", RuleUnique, nil)
-			} else {
-				return nil, err
-			}
+		if r, err := db.Query(context.Background(), q, args...); err != nil {
+			return nil, err
+		} else if r.Next() {
+			ve.Append("email", RuleUnique, nil)
 		}
 	}
 
@@ -148,20 +151,22 @@ func (u *User) Validate(db Database) ([]ValidationError, error) {
 
 // Create ...
 func (u *User) Create(db Database) error {
-	if err := u.CreatePassword(); err != nil {
-		return err
+	if u.Password != "" {
+		if err := u.CreatePassword(); err != nil {
+			return err
+		}
 	}
 
-	q, _, err := squirrel.
-		Insert(TableUsers).Columns("email", "password").
-		Values(u.Email, u.Password).
+	q, args, err := squirrel.
+		Insert(TableUsers).Columns("status", "email", "password_digest").
+		Values(u.Status, u.Email, u.PasswordDigest).
 		Suffix(`RETURNING *`).ToSql()
 
 	if err != nil {
 		return err
 	}
 
-	r, err := db.Query(context.Background(), q)
+	r, err := db.Query(context.Background(), q, args...)
 
 	if err != nil {
 		return err
@@ -183,6 +188,8 @@ func main() {
 	}
 	defer db.Close()
 
+	squirrel.StatementBuilder = squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)
+
 	f := fiber.New()
 
 	f.Use(logger.New())
@@ -192,12 +199,18 @@ func main() {
 	v1 := f.Group("/v1")
 
 	v1.Post("/users", func(c *fiber.Ctx) error {
-		u := &User{}
+		u := &User{
+			Status: UserStatusUnconfirmed,
+		}
+
+		if err := c.BodyParser(u); err != nil {
+			return err
+		}
 
 		if ve, err := u.Validate(db); err != nil {
 			return err
-		} else {
-			c.JSON(ve)
+		} else if len(ve) > 0 {
+			return c.Status(fiber.StatusUnprocessableEntity).JSON(ve)
 		}
 
 		if err := pgx.BeginFunc(c.Context(), db, func(tx pgx.Tx) error {
@@ -206,9 +219,7 @@ func main() {
 			return err
 		}
 
-		c.Status(fiber.StatusCreated).JSON(u)
-
-		return nil
+		return c.Status(fiber.StatusCreated).JSON(u)
 	})
 
 	f.Listen(":1234")
