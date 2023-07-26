@@ -1,5 +1,7 @@
 services:
   api:
+    ports:
+      - 2345:2345
     volumes:
       - ./api:/app
     command:

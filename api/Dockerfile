@@ -7,6 +7,9 @@ RUN apk add --no-cache make
 # Install air for live reloading.
 RUN go install github.com/cosmtrek/air@latest
 
+# Install Delve for debugging.
+RUN go install github.com/go-delve/delve/cmd/dlv@latest
+
 # Set working directory.
 WORKDIR /app
 
