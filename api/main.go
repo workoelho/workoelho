@@ -29,32 +29,32 @@ type Database interface {
 // Database primary and foreign key type.
 type Id int
 
-// ValidationError describes a validation error on a JSON field.
-type ValidationError struct {
+// Validation rules.
+const (
+	ValidationRuleRequired = "required"
+	ValidationRuleFormat   = "format"
+	ValidationRuleUnique   = "unique"
+	ValidationRuleLength   = "length"
+)
+
+// Validation
+type Validation struct {
 	Field  string                 `json:"field"`
 	Rule   string                 `json:"rule"`
 	Detail map[string]interface{} `json:"detail,omitempty"`
 }
 
 // Error returns the validation error as a string.
-func (v *ValidationError) Error() error {
+func (v *Validation) Error() error {
 	return fmt.Errorf("%v", v)
 }
 
-// ValidationErrors is a list of validation errors.
-type ValidationErrors []ValidationError
-
-// Validation rules.
-const (
-	RuleRequired = "required"
-	RuleFormat   = "format"
-	RuleUnique   = "unique"
-	RuleLength   = "length"
-)
+// Validations is a list of validation errors.
+type Validations []Validation
 
 // Append appens a new validation error to the list.
-func (v *ValidationErrors) Append(field, rule string, detail map[string]interface{}) {
-	*v = append(*v, ValidationError{
+func (v *Validations) Append(field, rule string, detail map[string]interface{}) {
+	*v = append(*v, Validation{
 		Field:  field,
 		Rule:   rule,
 		Detail: detail,
@@ -64,6 +64,13 @@ func (v *ValidationErrors) Append(field, rule string, detail map[string]interfac
 // Table names of the database schema.
 const (
 	TableUsers = "users"
+)
+
+// UserStatus indicates the status of a user.
+const (
+	UserStatusUnconfirmed = "unconfirmed"
+	UserStatusActive      = "active"
+	UserStatusBlocked     = "blocked"
 )
 
 // User holds credentials and controls which people has access to which companies.
@@ -80,12 +87,12 @@ type User struct {
 	PersonId       *Id        `json:"personId" db:"person_id"`
 }
 
-// UserStatus indicates the status of a user.
-const (
-	UserStatusUnconfirmed = "unconfirmed"
-	UserStatusActive      = "active"
-	UserStatusBlocked     = "blocked"
-)
+// NewUser returns a new user.
+func NewUser() *User {
+	return &User{
+		Status: UserStatusUnconfirmed,
+	}
+}
 
 // CreatePassword digests given password and assigns it to the user.
 func (u *User) CreatePassword() error {
@@ -104,17 +111,17 @@ func (u *User) ComparePassword(pwd string) error {
 }
 
 // Validate user data.
-func (u *User) Validate(db Database) ([]ValidationError, error) {
-	ve := ValidationErrors{}
+func (u *User) Validate(db Database) (Validations, error) {
+	v := Validations{}
 
 	if u.Status == "" {
-		ve.Append("status", RuleRequired, nil)
+		v.Append("status", ValidationRuleRequired, nil)
 	}
 
 	if u.Email == "" {
-		ve.Append("email", RuleRequired, nil)
+		v.Append("email", ValidationRuleRequired, nil)
 	} else if _, err := mail.ParseAddress(u.Email); err != nil {
-		ve.Append("email", RuleFormat, map[string]interface{}{"format": "email"})
+		v.Append("email", ValidationRuleFormat, map[string]interface{}{"format": "email"})
 	} else {
 		qb := squirrel.Select("1").From(TableUsers).
 			Where(squirrel.Eq{"email": u.Email}).Limit(1)
@@ -132,7 +139,7 @@ func (u *User) Validate(db Database) ([]ValidationError, error) {
 		if r, err := db.Query(context.Background(), q, args...); err != nil {
 			return nil, err
 		} else if r.Next() {
-			ve.Append("email", RuleUnique, nil)
+			v.Append("email", ValidationRuleUnique, nil)
 		}
 	}
 
@@ -140,16 +147,16 @@ func (u *User) Validate(db Database) ([]ValidationError, error) {
 
 	if u.PasswordDigest == "" {
 		if u.Password == "" {
-			ve.Append("password", RuleRequired, nil)
+			v.Append("password", ValidationRuleRequired, nil)
 		} else if len(u.Password) < minimum {
-			ve.Append("password", RuleLength, map[string]interface{}{"minimum": minimum})
+			v.Append("password", ValidationRuleLength, map[string]interface{}{"minimum": minimum})
 		}
 	}
 
-	return ve, nil
+	return v, nil
 }
 
-// Create ...
+// Create inserts receiver into the database.
 func (u *User) Create(db Database) error {
 	if u.Password != "" {
 		if err := u.CreatePassword(); err != nil {
@@ -182,26 +189,29 @@ func (u *User) Create(db Database) error {
 }
 
 func main() {
+	// Initialize database connection pool.
 	db, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
+	// Use PostgreSQL compatible placeholders.
 	squirrel.StatementBuilder = squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)
 
+	// Initialize Fiber application.
 	f := fiber.New()
 
+	// Use middlewares.
 	f.Use(logger.New())
 	f.Use(recover.New())
 	f.Use(requestid.New())
 
+	// Group v1 routes.
 	v1 := f.Group("/v1")
 
 	v1.Post("/users", func(c *fiber.Ctx) error {
-		u := &User{
-			Status: UserStatusUnconfirmed,
-		}
+		u := NewUser()
 
 		if err := c.BodyParser(u); err != nil {
 			return err
