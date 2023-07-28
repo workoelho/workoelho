@@ -6,7 +6,7 @@ services:
       - ./api:/app
     command:
       - make
-      - watch
+      - develop
 
   client:
     volumes:
