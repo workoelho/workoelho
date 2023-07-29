@@ -17,4 +17,4 @@ type Database interface {
 }
 
 // Primary and foreign keys type.
-type Id int
+type Id string

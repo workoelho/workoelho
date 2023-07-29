@@ -35,7 +35,9 @@ type User struct {
 	Password       string     `json:"password,omitempty" db:"-"`
 	PasswordDigest string     `json:"-" db:"password_digest"`
 	CompanyId      Id         `json:"companyId" db:"company_id"`
+	Company        *Company   `json:"company,omitempty" db:"-"`
 	PersonId       Id         `json:"personId" db:"person_id"`
+	Person         *Person    `json:"person,omitempty" db:"-"`
 }
 
 // NewUser returns a new user.
@@ -79,7 +81,7 @@ func (u *User) Validate(db Database) (validation.Validation, error) {
 		qb := squirrel.Select("1").From(RelationUsers).
 			Where(squirrel.Eq{"email": u.Email}).Limit(1)
 
-		if u.Id != 0 {
+		if u.Id != "" {
 			qb = qb.Where(squirrel.NotEq{"id": u.Id})
 		}
 
@@ -96,10 +98,24 @@ func (u *User) Validate(db Database) (validation.Validation, error) {
 		}
 	}
 
-	if err := validation.Empty(u.Password); err != nil {
-		v.Append("password", err)
-	} else if err := validation.Length(u.Password, 16, 512); err != nil {
-		v.Append("password", err)
+	if u.PasswordDigest == "" {
+		if err := validation.Empty(u.Password); err != nil {
+			v.Append("password", err)
+		}
+	}
+
+	if u.Password != "" {
+		if err := validation.Length(u.Password, 16, 512); err != nil {
+			v.Append("password", err)
+		}
+	}
+
+	if err := validation.Empty(u.CompanyId); err != nil {
+		v.Append("companyId", err)
+	}
+
+	if err := validation.Empty(u.PersonId); err != nil {
+		v.Append("personId", err)
 	}
 
 	return v, nil

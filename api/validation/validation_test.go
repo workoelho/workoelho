@@ -6,6 +6,8 @@ import (
 	"testing"
 )
 
+type Stringish string
+
 func TestEmpty(t *testing.T) {
 	if err := Empty(""); err == nil {
 		t.Error("expected empty string to fail")
@@ -13,6 +15,10 @@ func TestEmpty(t *testing.T) {
 		if err.Issue != "empty" {
 			t.Error("expected error to have issue equal to 'empty'")
 		}
+	}
+
+	if err := Empty(Stringish("")); err == nil {
+		t.Error("expected empty underlying string types to fail")
 	}
 
 	if err := Empty(0); err != nil {
@@ -23,7 +29,8 @@ func TestEmpty(t *testing.T) {
 		t.Error("expected value false to pass")
 	}
 
-	if err := Empty(nil); err == nil {
+	var n *byte
+	if err := Empty(n); err == nil {
 		t.Error("expected nil to fail")
 	}
 }

@@ -5,6 +5,7 @@ package validation
 import (
 	"fmt"
 	"net/mail"
+	"reflect"
 )
 
 // Detail contains additional information about a validation error.
@@ -27,18 +28,12 @@ func (e *Error) Error() string {
 
 // Empty returns an error if the value is considered empty.
 // i.e. "", nil or []. Initial values like 0 and false are not considered empty.
-func Empty(value interface{}) *Error {
-	switch v := value.(type) {
-	case string:
-		if v == "" {
+func Empty[T any](value T) *Error {
+	switch ref := reflect.ValueOf(value); ref.Kind() {
+	case reflect.Ptr, reflect.String, reflect.Slice:
+		if ref.IsZero() {
 			return &Error{"", "empty", nil}
 		}
-	case []interface{}:
-		if len(v) == 0 {
-			return &Error{"", "empty", nil}
-		}
-	case nil:
-		return &Error{"", "empty", nil}
 	}
 
 	return nil

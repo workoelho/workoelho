@@ -39,46 +39,63 @@ func TestUserValidate(t *testing.T) {
 
 	u := &User{}
 
-	v, err := u.Validate(db)
-
-	if err != nil {
+	if v, err := u.Validate(db); err != nil {
 		t.Fatal(err)
+	} else {
+		if !v.Check("companyId", "empty") {
+			t.Error("expected empty company id to fail validation")
+		}
+
+		if !v.Check("personId", "empty") {
+			t.Error("expected empty person id to fail validation")
+		}
+
+		if !v.Check("status", "empty") {
+			t.Error("expected empty status to fail empty validation")
+		}
+
+		if !v.Check("email", "empty") {
+			t.Error("expected empty email to fail empty validation")
+		}
+
+		if !v.Check("password", "empty") {
+			t.Error("expected empty password to fail empty validation")
+		}
 	}
 
-	if !v.Check("status", "empty") {
-		t.Error("expected empty status to fail empty validation")
+	u.PasswordDigest = "password"
+
+	if v, err := u.Validate(db); err != nil {
+		t.Fatal(err)
+	} else {
+		if v.Check("password", "empty") {
+			t.Error("expected digest password to skip password empty validation")
+		}
 	}
 
-	if !v.Check("email", "empty") {
-		t.Error("expected empty email to fail empty validation")
-	}
-
-	if !v.Check("password", "empty") {
-		t.Error("expected empty password to fail empty validation")
-	}
-
-	u.Email = "test"
+	u.Email = "invalid"
 	u.Status = "invalid"
-	u.Password = "123"
+	u.Password = "invalid"
 
-	v, err = u.Validate(db)
-
-	if err != nil {
+	if v, err := u.Validate(db); err != nil {
 		t.Fatal(err)
+	} else {
+
+		if !v.Check("status", "unknown") {
+			t.Error("expected invalid status to fail validation")
+		}
+
+		if !v.Check("email", "format") {
+			t.Error("expected invalid email to fail validation")
+		}
+
+		if !v.Check("password", "length") {
+			t.Error("expected short password to fail validation")
+		}
 	}
 
-	if !v.Check("status", "unknown") {
-		t.Error("expected invalid status to fail unknown validation")
-	}
-
-	if !v.Check("email", "format") {
-		t.Error("expected invalid email to fail format validation")
-	}
-
-	if !v.Check("password", "length") {
-		t.Error("expected short password to fail length validation")
-	}
-
+	u.CompanyId = "1"
+	u.PersonId = "1"
 	u.Status = "active"
 	u.Email = "me@example.org"
 	u.Password = "0123456789abcdef"
@@ -86,25 +103,21 @@ func TestUserValidate(t *testing.T) {
 	db.ExpectQuery("SELECT 1").WithArgs(u.Email).
 		WillReturnRows(pgxmock.NewRows([]string{""}).AddRow(1))
 
-	v, err = u.Validate(db)
-
-	if err != nil {
+	if v, err := u.Validate(db); err != nil {
 		t.Fatal(err)
-	}
-
-	if !v.Check("email", "taken") {
-		t.Error("expected taken email to fail validation")
+	} else {
+		if !v.Check("email", "taken") {
+			t.Error("expected taken email to fail validation")
+		}
 	}
 
 	db.ExpectQuery("SELECT 1").WithArgs(u.Email).WillReturnRows(pgxmock.NewRows([]string{""}))
 
-	v, err = u.Validate(db)
-
-	if err != nil {
+	if v, err := u.Validate(db); err != nil {
 		t.Fatal(err)
-	}
-
-	if len(v) > 0 {
-		t.Error("expected user to pass validation")
+	} else {
+		if len(v) > 0 {
+			t.Error("expected user to pass validation")
+		}
 	}
 }
