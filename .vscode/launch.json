@@ -11,12 +11,7 @@
       "mode": "remote",
       "port": 2345,
       "host": "localhost",
-      "substitutePath": [
-        {
-          "from": "${workspaceFolder}/api",
-          "to": "/app"
-        }
-      ]
+      "remotePath": "/mnt"
     }
   ]
 }
