@@ -25,8 +25,8 @@ func (e *Error) Error() string {
 	return fmt.Sprintf("validation: %s (%+v)", e.Issue, e.Detail)
 }
 
-// Empty checks if a given value is empty.
-// i.e. "", nil or []. Zero values like 0 and false are not considered empty.
+// Empty returns an error if the value is considered empty.
+// i.e. "", nil or []. Initial values like 0 and false are not considered empty.
 func Empty(value interface{}) *Error {
 	switch v := value.(type) {
 	case string:
@@ -44,7 +44,7 @@ func Empty(value interface{}) *Error {
 	return nil
 }
 
-// Format checks if a given string matches a given format.
+// Format returns an error if the string doesn't match a given format.
 // Available formats are "email".
 func Format(value, format string) *Error {
 	detail := Detail{"format": format}
@@ -58,7 +58,7 @@ func Format(value, format string) *Error {
 	return nil
 }
 
-// Length checks if a given string or slice has a length within a given range.
+// Length returns an error if the string or slice has a length outside a given range.
 func Length(value interface{}, minimum, maximum int) *Error {
 	detail := Detail{"minimum": minimum, "maximum": maximum}
 
@@ -75,7 +75,7 @@ func Length(value interface{}, minimum, maximum int) *Error {
 	return nil
 }
 
-// Unknown checks if a given value is among a list of options.
+// Unknown returns an error if the value isn't in a list of options.
 func Unknown(value string, options []string) *Error {
 	for _, option := range options {
 		if value == option {

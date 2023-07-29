@@ -21,7 +21,7 @@ func TestNewUser(t *testing.T) {
 func TestUserCreatePassword(t *testing.T) {
 	u := NewUser()
 	u.Password = "123"
-	u.CreatePasswordDigest()
+	u.DigestPassword()
 
 	if u.Password != "" {
 		t.Error("password expected to be empty")

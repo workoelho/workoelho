@@ -45,8 +45,8 @@ func NewUser() *User {
 	}
 }
 
-// CreatePasswordDigest digests and assigns existing password.
-func (u *User) CreatePasswordDigest() error {
+// DigestPassword digests and clear assigned plain password.
+func (u *User) DigestPassword() error {
 	h, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
@@ -108,7 +108,7 @@ func (u *User) Validate(db Database) (validation.Validation, error) {
 // Create inserts receiver into the database.
 func (u *User) Create(db Database) error {
 	if u.Password != "" {
-		if err := u.CreatePasswordDigest(); err != nil {
+		if err := u.DigestPassword(); err != nil {
 			return err
 		}
 	}
