@@ -1,4 +1,4 @@
-module github.com/haggen/workoelho
+module github.com/workoelho/workoelho
 
 go 1.20
 
@@ -8,7 +8,6 @@ require (
 	github.com/jackc/pgx/v5 v5.4.2
 	github.com/pashagolub/pgxmock/v2 v2.10.0
 	golang.org/x/crypto v0.11.0
-	golang.org/x/exp v0.0.0-20230725093048-515e97ebf090
 )
 
 require (

@@ -1,13 +1,13 @@
 services:
   api:
     ports:
+      # Debug server.
       - 2345:2345
     volumes:
-      - ./api:/app
-    command:
-      - make
-      - develop
+      - .:/mnt
+    command: air
 
   client:
     volumes:
-      - ./client:/app
+      - .:/mnt
+    command: npm run-script develop

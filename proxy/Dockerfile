@@ -8,5 +8,5 @@ RUN xcaddy build \
 # Base image.
 FROM caddy:2-alpine
 
-# Copy Caddy binary.
+# Copy custom built binary.
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy

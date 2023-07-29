@@ -1,12 +1,12 @@
 {
+  "private": true,
   "name": "client",
   "version": "0.1.0",
-  "private": true,
+  "license": "MPL-2.0",
   "scripts": {
     "prestart": "test -d node_modules || npm ci",
-    "start": "npm run-script start:${NODE_ENV:-development}",
-    "start:development": "next dev",
-    "start:production": "next start",
+    "start": "next start",
+    "develop": "next dev",
     "lint": "next lint",
     "format": "prettier . --cache",
     "prebuild": "npm run format -- --check --loglevel error && npm run lint -- --quiet",

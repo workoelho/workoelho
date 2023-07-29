@@ -1,6 +1,6 @@
 # Workoelho
 
-> Organize and find work information when you need it.
+> Find the information you need when you need it.
 
 ## About
 
@@ -12,4 +12,4 @@
 
 ## Legal
 
-AGPL-3.0 © Workoelho collaborators.
+Mozilla Public License 2.0 © Workoelho.

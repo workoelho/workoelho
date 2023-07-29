@@ -5,10 +5,8 @@ services:
   api:
     restart: unless-stopped
 
-  client:
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-
   db:
+    restart: unless-stopped
+
+  client:
     restart: unless-stopped

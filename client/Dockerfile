@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # Change working dir.
-WORKDIR /app
+WORKDIR /mnt/client
 
 # Install dependencies based off package files.
 COPY --chown=node package*.json ./

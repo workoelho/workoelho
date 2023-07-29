@@ -11,7 +11,7 @@ RUN go install github.com/cosmtrek/air@latest
 RUN go install github.com/go-delve/delve/cmd/dlv@latest
 
 # Set working directory.
-WORKDIR /app
+WORKDIR /mnt/api
 
 # Copy manifest and download dependencies.
 COPY go.* ./
@@ -27,4 +27,4 @@ RUN make
 EXPOSE 1234
 
 # Run the application.
-CMD [ "make", "start" ]
+CMD ["make", "start"]

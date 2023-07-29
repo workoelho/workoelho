@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS users (
 	status TEXT NOT NULL,
 	email TEXT NOT NULL UNIQUE,
 	password_digest TEXT NOT NULL,
-	company_id INTEGER REFERENCES companies(id),
-	person_id INTEGER REFERENCES people(id)
+	company_id INTEGER REFERENCES companies(id) NOT NULL,
+	person_id INTEGER REFERENCES people(id) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
