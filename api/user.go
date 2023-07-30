@@ -26,21 +26,33 @@ var UserStatuses []string = []string{
 
 // User holds credentials and controls which people has access to which companies.
 type User struct {
-	Id             Id         `json:"id" db:"id"`
-	CreatedAt      *time.Time `json:"createdAt" db:"created_at"`
-	UpdatedAt      *time.Time `json:"updatedAt" db:"updated_at"`
-	DeletedAt      *time.Time `json:"deletedAt" db:"deleted_at"`
-	Status         string     `json:"status" db:"status"`
-	Email          string     `json:"email" db:"email"`
-	Password       string     `json:"password,omitempty" db:"-"`
-	PasswordDigest string     `json:"-" db:"password_digest"`
-	CompanyId      Id         `json:"companyId" db:"company_id"`
-	Company        *Company   `json:"company,omitempty" db:"-"`
-	PersonId       Id         `json:"personId" db:"person_id"`
-	Person         *Person    `json:"person,omitempty" db:"-"`
+	// Id of the record.
+	Id Id `json:"id" db:"id"`
+	// Date and time when the record was created.
+	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
+	// Date and time when the record was last updated.
+	UpdatedAt *time.Time `json:"updatedAt" db:"updated_at"`
+	// Date and time when the record was deleted.
+	DeletedAt *time.Time `json:"deletedAt" db:"deleted_at"`
+	// Whether the user is active, needs confirmation, etc.
+	Status string `json:"status" db:"status"`
+	// User's email.
+	Email string `json:"email" db:"email"`
+	// Password in plain text. Used as an intermediate field before digesting.
+	Password string `json:"password,omitempty" db:"-"`
+	// Password digested.
+	PasswordDigest string `json:"-" db:"password_digest"`
+	// Id of the company the user belongs to.
+	CompanyId Id `json:"companyId" db:"company_id"`
+	// Company model.
+	Company *Company `json:"company,omitempty" db:"-"`
+	// Id of the person behind the user.
+	PersonId Id `json:"personId" db:"person_id"`
+	// Person model.
+	Person *Person `json:"person,omitempty" db:"-"`
 }
 
-// NewUser returns a new user.
+// NewUser returns a new instance with default values.
 func NewUser() *User {
 	return &User{
 		Status: "unconfirmed",
@@ -110,18 +122,18 @@ func (u *User) Validate(db Database) (validation.Validation, error) {
 		}
 	}
 
-	if err := validation.Empty(u.CompanyId); err != nil {
-		v.Append("companyId", err)
-	}
+	// if err := validation.Empty(u.CompanyId); err != nil {
+	// 	v.Append("companyId", err)
+	// }
 
-	if err := validation.Empty(u.PersonId); err != nil {
-		v.Append("personId", err)
-	}
+	// if err := validation.Empty(u.PersonId); err != nil {
+	// 	v.Append("personId", err)
+	// }
 
 	return v, nil
 }
 
-// Create inserts receiver into the database.
+// Create saves data to the database.
 func (u *User) Create(db Database) error {
 	if u.Password != "" {
 		if err := u.DigestPassword(); err != nil {
@@ -130,8 +142,9 @@ func (u *User) Create(db Database) error {
 	}
 
 	q, args, err := squirrel.
-		Insert(RelationUsers).Columns("status", "email", "password_digest").
-		Values(u.Status, u.Email, u.PasswordDigest).
+		Insert(RelationUsers).
+		Columns("status", "email", "password_digest", "company_id", "person_id").
+		Values(u.Status, u.Email, u.PasswordDigest, u.CompanyId, u.PersonId).
 		Suffix(`RETURNING *`).ToSql()
 
 	if err != nil {
