@@ -9,6 +9,7 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/workoelho/workoelho/database"
+	"github.com/workoelho/workoelho/sanitization"
 )
 
 // Company ...
@@ -16,7 +17,7 @@ type Company struct {
 	database.Record
 
 	// Name of the company.
-	Name string `input:"name" output:"name" sanitize:"trim,squeeze" db:"name"`
+	Name string `input:"name" output:"name" db:"name"`
 }
 
 // Table returns the table name.
@@ -30,8 +31,9 @@ func (c *Company) New() {
 	c.UpdatedAt = c.CreatedAt
 }
 
-// Sanitize sanitizes the struct values after user input.
+// Sanitize sanitizes values after user input.
 func (c *Company) Sanitize() error {
+	c.Name = sanitization.Condense(c.Name)
 	return nil
 }
 

@@ -28,7 +28,7 @@ type User struct {
 
 	Status string `output:"status" db:"status"`
 	// User's email.
-	Email string `input:"email" output:"email" sanitize:"lower" db:"email"`
+	Email string `input:"email" output:"email" db:"email"`
 	// Password in plain text. Used as an intermediate field before digesting.
 	Password string `input:"password,omitempty" db:"-"`
 	// Password digested.
@@ -78,9 +78,10 @@ func (u *User) New() {
 	u.Person.New()
 }
 
-// Sanitize sanitizes the struct values after user input.
+// Sanitize sanitizes values after user input.
 func (u *User) Sanitize() error {
-	return sanitization.Struct(u)
+	u.Email = sanitization.Lower(sanitization.Trim(u.Email))
+	return nil
 }
 
 // Validate ensures the struct is in a valid state.
@@ -143,7 +144,7 @@ func (u *User) Validate() error {
 
 // Writable checks if the session can write to the model.
 func (u *User) Writable(s *Session) error {
-	if u.CompanyId != "" && s.User != nil && u.CompanyId != s.User.CompanyId {
+	if u.CompanyId != "" && u.CompanyId != s.User.CompanyId {
 		return errors.New("cannot write to a different company")
 	}
 	return nil
