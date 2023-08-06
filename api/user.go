@@ -28,7 +28,7 @@ type User struct {
 
 	Status string `output:"status" db:"status"`
 	// User's email.
-	Email string `input:"email" output:"email" db:"email"`
+	Email string `input:"email" output:"email" sanitize:"lower" db:"email"`
 	// Password in plain text. Used as an intermediate field before digesting.
 	Password string `input:"password,omitempty" db:"-"`
 	// Password digested.
