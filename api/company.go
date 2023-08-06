@@ -8,50 +8,60 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
-)
-
-// Database relation name.
-const (
-	RelationCompanies = "companies"
+	"github.com/workoelho/workoelho/database"
 )
 
 // Company ...
 type Company struct {
-	// Id of the record.
-	Id Id `json:"id" db:"id"`
-	// Date and time when the record was created.
-	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
-	// Date and time when the record was last updated.
-	UpdatedAt *time.Time `json:"updatedAt" db:"updated_at"`
-	// Date and time when the record was deleted.
-	DeletedAt *time.Time `json:"deletedAt" db:"deleted_at"`
+	database.Record
+
 	// Name of the company.
-	Name string `json:"name" db:"name"`
+	Name string `input:"name" output:"name" sanitize:"trim,squeeze" db:"name"`
 }
 
-// NewCompany returns a new instance with default values.
-func NewCompany() *Company {
-	return &Company{}
+// Table returns the table name.
+func (*Company) Table() string {
+	return "companies"
 }
 
-// Create saves data to the database.
-func (c *Company) Create(db Database) error {
-	q, args, err := squirrel.
-		Insert(RelationCompanies).Columns("name").
-		Values(c.Name).
+// New assigns default values.
+func (c *Company) New() {
+	c.CreatedAt = time.Now()
+	c.UpdatedAt = c.CreatedAt
+}
+
+// Sanitize sanitizes the struct values after user input.
+func (c *Company) Sanitize() error {
+	return nil
+}
+
+// Validate ensures the struct is in a valid state.
+func (c *Company) Validate() error {
+	return nil
+}
+
+// Writable checks if the session can write to the model.
+func (c *Company) Writable(s *Session) error {
+	return nil
+}
+
+// Create inserts the struct values into the database.
+func (c *Company) Create() error {
+	q, args, err := squirrel.Insert(c.Table()).
+		Columns("name").Values(c.Name).
 		Suffix(`RETURNING *`).ToSql()
 
 	if err != nil {
 		return err
 	}
 
-	r, err := db.Query(context.Background(), q, args...)
-
+	rows, err := database.Query(context.Background(), q, args...)
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
 
-	*c, err = pgx.CollectOneRow(r, pgx.RowToStructByNameLax[Company])
+	*c, err = pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[Company])
 
 	if err != nil {
 		return err

@@ -4,10 +4,14 @@ package main
 
 import "testing"
 
-func TestNewCompany(t *testing.T) {
-	c := NewCompany()
+func TestCompanyNew(t *testing.T) {
+	c := &Company{}
+	c.New()
 
-	if c == nil {
-		t.Error("expected company not to be nil")
+	if c.CreatedAt.IsZero() {
+		t.Error("expected created at to not be zero")
+	}
+	if c.UpdatedAt != c.CreatedAt {
+		t.Error("expected updated at to be equal to created at")
 	}
 }

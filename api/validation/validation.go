@@ -14,11 +14,11 @@ type Detail map[string]interface{}
 // Error describes a validation error.
 type Error struct {
 	// Field that failed validation.
-	Field string `json:"field"`
+	Field string `output:"field"`
 	// What's the issue with the value, e.g. "empty", "format", "length"
-	Issue string `json:"issue"`
+	Issue string `output:"issue"`
 	// Additional details about the validation. e.g. minimum length.
-	Detail Detail `json:"detail,omitempty"`
+	Detail Detail `output:"detail,omitempty"`
 }
 
 // Error returns a description of the validation error.
@@ -29,9 +29,9 @@ func (e *Error) Error() string {
 // Empty returns an error if the value is considered empty.
 // i.e. "", nil or []. Initial values like 0 and false are not considered empty.
 func Empty[T any](value T) *Error {
-	switch ref := reflect.ValueOf(value); ref.Kind() {
+	switch v := reflect.ValueOf(value); v.Kind() {
 	case reflect.Ptr, reflect.String, reflect.Slice:
-		if ref.IsZero() {
+		if v.IsZero() {
 			return &Error{"", "empty", nil}
 		}
 	}
@@ -88,13 +88,23 @@ func New() Validation {
 	return Validation{}
 }
 
+// Error returns a description of the validation errors.
+func (v Validation) Error() string {
+	return fmt.Sprintf("validation: %d errors", len(v))
+}
+
+// Empty tests if the validation has no errors.
+func (v Validation) Empty() bool {
+	return len(v) == 0
+}
+
 // Append updates the collection with a given validation error.
 func (v *Validation) Append(field string, err *Error) {
 	err.Field = field
 	*v = append(*v, err)
 }
 
-// Check checks if a given field has a given issue.
+// Check tests if a given field has a given issue.
 func (v *Validation) Check(field, issue string) bool {
 	for _, err := range *v {
 		if err.Field == field && err.Issue == issue {

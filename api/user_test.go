@@ -7,27 +7,45 @@ import (
 	"time"
 
 	"github.com/pashagolub/pgxmock/v2"
+	"github.com/workoelho/workoelho/database"
+	"github.com/workoelho/workoelho/validation"
 )
 
-func TestNewUser(t *testing.T) {
-	u := NewUser()
+func TestUserNew(t *testing.T) {
+	u := &User{}
+	u.New()
 
-	if u == nil {
-		t.Error("user expected not to be nil")
-	} else if u.Status != "unconfirmed" {
-		t.Error("status expected to have a default value")
+	if u.CreatedAt.IsZero() {
+		t.Error("expected created at to not be zero")
+	}
+	if u.UpdatedAt != u.CreatedAt {
+		t.Error("expected updated at to be equal to created at")
+	}
+	if u.Status != "unconfirmed" {
+		t.Error("expected status to have a default value")
+	}
+	if u.Company == nil {
+		t.Error("expected company to not be nil")
+	}
+	if u.Person == nil {
+		t.Error("expected person to not be nil")
 	}
 }
 
 func TestUserDigestPassword(t *testing.T) {
-	u := NewUser()
+	u := &User{}
+
+	if err := u.DigestPassword(); err != nil {
+		t.Error("expected digesting empty password not to fail")
+	}
+
 	u.Password = "123"
 	u.DigestPassword()
 
 	if u.Password != "" {
-		t.Error("password expected to be empty")
+		t.Error("expected plain password to be empty after digestion")
 	} else if u.PasswordDigest == "" {
-		t.Error("password digest expected not to be empty")
+		t.Error("expected digest not to be empty")
 	}
 }
 
@@ -38,39 +56,45 @@ func TestUserValidate(t *testing.T) {
 	}
 	defer db.Close()
 
+	database.Set(db)
+
 	u := &User{}
 
-	if v, err := u.Validate(db); err != nil {
-		t.Fatal(err)
-	} else {
-		// if !v.Check("companyId", "empty") {
-		// 	t.Error("expected empty company id to fail validation")
-		// }
+	if err := u.Validate(); err != nil {
+		if err, ok := err.(validation.Validation); !ok {
+			t.Fatal(err)
+		} else {
+			if !err.Check("companyId", "empty") {
+				t.Error("expected empty company id to fail validation")
+			}
 
-		// if !v.Check("personId", "empty") {
-		// 	t.Error("expected empty person id to fail validation")
-		// }
+			if !err.Check("personId", "empty") {
+				t.Error("expected empty person id to fail validation")
+			}
 
-		if !v.Check("status", "empty") {
-			t.Error("expected empty status to fail empty validation")
-		}
+			if !err.Check("status", "empty") {
+				t.Error("expected empty status to fail empty validation")
+			}
 
-		if !v.Check("email", "empty") {
-			t.Error("expected empty email to fail empty validation")
-		}
+			if !err.Check("email", "empty") {
+				t.Error("expected empty email to fail empty validation")
+			}
 
-		if !v.Check("password", "empty") {
-			t.Error("expected empty password to fail empty validation")
+			if !err.Check("password", "empty") {
+				t.Error("expected empty password to fail empty validation")
+			}
 		}
 	}
 
 	u.PasswordDigest = "password"
 
-	if v, err := u.Validate(db); err != nil {
-		t.Fatal(err)
-	} else {
-		if v.Check("password", "empty") {
-			t.Error("expected digest password to skip password empty validation")
+	if err := u.Validate(); err != nil {
+		if err, ok := err.(validation.Validation); !ok {
+			t.Fatal(err)
+		} else {
+			if err.Check("password", "empty") {
+				t.Error("expected digest password to skip password empty validation")
+			}
 		}
 	}
 
@@ -78,20 +102,22 @@ func TestUserValidate(t *testing.T) {
 	u.Status = "invalid"
 	u.Password = "invalid"
 
-	if v, err := u.Validate(db); err != nil {
-		t.Fatal(err)
-	} else {
+	if err := u.Validate(); err != nil {
+		if err, ok := err.(validation.Validation); !ok {
+			t.Fatal(err)
+		} else {
 
-		if !v.Check("status", "unknown") {
-			t.Error("expected invalid status to fail validation")
-		}
+			if !err.Check("status", "unknown") {
+				t.Error("expected invalid status to fail validation")
+			}
 
-		if !v.Check("email", "format") {
-			t.Error("expected invalid email to fail validation")
-		}
+			if !err.Check("email", "format") {
+				t.Error("expected invalid email to fail validation")
+			}
 
-		if !v.Check("password", "length") {
-			t.Error("expected short password to fail validation")
+			if !err.Check("password", "length") {
+				t.Error("expected short password to fail validation")
+			}
 		}
 	}
 
@@ -104,21 +130,23 @@ func TestUserValidate(t *testing.T) {
 	db.ExpectQuery("SELECT 1").WithArgs(u.Email).
 		WillReturnRows(pgxmock.NewRows([]string{""}).AddRow(1))
 
-	if v, err := u.Validate(db); err != nil {
+	if err, ok := u.Validate().(validation.Validation); !ok {
 		t.Fatal(err)
 	} else {
-		if !v.Check("email", "taken") {
+		if !err.Check("email", "taken") {
 			t.Error("expected taken email to fail validation")
 		}
 	}
 
 	db.ExpectQuery("SELECT 1").WithArgs(u.Email).WillReturnRows(pgxmock.NewRows([]string{""}))
 
-	if v, err := u.Validate(db); err != nil {
-		t.Fatal(err)
-	} else {
-		if len(v) > 0 {
-			t.Error("expected user to pass validation")
+	if err := u.Validate(); err != nil {
+		if err, ok := err.(validation.Validation); !ok {
+			t.Fatal(err)
+		} else {
+			if !err.Empty() {
+				t.Error("expected valid user to pass")
+			}
 		}
 	}
 }
@@ -130,6 +158,8 @@ func TestUserCreate(t *testing.T) {
 	}
 	defer db.Close()
 
+	database.Set(db)
+
 	u := &User{}
 
 	now := time.Now()
@@ -138,9 +168,9 @@ func TestUserCreate(t *testing.T) {
 		WithArgs(u.Status, u.Email, u.PasswordDigest, u.CompanyId, u.PersonId).
 		WillReturnRows(pgxmock.
 			NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "status", "email", "password_digest", "company_id", "person_id"}).
-			AddRow(Id("1"), &now, &now, nil, "active", "me@example.org", "0123456789abcdef", Id("1"), Id("1")))
+			AddRow(database.Id("1"), now, now, nil, "active", "me@example.org", "0123456789abcdef", database.Id("1"), database.Id("1")))
 
-	if err := u.Create(db); err != nil {
+	if err := u.Create(); err != nil {
 		t.Fatal(err)
 	}
 

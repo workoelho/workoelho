@@ -4,21 +4,22 @@
   "version": "0.1.0",
   "license": "MPL-2.0",
   "scripts": {
-    "prestart": "test -d node_modules || npm ci",
+    "prestart": "test -d node_modules || pnpm i",
     "start": "next start",
     "develop": "next dev",
     "lint": "next lint",
     "format": "prettier . --cache",
-    "prebuild": "npm run format -- --check --loglevel error && npm run lint -- --quiet",
+    "prebuild": "pnpm run format -- --check --loglevel error && pnpm run lint -- --quiet",
     "build": "next build"
   },
   "dependencies": {
-    "@types/node": "20.4.4",
-    "@types/react": "18.2.15",
+    "@types/node": "18.17.3",
+    "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
-    "eslint": "8.45.0",
+    "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "next": "13.4.12",
+    "pnpm": "^8.6.12",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.1.6"

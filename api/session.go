@@ -2,20 +2,44 @@
 
 package main
 
-import "time"
+import (
+	"time"
 
-// Database relation name.
-const (
-	RelationSessions = "sessions"
+	"github.com/workoelho/workoelho/database"
 )
 
-// Session ...
+// Session holds information about a user session.
 type Session struct {
-	Id         Id         `json:"id" db:"id"`
-	CreatedAt  *time.Time `json:"createdAt" db:"created_at"`
-	ExpiresAt  *time.Time `json:"expiresAt" db:"expires_at"`
-	UserId     int        `json:"userId" db:"user_id"`
-	User       *User      `json:"user,omitempty" db:"-"`
-	RemoteAddr string     `json:"remoteAddr" db:"remote_addr"`
-	UserAgent  string     `json:"userAgent" db:"user_agent"`
+	// Id of the record.
+	Id database.Id `output:"id" db:"id"`
+	// Date and time when the record was created.
+	CreatedAt time.Time `output:"createdAt" db:"created_at"`
+	// Date and time when the session expires.
+	ExpiresAt time.Time `output:"expiresAt" db:"expires_at"`
+	// ID of the owner of the session.
+	UserId int `output:"userId" db:"user_id"`
+	// Owner of the session.
+	User *User `output:"user,omitempty" db:"-"`
+	// IP address of the client that started the session.
+	RemoteAddr string `output:"remoteAddr" db:"remote_addr"`
+	// User agent of the client that started the session.
+	UserAgent string `output:"userAgent" db:"user_agent"`
+}
+
+const (
+	// Default session duration.
+	SessionDuration = time.Hour * 24
+)
+
+// Table name of the model.
+func (*Session) Table() string {
+	return "sessions"
+}
+
+// New creates a new session.
+func (s *Session) New() {
+	s.CreatedAt = time.Now()
+	s.ExpiresAt = s.CreatedAt.Add(SessionDuration)
+	s.User = &User{}
+	s.User.New()
 }

@@ -1,0 +1,1 @@
+- func Authorize() for checking permissions. It should get database access as well as session information. I should ponder using Context.

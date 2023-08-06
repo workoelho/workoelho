@@ -8,36 +8,47 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
-)
-
-// Database relation name.
-const (
-	RelationPeople = "people"
+	"github.com/workoelho/workoelho/database"
 )
 
 // Person model.
 type Person struct {
-	// Id of the record.
-	Id Id `json:"id" db:"id"`
-	// Date and time when the record was created.
-	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
-	// Date and time when the record was last updated.
-	UpdatedAt *time.Time `json:"updatedAt" db:"updated_at"`
-	// Date and time when the record was deleted.
-	DeletedAt *time.Time `json:"deletedAt" db:"deleted_at"`
+	database.Record
+
 	// Person's name.
-	Name string `json:"name" db:"name"`
+	Name string `input:"name" output:"name" sanitize:"trim,squeeze" db:"name"`
 }
 
-// NewPerson returns a new instance with default values.
-func NewPerson() *Person {
-	return &Person{}
+// Table returns the table name.
+func (*Person) Table() string {
+	return "people"
+}
+
+// New assigns default values.
+func (p *Person) New() {
+	p.CreatedAt = time.Now()
+	p.UpdatedAt = p.CreatedAt
+}
+
+// Sanitize sanitizes the struct values after user input.
+func (p *Person) Sanitize() error {
+	return nil
+}
+
+// Validate ensures the struct is in a valid state.
+func (p *Person) Validate() error {
+	return nil
+}
+
+// Writable checks if the session can write to the model.
+func (p *Person) Writable(s *Session) error {
+	return nil
 }
 
 // Create saves data to the database.
-func (p *Person) Create(db Database) error {
+func (p *Person) Create() error {
 	q, args, err := squirrel.
-		Insert(RelationPeople).Columns("name").
+		Insert(p.Table()).Columns("name").
 		Values(p.Name).
 		Suffix(`RETURNING *`).ToSql()
 
@@ -45,13 +56,13 @@ func (p *Person) Create(db Database) error {
 		return err
 	}
 
-	r, err := db.Query(context.Background(), q, args...)
-
+	rows, err := database.Query(context.Background(), q, args...)
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
 
-	*p, err = pgx.CollectOneRow(r, pgx.RowToStructByNameLax[Person])
+	*p, err = pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[Person])
 
 	if err != nil {
 		return err

@@ -4,10 +4,14 @@ package main
 
 import "testing"
 
-func TestNewPerson(t *testing.T) {
-	p := NewPerson()
+func TestPersonNew(t *testing.T) {
+	p := &Person{}
+	p.New()
 
-	if p == nil {
-		t.Error("expected person not to be nil")
+	if p.CreatedAt.IsZero() {
+		t.Error("expected created at to not be zero")
+	}
+	if p.UpdatedAt != p.CreatedAt {
+		t.Error("expected updated at to be equal to created at")
 	}
 }

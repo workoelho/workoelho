@@ -5,8 +5,8 @@ FROM node:20-alpine
 WORKDIR /mnt/client
 
 # Install dependencies based off package files.
-COPY --chown=node package*.json ./
-RUN npm ci
+COPY --chown=node pnpm-lock.yaml ./
+RUN pnpm i
 
 # Copy everything else and build the application.
 COPY --chown=node . .
@@ -15,4 +15,4 @@ COPY --chown=node . .
 EXPOSE 3000
 
 # Start the application.
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
