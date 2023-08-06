@@ -29,7 +29,7 @@ func parseTag(tag string) map[string]string {
 
 // String returns a sanitized string, according to the given tag.
 // Tag is a comma separated list of sanitizations.
-// Supported sanitizations for string are 'trim', 'squeeze', 'lowercase', 'title', 'uppercase'.
+// Supported sanitizations for string are 'trim', 'squeeze', 'lower', 'title', 'upper'.
 func String(s string, tag string) string {
 	sanitizations := parseTag(tag)
 	if _, ok := sanitizations["squeeze"]; ok {
@@ -38,13 +38,13 @@ func String(s string, tag string) string {
 	if _, ok := sanitizations["trim"]; ok {
 		s = strings.TrimSpace(s)
 	}
-	if _, ok := sanitizations["lowercase"]; ok {
+	if _, ok := sanitizations["lower"]; ok {
 		s = cases.Lower(language.English).String(s)
 	}
 	if _, ok := sanitizations["title"]; ok {
 		s = cases.Title(language.English).String(s)
 	}
-	if _, ok := sanitizations["uppercase"]; ok {
+	if _, ok := sanitizations["upper"]; ok {
 		s = cases.Upper(language.English).String(s)
 	}
 	return s
