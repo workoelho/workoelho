@@ -5,6 +5,7 @@ package main
 import (
 	"log"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/workoelho/workoelho/database"
 	"github.com/workoelho/workoelho/validation"
 
@@ -33,13 +34,54 @@ func main() {
 	f.Use(recover.New())
 	f.Use(requestid.New())
 
+	f.Use(func(c *fiber.Ctx) error {
+		err := c.Next()
+
+		if tx, ok := c.Locals("tx").(pgx.Tx); ok {
+			if err == nil {
+				tx.Commit(c.Context())
+			} else {
+				tx.Rollback(c.Context())
+			}
+		}
+
+		return err
+	})
+
 	v1 := f.Group("/v1")
 
-	v1.Post("/users", func(c *fiber.Ctx) error {
-		session := &Session{}
-		user := &User{}
+	// v1.Post("/sessions", func(c *fiber.Ctx) error {
+	// 	session := &Session{}
+	// 	session.New()
 
-		session.New()
+	// 	credentials := &Credentials{}
+
+	// 	if err := c.BodyParser(credentials); err != nil {
+	// 		return err
+	// 	}
+
+	// 	if err := credentials.Sanitize(); err != nil {
+	// 		return err
+	// 	}
+
+	// 	if err := credentials.Validate(); err != nil {
+	// 		if err, ok := err.(validation.Validation); ok {
+	// 			return c.Status(fiber.StatusUnprocessableEntity).JSON(err)
+	// 		}
+	// 	}
+
+	// 	if err := session.Create(c); err != nil {
+	// 		return err
+	// 	}
+
+	// 	return c.Status(fiber.StatusCreated).JSON(session)
+	// })
+
+	// v1.Get("/sessions/:id", func(c *fiber.Ctx) error {
+	// })
+
+	v1.Post("/users", func(c *fiber.Ctx) error {
+		user := &User{}
 		user.New()
 
 		if err := c.BodyParser(user); err != nil {
@@ -50,15 +92,9 @@ func main() {
 			return err
 		}
 
-		if err := user.Writable(session); err != nil {
+		if err := user.Writable(c); err != nil {
 			return fiber.ErrUnauthorized
 		}
-
-		tx, err := database.Begin(c.Context())
-		if err != nil {
-			return err
-		}
-		defer tx.Rollback(c.Context())
 
 		if user.CompanyId == "" {
 			user.Company = &Company{}
@@ -91,8 +127,6 @@ func main() {
 		if err := user.Create(); err != nil {
 			return err
 		}
-
-		tx.Commit(c.Context())
 
 		return c.Status(fiber.StatusCreated).JSON(user)
 	})

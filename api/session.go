@@ -5,6 +5,9 @@ package main
 import (
 	"time"
 
+	"github.com/Masterminds/squirrel"
+	"github.com/gofiber/fiber/v2"
+	"github.com/jackc/pgx/v5"
 	"github.com/workoelho/workoelho/database"
 )
 
@@ -42,4 +45,29 @@ func (s *Session) New() {
 	s.ExpiresAt = s.CreatedAt.Add(SessionDuration)
 	s.User = &User{}
 	s.User.New()
+}
+
+// Create ...
+func (s *Session) Create(c *fiber.Ctx) error {
+	q, args, err := squirrel.Insert(s.Table()).
+		Columns("created_at", "expires_at", "user_id", "remote_addr", "user_agent").
+		Values(s.CreatedAt, s.ExpiresAt, s.UserId, s.RemoteAddr, s.UserAgent).
+		Suffix(`RETURNING *`).ToSql()
+
+	if err != nil {
+		return err
+	}
+
+	r, err := database.Tx(c).Query(c.Context(), q, args...)
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	*s, err = pgx.CollectOneRow(r, pgx.RowToStructByNameLax[Session])
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -4,17 +4,15 @@ package database
 
 import (
 	"context"
-	"log"
 	"os"
 	"time"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
-
-var database Database
 
 // Database interface can execute statements, query rows and begin transactions.
 type Database interface {
@@ -40,33 +38,44 @@ type Record struct {
 	DeletedAt *time.Time `output:"deletedAt" db:"deleted_at"`
 }
 
-// Open creates a new connection pool to the database.
-func Open() {
-	var err error
+var database Database
 
-	database, err = pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
+// Open ...
+func Open() error {
 	// Use PostgreSQL placeholders `$1` instead of MySQL `?`.
 	squirrel.StatementBuilder = squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)
+
+	var err error
+	database, err = pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
+	return err
 }
 
-// Set resets the pool to the database.
-// Useful for mocking.
-func Set(d Database) {
-	database = d
-}
-
-// Close closes all connections to the database.
+// Close ...
 func Close() {
 	database.Close()
 }
 
-// Begin starts a transaction.
-func Begin(ctx context.Context) (pgx.Tx, error) {
-	return database.Begin(ctx)
+// Get ...
+func Get() Database {
+	return database
+}
+
+// Set changes the database instance. Useful for mocking.
+func Set(d Database) {
+	database = d
+}
+
+// Tx returns a transaction bound to a request context.
+func Tx(c *fiber.Ctx) pgx.Tx {
+	tx := c.Locals("tx").(pgx.Tx)
+	if tx == nil {
+		tx, err := database.Begin(c.Context())
+		if err != nil {
+			panic(err)
+		}
+		c.Locals("tx", tx)
+	}
+	return tx
 }
 
 // Query executes a query that returns rows.

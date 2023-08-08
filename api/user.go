@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5"
 	"github.com/workoelho/workoelho/database"
 	"github.com/workoelho/workoelho/sanitization"
@@ -78,7 +79,7 @@ func (u *User) New() {
 	u.Person.New()
 }
 
-// Sanitize sanitizes values after user input.
+// Sanitize values after user input.
 func (u *User) Sanitize() error {
 	u.Email = sanitization.Lower(sanitization.Trim(u.Email))
 	return nil
@@ -143,15 +144,19 @@ func (u *User) Validate() error {
 }
 
 // Writable checks if the session can write to the model.
-func (u *User) Writable(s *Session) error {
-	if u.CompanyId != "" && u.CompanyId != s.User.CompanyId {
-		return errors.New("cannot write to a different company")
+func (u *User) Writable(c *fiber.Ctx) error {
+	session := c.Locals("session").(*Session)
+
+	if session != nil {
+		if u.CompanyId != "" && u.CompanyId != session.User.CompanyId {
+			return errors.New("cannot write to a different company")
+		}
 	}
 	return nil
 }
 
 // Create inserts the struct values into the database.
-func (u *User) Create() error {
+func (u *User) Create(c *fiber.Ctx) error {
 	q, args, err := squirrel.Insert(u.Table()).
 		Columns("status", "email", "password_digest", "company_id", "person_id").
 		Values(u.Status, u.Email, u.PasswordDigest, u.CompanyId, u.PersonId).
@@ -161,14 +166,13 @@ func (u *User) Create() error {
 		return err
 	}
 
-	rows, err := database.Query(context.Background(), q, args...)
+	r, err := database.Tx(c).Query(c.Context(), q, args...)
 	if err != nil {
 		return err
 	}
-	defer rows.Close()
+	defer r.Close()
 
-	*u, err = pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[User])
-
+	*u, err = pgx.CollectOneRow(r, pgx.RowToStructByNameLax[User])
 	if err != nil {
 		return err
 	}
@@ -181,16 +185,15 @@ func (u *User) Exists(build func(squirrel.SelectBuilder) squirrel.SelectBuilder)
 	qb := build(squirrel.Select("1").From(u.Table()).Limit(1))
 
 	q, args, err := qb.ToSql()
-
 	if err != nil {
 		return false, err
 	}
 
-	rows, err := database.Query(context.Background(), q, args...)
+	r, err := database.Query(context.Background(), q, args...)
 	if err != nil {
 		return false, err
 	}
-	rows.Close()
+	r.Close()
 
-	return rows.Next(), nil
+	return r.Next(), nil
 }

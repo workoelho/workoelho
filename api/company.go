@@ -31,7 +31,7 @@ func (c *Company) New() {
 	c.UpdatedAt = c.CreatedAt
 }
 
-// Sanitize sanitizes values after user input.
+// Sanitize values after user input.
 func (c *Company) Sanitize() error {
 	c.Name = sanitization.Condense(c.Name)
 	return nil
