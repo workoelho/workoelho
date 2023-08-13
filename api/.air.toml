@@ -1,3 +1,4 @@
 [build]
 cmd = "go build -gcflags='all=-N -l'"
 full_bin = "dlv exec --accept-multiclient --log --headless --continue --listen :2345 --api-version 2 workoelho"
+poll = true

@@ -3,7 +3,6 @@
 package main
 
 import (
-	"context"
 	"time"
 
 	"github.com/Masterminds/squirrel"
@@ -20,15 +19,17 @@ type Company struct {
 	Name string `input:"name" output:"name" db:"name"`
 }
 
+// NewCompany returns an instance with default values.
+func NewCompany() *Company {
+	c := &Company{}
+	c.CreatedAt = time.Now()
+	c.UpdatedAt = c.CreatedAt
+	return c
+}
+
 // Table returns the table name.
 func (*Company) Table() string {
 	return "companies"
-}
-
-// New assigns default values.
-func (c *Company) New() {
-	c.CreatedAt = time.Now()
-	c.UpdatedAt = c.CreatedAt
 }
 
 // Sanitize values after user input.
@@ -43,21 +44,27 @@ func (c *Company) Validate() error {
 }
 
 // Writable checks if the session can write to the model.
-func (c *Company) Writable(s *Session) error {
+func (c *Company) Writable(req Request) error {
 	return nil
 }
 
 // Create inserts the struct values into the database.
-func (c *Company) Create() error {
+func (c *Company) Create(req Request) error {
 	q, args, err := squirrel.Insert(c.Table()).
-		Columns("name").Values(c.Name).
+		Columns("name").
+		Values(c.Name).
 		Suffix(`RETURNING *`).ToSql()
 
 	if err != nil {
 		return err
 	}
 
-	rows, err := database.Query(context.Background(), q, args...)
+	tx, err := req.Tx()
+	if err != nil {
+		return err
+	}
+
+	rows, err := tx.Query(req.Context(), q, args...)
 	if err != nil {
 		return err
 	}

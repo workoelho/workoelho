@@ -5,8 +5,7 @@ package main
 import "testing"
 
 func TestPersonNew(t *testing.T) {
-	p := &Person{}
-	p.New()
+	p := NewPerson()
 
 	if p.CreatedAt.IsZero() {
 		t.Error("expected created at to not be zero")

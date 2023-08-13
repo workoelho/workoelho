@@ -5,8 +5,7 @@ package main
 import "testing"
 
 func TestCompanyNew(t *testing.T) {
-	c := &Company{}
-	c.New()
+	c := NewCompany()
 
 	if c.CreatedAt.IsZero() {
 		t.Error("expected created at to not be zero")

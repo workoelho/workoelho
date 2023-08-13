@@ -5,8 +5,7 @@ package main
 import "testing"
 
 func TestSessionNew(t *testing.T) {
-	s := &Session{}
-	s.New()
+	s := NewSession()
 
 	if s.CreatedAt.IsZero() {
 		t.Errorf("expected created at (%s) to not be zero", s.CreatedAt)

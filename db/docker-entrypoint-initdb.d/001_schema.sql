@@ -1,3 +1,5 @@
+BEGIN TRANSACTION;
+
 CREATE TABLE IF NOT EXISTS companies (
 	id public.xid PRIMARY KEY DEFAULT xid(),
 	created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
@@ -11,8 +13,7 @@ CREATE TABLE IF NOT EXISTS people (
 	created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	deleted_at TIMESTAMP WITH TIME ZONE,
-	name TEXT NOT NULL,
-	company_id public.xid NOT NULL REFERENCES companies(id)
+	name TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -35,3 +36,5 @@ CREATE TABLE IF NOT EXISTS sessions (
 	remote_addr TEXT NOT NULL,
 	user_agent TEXT NOT NULL
 );
+
+COMMIT;

@@ -3,6 +3,7 @@
 package main
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -12,8 +13,7 @@ import (
 )
 
 func TestUserNew(t *testing.T) {
-	u := &User{}
-	u.New()
+	u := NewUser()
 
 	if u.CreatedAt.IsZero() {
 		t.Error("expected created at to not be zero")
@@ -33,7 +33,7 @@ func TestUserNew(t *testing.T) {
 }
 
 func TestUserDigestPassword(t *testing.T) {
-	u := &User{}
+	u := NewUser()
 
 	if err := u.DigestPassword(); err != nil {
 		t.Error("expected digesting empty password not to fail")
@@ -49,6 +49,28 @@ func TestUserDigestPassword(t *testing.T) {
 	}
 }
 
+type request struct {
+	session *Session
+	db      database.Database
+	tx      database.Database
+}
+
+func (r *request) Db() database.Database {
+	return r.db
+}
+
+func (r *request) Tx() (database.Database, error) {
+	return r.tx, nil
+}
+
+func (r *request) Session() *Session {
+	return r.session
+}
+
+func (r *request) Context() context.Context {
+	return context.Background()
+}
+
 func TestUserValidate(t *testing.T) {
 	db, err := pgxmock.NewPool()
 	if err != nil {
@@ -56,11 +78,17 @@ func TestUserValidate(t *testing.T) {
 	}
 	defer db.Close()
 
-	database.Set(db)
+	// tx, err := db.Begin(context.Background())
+	// if err != nil {
+	// 	t.Fatal(err)
+	// }
+	// defer tx.Rollback(context.Background())
+
+	req := &request{nil, db.(database.Database), nil}
 
 	u := &User{}
 
-	if err := u.Validate(); err != nil {
+	if err := u.Validate(req); err != nil {
 		if err, ok := err.(validation.Validation); !ok {
 			t.Fatal(err)
 		} else {
@@ -88,7 +116,7 @@ func TestUserValidate(t *testing.T) {
 
 	u.PasswordDigest = "password"
 
-	if err := u.Validate(); err != nil {
+	if err := u.Validate(req); err != nil {
 		if err, ok := err.(validation.Validation); !ok {
 			t.Fatal(err)
 		} else {
@@ -102,7 +130,7 @@ func TestUserValidate(t *testing.T) {
 	u.Status = "invalid"
 	u.Password = "invalid"
 
-	if err := u.Validate(); err != nil {
+	if err := u.Validate(req); err != nil {
 		if err, ok := err.(validation.Validation); !ok {
 			t.Fatal(err)
 		} else {
@@ -130,7 +158,7 @@ func TestUserValidate(t *testing.T) {
 	db.ExpectQuery("SELECT 1").WithArgs(u.Email).
 		WillReturnRows(pgxmock.NewRows([]string{""}).AddRow(1))
 
-	if err, ok := u.Validate().(validation.Validation); !ok {
+	if err, ok := u.Validate(req).(validation.Validation); !ok {
 		t.Fatal(err)
 	} else {
 		if !err.Check("email", "taken") {
@@ -140,7 +168,7 @@ func TestUserValidate(t *testing.T) {
 
 	db.ExpectQuery("SELECT 1").WithArgs(u.Email).WillReturnRows(pgxmock.NewRows([]string{""}))
 
-	if err := u.Validate(); err != nil {
+	if err := u.Validate(req); err != nil {
 		if err, ok := err.(validation.Validation); !ok {
 			t.Fatal(err)
 		} else {
@@ -158,9 +186,17 @@ func TestUserCreate(t *testing.T) {
 	}
 	defer db.Close()
 
-	database.Set(db)
+	db.ExpectBegin()
 
-	u := &User{}
+	tx, err := db.Begin(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer tx.Rollback(context.Background())
+
+	req := &request{nil, db.(database.Database), tx.(database.Database)}
+
+	u := NewUser()
 
 	now := time.Now()
 
@@ -170,7 +206,7 @@ func TestUserCreate(t *testing.T) {
 			NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "status", "email", "password_digest", "company_id", "person_id"}).
 			AddRow(database.Id("1"), now, now, nil, "active", "me@example.org", "0123456789abcdef", database.Id("1"), database.Id("1")))
 
-	if err := u.Create(); err != nil {
+	if err := u.Create(req); err != nil {
 		t.Fatal(err)
 	}
 

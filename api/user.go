@@ -3,12 +3,10 @@
 package main
 
 import (
-	"context"
 	"errors"
 	"time"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5"
 	"github.com/workoelho/workoelho/database"
 	"github.com/workoelho/workoelho/sanitization"
@@ -44,6 +42,17 @@ type User struct {
 	Person *Person `output:"person,omitempty" db:"-"`
 }
 
+// NewUser returns an instance with default values.
+func NewUser() *User {
+	u := &User{}
+	u.CreatedAt = time.Now()
+	u.UpdatedAt = u.CreatedAt
+	u.Status = "unconfirmed"
+	u.Company = NewCompany()
+	u.Person = NewPerson()
+	return u
+}
+
 // Table returns the table name for the model.
 func (*User) Table() string {
 	return "users"
@@ -68,17 +77,6 @@ func (u *User) ComparePassword(pwd string) error {
 	return bcrypt.CompareHashAndPassword([]byte(u.PasswordDigest), []byte(pwd))
 }
 
-// New assigns default values.
-func (u *User) New() {
-	u.CreatedAt = time.Now()
-	u.UpdatedAt = u.CreatedAt
-	u.Status = "unconfirmed"
-	u.Company = &Company{}
-	u.Company.New()
-	u.Person = &Person{}
-	u.Person.New()
-}
-
 // Sanitize values after user input.
 func (u *User) Sanitize() error {
 	u.Email = sanitization.Lower(sanitization.Trim(u.Email))
@@ -86,7 +84,7 @@ func (u *User) Sanitize() error {
 }
 
 // Validate ensures the struct is in a valid state.
-func (u *User) Validate() error {
+func (u *User) Validate(req Request) error {
 	v := validation.New()
 
 	if err := validation.Empty(u.Status); err != nil {
@@ -100,12 +98,8 @@ func (u *User) Validate() error {
 	} else if err := validation.Format(u.Email, "email"); err != nil {
 		v.Append("email", err)
 	} else {
-		taken, err := u.Exists(func(q squirrel.SelectBuilder) squirrel.SelectBuilder {
-			q = q.Where(squirrel.Eq{"email": u.Email})
-			if u.Id != "" {
-				q = q.Where(squirrel.NotEq{"id": u.Id})
-			}
-			return q
+		taken, err := u.Exists(req, func(q squirrel.SelectBuilder) squirrel.SelectBuilder {
+			return q.Where(squirrel.Eq{"email": u.Email})
 		})
 
 		if err != nil {
@@ -133,9 +127,9 @@ func (u *User) Validate() error {
 		v.Append("companyId", err)
 	}
 
-	if err := validation.Empty(u.PersonId); err != nil {
-		v.Append("personId", err)
-	}
+	// if err := validation.Empty(u.PersonId); err != nil {
+	// 	v.Append("personId", err)
+	// }
 
 	if !v.Empty() {
 		return v
@@ -143,9 +137,9 @@ func (u *User) Validate() error {
 	return nil
 }
 
-// Writable checks if the session can write to the model.
-func (u *User) Writable(c *fiber.Ctx) error {
-	session := c.Locals("session").(*Session)
+// Writable checks if the model can be modified by the request context.
+func (u *User) Writable(c Request) error {
+	session := c.Session()
 
 	if session != nil {
 		if u.CompanyId != "" && u.CompanyId != session.User.CompanyId {
@@ -156,7 +150,7 @@ func (u *User) Writable(c *fiber.Ctx) error {
 }
 
 // Create inserts the struct values into the database.
-func (u *User) Create(c *fiber.Ctx) error {
+func (u *User) Create(req Request) error {
 	q, args, err := squirrel.Insert(u.Table()).
 		Columns("status", "email", "password_digest", "company_id", "person_id").
 		Values(u.Status, u.Email, u.PasswordDigest, u.CompanyId, u.PersonId).
@@ -166,13 +160,18 @@ func (u *User) Create(c *fiber.Ctx) error {
 		return err
 	}
 
-	r, err := database.Tx(c).Query(c.Context(), q, args...)
+	tx, err := req.Tx()
 	if err != nil {
 		return err
 	}
-	defer r.Close()
 
-	*u, err = pgx.CollectOneRow(r, pgx.RowToStructByNameLax[User])
+	rows, err := tx.Query(req.Context(), q, args...)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	*u, err = pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[User])
 	if err != nil {
 		return err
 	}
@@ -181,19 +180,23 @@ func (u *User) Create(c *fiber.Ctx) error {
 }
 
 // Exists checks if at least one record matching the given criteria exists.
-func (u *User) Exists(build func(squirrel.SelectBuilder) squirrel.SelectBuilder) (bool, error) {
+func (u *User) Exists(req Request, build func(squirrel.SelectBuilder) squirrel.SelectBuilder) (bool, error) {
 	qb := build(squirrel.Select("1").From(u.Table()).Limit(1))
+
+	if u.Id != "" {
+		qb = qb.Where(squirrel.NotEq{"id": u.Id})
+	}
 
 	q, args, err := qb.ToSql()
 	if err != nil {
 		return false, err
 	}
 
-	r, err := database.Query(context.Background(), q, args...)
+	rows, err := req.Db().Query(req.Context(), q, args...)
 	if err != nil {
 		return false, err
 	}
-	r.Close()
+	defer rows.Close()
 
-	return r.Next(), nil
+	return rows.Next(), nil
 }

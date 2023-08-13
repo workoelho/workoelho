@@ -6,9 +6,13 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5"
 	"github.com/workoelho/workoelho/database"
+)
+
+const (
+	// Default session duration.
+	SessionDuration = time.Hour * 24
 )
 
 // Session holds information about a user session.
@@ -29,26 +33,22 @@ type Session struct {
 	UserAgent string `output:"userAgent" db:"user_agent"`
 }
 
-const (
-	// Default session duration.
-	SessionDuration = time.Hour * 24
-)
+// NewSession returns an instance with default values.
+func NewSession() *Session {
+	s := &Session{}
+	s.CreatedAt = time.Now()
+	s.ExpiresAt = s.CreatedAt.Add(SessionDuration)
+	s.User = &User{}
+	return s
+}
 
 // Table name of the model.
 func (*Session) Table() string {
 	return "sessions"
 }
 
-// New creates a new session.
-func (s *Session) New() {
-	s.CreatedAt = time.Now()
-	s.ExpiresAt = s.CreatedAt.Add(SessionDuration)
-	s.User = &User{}
-	s.User.New()
-}
-
-// Create ...
-func (s *Session) Create(c *fiber.Ctx) error {
+// Create inserts the struct values into the database.
+func (s *Session) Create(req Request) error {
 	q, args, err := squirrel.Insert(s.Table()).
 		Columns("created_at", "expires_at", "user_id", "remote_addr", "user_agent").
 		Values(s.CreatedAt, s.ExpiresAt, s.UserId, s.RemoteAddr, s.UserAgent).
@@ -58,13 +58,18 @@ func (s *Session) Create(c *fiber.Ctx) error {
 		return err
 	}
 
-	r, err := database.Tx(c).Query(c.Context(), q, args...)
+	tx, err := req.Tx()
 	if err != nil {
 		return err
 	}
-	defer r.Close()
 
-	*s, err = pgx.CollectOneRow(r, pgx.RowToStructByNameLax[Session])
+	rows, err := tx.Query(req.Context(), q, args...)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	*s, err = pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[Session])
 	if err != nil {
 		return err
 	}
