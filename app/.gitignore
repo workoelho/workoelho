@@ -1,0 +1,12 @@
+# npm stuff.
+node_modules
+package-lock.json
+
+# TypeScript stuff.
+*.tsbuildinfo
+
+# Next.js artifacts.
+build
+next-env.d.ts
+.next
+.env*.local

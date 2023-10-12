@@ -1,0 +1,28 @@
+services:
+  proxy:
+    build: ./proxy
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    volumes:
+      - /data
+      - /config
+      - ./proxy/Caddyfile:/etc/caddy/Caddyfile
+
+  db:
+    image: postgres:16-alpine
+    ports:
+      - 5432
+    volumes:
+      - /var/lib/postgresql/data
+      - ./db/postgres.conf:/etc/postgres.conf
+    environment:
+      - POSTGRES_PASSWORD=123
+    command: |
+      postgres -c config_file=/etc/postgres.conf
+
+  app:
+    build: ./app
+    environment:
+      - DATABASE_URL=postgresql://postgres:123@db:5432/postgres

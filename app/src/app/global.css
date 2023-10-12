@@ -1,0 +1,251 @@
+/* Define SVG namespace. */
+
+@namespace svg "http://www.w3.org/2000/svg";
+
+/* Hard reset everything that is not under SVG namespace but revert display property to browser's default. */
+
+:not(svg|*) {
+  all: unset;
+  display: revert;
+}
+
+/* Better control when setting width and height. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Fix inheritance in pseudo-elements. */
+
+::before,
+::after {
+  font: inherit;
+  text-decoration: inherit;
+  vertical-align: inherit;
+}
+
+/* Reset form controls. */
+
+input[type="number"] {
+  appearance: textfield; /* Fix for Firefox. Nothing else works. */
+}
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  all: unset;
+}
+
+::-webkit-color-swatch-wrapper {
+  all: unset;
+}
+
+::-webkit-color-swatch {
+  all: unset;
+}
+
+::-moz-color-swatch {
+  all: unset;
+}
+
+::-webkit-file-upload-button {
+  all: unset;
+}
+
+::-webkit-search-cancel-button,
+::-webkit-search-results-button,
+::-webkit-search-results-decoration {
+  all: unset;
+}
+
+::-webkit-slider-thumb {
+  all: unset;
+}
+
+::-webkit-slider-runnable-track {
+  all: unset;
+}
+
+::-moz-range-thumb {
+  all: unset;
+}
+
+::-moz-range-track {
+  all: unset;
+}
+
+::-moz-range-progress {
+  all: unset;
+}
+
+::-webkit-datetime-edit-fields-wrapper {
+  all: unset;
+}
+
+::-webkit-calendar-picker-indicator {
+  all: unset;
+}
+
+[list]::-webkit-calendar-picker-indicator {
+  list-style: none !important; /* Fix for input with list where the picker uses style attribute. */
+}
+
+::-webkit-progress-bar {
+  all: unset;
+}
+
+::-webkit-progress-value {
+  all: unset;
+}
+
+::-moz-progress-bar {
+  all: unset;
+}
+
+/* Fix text wrapping. */
+
+pre,
+textarea {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Fix issues with box height. */
+
+input,
+select,
+textarea {
+  vertical-align: bottom;
+}
+
+textarea {
+  resize: auto;
+}
+
+/* Enable smooth scroll avoiding issues with find in page. */
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Nicer defaults. */
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  cursor: default;
+  font:
+    16px/1.5 system-ui,
+    sans-serif;
+  overflow-wrap: break-word;
+  tab-size: 4;
+  text-size-adjust: 100%;
+}
+
+pre {
+  overflow: auto;
+}
+
+abbr[title] {
+  cursor: help;
+  text-decoration: underline dotted;
+}
+
+small {
+  font-size: 0.75em;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+a {
+  cursor: pointer;
+}
+
+svg:not([fill]) {
+  fill: currentColor;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: monospace;
+}
+
+sub,
+sup {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+li {
+  list-style: none;
+}
+
+/* Constraint dimensions of embedded content. */
+
+iframe,
+img,
+input,
+select,
+textarea {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Faster rendering with easier styling, and fix text indentation in tables. */
+
+table {
+  table-layout: fixed;
+  text-indent: 0;
+}
+
+/* Remove the inner border and padding in Firefox. */
+
+::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/* Reset invalid style in Firefox. */
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/* Accessbility defaults. */
+
+:-moz-focusring {
+  outline: 1px dotted currentColor;
+}
+
+:focus {
+  outline: 1px dotted currentColor;
+}
+
+[aria-busy="true"] {
+  cursor: progress;
+}
+
+[aria-disabled="true"],
+[disabled] {
+  cursor: not-allowed;
+}
