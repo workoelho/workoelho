@@ -1,16 +1,17 @@
 // Mozilla Public License 2.0 ©️ 2023 Workoelho.
 
-package main
+package models
 
 import "testing"
 
-func TestCompanyNew(t *testing.T) {
-	c := NewCompany()
+func TestPersonNew(t *testing.T) {
+	p := new(Person)
+	p.New()
 
-	if c.CreatedAt.IsZero() {
+	if p.CreatedAt.IsZero() {
 		t.Error("expected created at to not be zero")
 	}
-	if c.UpdatedAt != c.CreatedAt {
+	if p.UpdatedAt != p.CreatedAt {
 		t.Error("expected updated at to be equal to created at")
 	}
 }

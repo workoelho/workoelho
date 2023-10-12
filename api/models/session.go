@@ -1,8 +1,9 @@
 // Mozilla Public License 2.0 ©️ 2023 Workoelho.
 
-package main
+package models
 
 import (
+	"context"
 	"time"
 
 	"github.com/Masterminds/squirrel"
@@ -12,7 +13,7 @@ import (
 
 const (
 	// Default session duration.
-	SessionDuration = time.Hour * 24
+	DefaultDuration = time.Hour * 24
 )
 
 // Session holds information about a user session.
@@ -24,7 +25,7 @@ type Session struct {
 	// Date and time when the session expires.
 	ExpiresAt time.Time `output:"expiresAt" db:"expires_at"`
 	// ID of the owner of the session.
-	UserId int `output:"userId" db:"user_id"`
+	UserId database.Id `output:"userId" db:"user_id"`
 	// Owner of the session.
 	User *User `output:"user,omitempty" db:"-"`
 	// IP address of the client that started the session.
@@ -33,22 +34,24 @@ type Session struct {
 	UserAgent string `output:"userAgent" db:"user_agent"`
 }
 
-// NewSession returns an instance with default values.
-func NewSession() *Session {
-	s := &Session{}
+// New resets all fields to their default values.
+func (s *Session) New() {
+	s.Id = ""
 	s.CreatedAt = time.Now()
-	s.ExpiresAt = s.CreatedAt.Add(SessionDuration)
-	s.User = &User{}
-	return s
+	s.ExpiresAt = s.CreatedAt.Add(DefaultDuration)
+	s.UserId = ""
+	s.User = nil
+	s.RemoteAddr = ""
+	s.UserAgent = ""
 }
 
-// Table name of the model.
+// Table name on the database.
 func (*Session) Table() string {
 	return "sessions"
 }
 
-// Create inserts the struct values into the database.
-func (s *Session) Create(req Request) error {
+// Create inserts a new record into the database.
+func (s *Session) Create(ctx context.Context, tx pgx.Tx) error {
 	q, args, err := squirrel.Insert(s.Table()).
 		Columns("created_at", "expires_at", "user_id", "remote_addr", "user_agent").
 		Values(s.CreatedAt, s.ExpiresAt, s.UserId, s.RemoteAddr, s.UserAgent).
@@ -58,12 +61,7 @@ func (s *Session) Create(req Request) error {
 		return err
 	}
 
-	tx, err := req.Tx()
-	if err != nil {
-		return err
-	}
-
-	rows, err := tx.Query(req.Context(), q, args...)
+	rows, err := tx.Query(context.Background(), q, args...)
 	if err != nil {
 		return err
 	}

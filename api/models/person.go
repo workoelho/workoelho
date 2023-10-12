@@ -1,13 +1,14 @@
 // Mozilla Public License 2.0 ©️ 2023 Workoelho.
 
-package main
+package models
 
 import (
-	"time"
+	"context"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/workoelho/workoelho/database"
+	"github.com/workoelho/workoelho/helpers"
 	"github.com/workoelho/workoelho/sanitization"
 	"github.com/workoelho/workoelho/validation"
 )
@@ -20,15 +21,13 @@ type Person struct {
 	Name string `input:"name" output:"name" db:"name"`
 }
 
-// NewPerson returns an instance with default values.
-func NewPerson() *Person {
-	p := &Person{}
-	p.CreatedAt = time.Now()
-	p.UpdatedAt = p.CreatedAt
-	return p
+// New resets all fields to their default values.
+func (p *Person) New() {
+	p.Record.New()
+	p.Name = ""
 }
 
-// Table returns the table name.
+// Table name on the database.
 func (*Person) Table() string {
 	return "people"
 }
@@ -40,23 +39,23 @@ func (p *Person) Sanitize() error {
 }
 
 // Validate ensures the struct is in a valid state.
-func (p *Person) Validate(req Request) error {
+func (p *Person) Validate(ctx context.Context, database database.DB) error {
 	v := validation.New()
 
 	if err := validation.Empty(p.Name); err != nil {
-		v.Append(Tag(p, "Name", "output"), err)
+		v.Append(helpers.Tag(p, "Name", "output"), err)
 	}
 
 	return v
 }
 
 // Writable checks if the session can write to the model.
-func (p *Person) Writable(req Request) error {
+func (p *Person) Writable(ctx context.Context, session *Session) error {
 	return nil
 }
 
-// Create saves data to the database.
-func (p *Person) Create(req Request) error {
+// Create inserts a new record into the database.
+func (p *Person) Create(ctx context.Context, tx pgx.Tx) error {
 	q, args, err := squirrel.Insert(p.Table()).
 		Columns("name").
 		Values(p.Name).
@@ -66,12 +65,7 @@ func (p *Person) Create(req Request) error {
 		return err
 	}
 
-	tx, err := req.Tx()
-	if err != nil {
-		return err
-	}
-
-	rows, err := tx.Query(req.Context(), q, args...)
+	rows, err := tx.Query(context.Background(), q, args...)
 	if err != nil {
 		return err
 	}

@@ -10,8 +10,8 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-// Database interface can execute statements, query rows and begin transactions.
-type Database interface {
+// DB interface can execute statements, query rows and begin transactions.
+type DB interface {
 	QueryRow(ctx context.Context, sql string, args ...interface{}) pgx.Row
 	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
 	Exec(ctx context.Context, sql string, args ...interface{}) (pgconn.CommandTag, error)
@@ -31,4 +31,12 @@ type Record struct {
 	UpdatedAt time.Time `output:"updatedAt" db:"updated_at"`
 	// Date and time when the record was deleted.
 	DeletedAt *time.Time `output:"deletedAt" db:"deleted_at"`
+}
+
+// New resets all fields to their default values.
+func (r *Record) New() {
+	r.Id = ""
+	r.CreatedAt = time.Now()
+	r.UpdatedAt = r.CreatedAt
+	r.DeletedAt = nil
 }

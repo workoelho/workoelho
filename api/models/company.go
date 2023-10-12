@@ -1,9 +1,9 @@
 // Mozilla Public License 2.0 ©️ 2023 Workoelho.
 
-package main
+package models
 
 import (
-	"time"
+	"context"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
@@ -19,15 +19,13 @@ type Company struct {
 	Name string `input:"name" output:"name" db:"name"`
 }
 
-// NewCompany returns an instance with default values.
-func NewCompany() *Company {
-	c := &Company{}
-	c.CreatedAt = time.Now()
-	c.UpdatedAt = c.CreatedAt
-	return c
+// New resets all fields to their default values.
+func (c *Company) New() {
+	c.Record.New()
+	c.Name = ""
 }
 
-// Table returns the table name.
+// Table name on the database.
 func (*Company) Table() string {
 	return "companies"
 }
@@ -39,17 +37,17 @@ func (c *Company) Sanitize() error {
 }
 
 // Validate ensures the struct is in a valid state.
-func (c *Company) Validate() error {
+func (c *Company) Validate(ctx context.Context, database database.DB) error {
 	return nil
 }
 
 // Writable checks if the session can write to the model.
-func (c *Company) Writable(req Request) error {
+func (c *Company) Writable(ctx context.Context, database database.DB, session *Session) error {
 	return nil
 }
 
-// Create inserts the struct values into the database.
-func (c *Company) Create(req Request) error {
+// Create inserts a new record into the database.
+func (c *Company) Create(ctx context.Context, tx pgx.Tx) error {
 	q, args, err := squirrel.Insert(c.Table()).
 		Columns("name").
 		Values(c.Name).
@@ -59,12 +57,7 @@ func (c *Company) Create(req Request) error {
 		return err
 	}
 
-	tx, err := req.Tx()
-	if err != nil {
-		return err
-	}
-
-	rows, err := tx.Query(req.Context(), q, args...)
+	rows, err := tx.Query(context.Background(), q, args...)
 	if err != nil {
 		return err
 	}

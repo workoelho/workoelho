@@ -3,6 +3,9 @@
 package main
 
 import (
+	"context"
+
+	"github.com/workoelho/workoelho/database"
 	"github.com/workoelho/workoelho/sanitization"
 	"github.com/workoelho/workoelho/validation"
 )
@@ -22,7 +25,7 @@ func (c *Credentials) Sanitize() error {
 }
 
 // Validate ensures the struct is in a valid state.
-func (c *Credentials) Validate() error {
+func (c *Credentials) Validate(ctx context.Context, database database.DB) error {
 	v := validation.New()
 
 	if err := validation.Empty(c.Email); err != nil {
