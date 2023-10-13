@@ -6,5 +6,5 @@ module.exports = {
       aggregateTimeout: 100,
     };
     return config;
-  }
+  },
 };

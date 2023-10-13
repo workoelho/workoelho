@@ -234,11 +234,13 @@ table {
 /* Accessbility defaults. */
 
 :-moz-focusring {
-  outline: 1px dotted currentColor;
+  transition: outline ease-in-out 0.25s;
+  outline: 0.125rem solid color-mix(in srgb, currentColor 25%, transparent);
 }
 
-:focus {
-  outline: 1px dotted currentColor;
+:focus-visible {
+  transition: outline ease-in-out 0.25s;
+  outline: 0.125rem solid color-mix(in srgb, currentColor 25%, transparent);
 }
 
 [aria-busy="true"] {

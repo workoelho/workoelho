@@ -1,0 +1,9 @@
+.button {
+  align-items: center;
+  background-color: gainsboro;
+  border-radius: 0.25rem;
+  border: 1px outset;
+  display: flex;
+  height: 2rem;
+  padding-inline: 0.75rem;
+}

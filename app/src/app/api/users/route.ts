@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import { New, createPassword } from "~/lib/api/User";
+import { createPassword } from "~/lib/api/user";
 import { withErrorHandled } from "~/lib/handler";
 import prisma from "~/lib/prisma";
+import { newUserSchema } from "~/lib/schema/user";
 
 export const POST = withErrorHandled(async (request) => {
-  const input = New.parse(await request.json());
+  const input = newUserSchema.parse(await request.json());
 
   const user = await prisma.user.create({
     data: {

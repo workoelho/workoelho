@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { New } from "~/lib/api/Session";
-import { comparePassword } from "~/lib/api/User";
+import { comparePassword } from "~/lib/api/user";
 import { withErrorHandled } from "~/lib/handler";
 import prisma from "~/lib/prisma";
+import { newSessionSchema } from "~/lib/schema/session";
 
 export const POST = withErrorHandled(async (request) => {
-  const input = New.parse(await request.json());
+  const input = newSessionSchema.parse(await request.json());
 
   const user = await prisma.user.findUnique({
     where: { email: input.email },

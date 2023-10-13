@@ -1,0 +1,9 @@
+.input {
+  align-items: center;
+  background-color: white;
+  border-radius: 0.25rem;
+  border: 1px inset currentColor;
+  display: flex;
+  height: 2rem;
+  padding-inline: 0.25rem;
+}

@@ -1,9 +1,9 @@
-import { SignInForm } from "./form";
+import { SignUpForm } from "./form";
 
 export default function Page() {
   return (
     <main>
-      <SignInForm />
+      <SignUpForm />
     </main>
   );
 }

@@ -1,0 +1,10 @@
+.field {
+}
+
+.error {
+  color: firebrick;
+}
+
+.valid {
+  color: forestgreen;
+}
