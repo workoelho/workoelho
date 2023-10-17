@@ -1,22 +1,37 @@
-import { NextResponse } from "next/server";
-import { comparePassword } from "~/lib/api/user";
-import { withErrorHandled } from "~/lib/handler";
-import prisma from "~/lib/prisma";
-import { newSessionSchema } from "~/lib/schema/session";
+import { comparePassword } from "~/lib/server/user";
+import { withErrorHandled } from "~/lib/server/handler";
+import prisma from "~/lib/server/prisma";
+import * as Schema from "~/lib/shared/schema";
+import { z } from "zod";
+import { InvalidInput } from "~/lib/shared/InvalidInput";
 
 export const POST = withErrorHandled(async (request) => {
-  const input = newSessionSchema.parse(await request.json());
+  const schema = z.object({
+    email: z.string().email(),
+    password: Schema.User.password,
+  });
+  const input = schema.parse(await request.json());
 
   const user = await prisma.user.findUnique({
     where: { email: input.email },
   });
 
   if (!user) {
-    return new NextResponse(null, { status: 404 });
+    throw new InvalidInput([
+      {
+        path: ["email"],
+        code: "nonexistent",
+      },
+    ]);
   }
 
-  if (await comparePassword(input.password, user.password)) {
-    return new NextResponse(null, { status: 401 });
+  if (!(await comparePassword(input.password, user.password))) {
+    throw new InvalidInput([
+      {
+        path: ["password"],
+        code: "mismatch",
+      },
+    ]);
   }
 
   const session = await prisma.session.create({
@@ -26,5 +41,5 @@ export const POST = withErrorHandled(async (request) => {
     },
   });
 
-  return NextResponse.json({ data: session }, { status: 201 });
+  return Response.json({ data: session }, { status: 201 });
 });

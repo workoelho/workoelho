@@ -1,19 +1,24 @@
-import { NextResponse } from "next/server";
-import { createPassword } from "~/lib/api/user";
-import { withErrorHandled } from "~/lib/handler";
-import prisma from "~/lib/prisma";
-import { newUserSchema } from "~/lib/schema/user";
+import { createPassword } from "~/lib/server/user";
+import { withErrorHandled } from "~/lib/server/handler";
+import prisma from "~/lib/server/prisma";
+import * as Schema from "~/lib/shared/schema";
+import { z } from "zod";
 
 export const POST = withErrorHandled(async (request) => {
-  const input = newUserSchema.parse(await request.json());
+  const schema = z.object({
+    name: Schema.User.name,
+    email: Schema.User.email,
+    password: Schema.User.password,
+  });
+  const input = schema.parse(await request.json());
 
   const user = await prisma.user.create({
     data: {
-      name: input.name ?? "",
+      name: input.name,
       email: input.email,
       password: await createPassword(input.password),
     },
   });
 
-  return NextResponse.json({ data: user }, { status: 201 });
+  return Response.json({ data: user }, { status: 201 });
 });

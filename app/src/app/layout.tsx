@@ -3,7 +3,6 @@ import "./global.css";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { Layout } from "~/components/Layout";
-import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,7 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Layout>
           <nav>
             <h1>
-              <a href="">Workoelho</a>
+              <a href="/">Workoelho</a>
             </h1>
             <ul>
               <li>
@@ -29,7 +28,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </ul>
           </nav>
 
-          <Providers>{children}</Providers>
+          {children}
         </Layout>
       </body>
     </html>

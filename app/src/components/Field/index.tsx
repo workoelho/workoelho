@@ -1,37 +1,37 @@
-import { Children, ReactNode, cloneElement, useContext, useId } from "react";
-import { ClassList } from "~/lib/classList";
-import { Context, getErrorMessage, getInputProps } from "~/lib/useForm";
+import { ReactNode, useId } from "react";
+import { ClassList } from "~/lib/client/ClassList";
 import classes from "./style.module.css";
 
 type Props = {
-  name: string;
-  label: string;
+  label: ReactNode;
+  valid?: boolean;
   hint?: ReactNode;
-  children: JSX.Element;
+  children: (props: {
+    fieldId: string;
+    hintId: string | undefined;
+  }) => ReactNode;
 };
 
-export function Field({ name, label, hint, children }: Props) {
-  const form = useContext(Context);
-  const id = `field-${useId()}`;
-  const error = getErrorMessage(form, name);
+export function Field({ label, valid, hint, children }: Props) {
+  const fieldId = `field-${useId()}`;
+  const hintId = hint ? `${fieldId}-hint` : undefined;
 
   const classList = new ClassList(classes.field);
-  if (form.fields[name].touched) {
-    if (form.fields[name].error) {
-      classList.add(classes.error);
-    } else {
-      classList.add(classes.valid);
-    }
+  if (valid === true) {
+    classList.add(classes.valid);
+  } else if (valid === false) {
+    classList.add(classes.error);
   }
 
   return (
     <div className={classList.toString()}>
-      <label htmlFor={id}>{label}</label>
-      {cloneElement(Children.only(children), {
-        id,
-        ...getInputProps(form, name),
-      })}
-      <span>{error ?? hint}</span>
+      <label htmlFor={fieldId}>{label}</label>
+      {children({ fieldId, hintId })}
+      {hint ? (
+        <span id={hintId} className={classes.hint}>
+          {hint}
+        </span>
+      ) : null}
     </div>
   );
 }

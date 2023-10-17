@@ -1,70 +1,55 @@
 "use client";
 
-import { type Session } from "@prisma/client";
-import { useMutation } from "@tanstack/react-query";
-import { type FormEvent } from "react";
-import { z } from "zod";
-import { Button } from "~/components/Button";
+import { useFormState } from "react-dom";
 import { Field } from "~/components/Field";
-import { Form } from "~/components/Form";
 import { Input } from "~/components/Input";
-import { fetch } from "~/lib/fetch";
-import { passwordSchema } from "~/lib/schema/user";
-import { useForm } from "~/lib/useForm";
+import { Submit } from "~/components/Submit";
+import { Flex } from "~/components/Flex";
+import { Issue } from "~/lib/shared/InvalidInput";
 
-const signInSchema = z.object({
-  email: z.string().email(),
-  password: passwordSchema,
-});
+type Props<T> = {
+  action: (state: T, payload: FormData) => Promise<T>;
+};
 
-type Data = z.infer<typeof signInSchema>;
-
-export function SignInForm() {
-  const form = useForm(signInSchema);
-
-  const { mutate, data, isLoading, isError, isSuccess } = useMutation(
-    (data: Data) => fetch<Session, Data>("POST", "/api/sessions", data),
-  );
-
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (isLoading) {
-      return;
-    }
-
-    const data = form.parse();
-    mutate(data);
-  };
+export function Form({ action: initialAction }: Props<Issue[] | null>) {
+  const [issues, action] = useFormState(initialAction, null);
 
   return (
-    <Form form={form} onSubmit={onSubmit}>
-      <fieldset>
+    <form method="POST" action={action}>
+      <Flex as="fieldset" flexDirection="column" gap="1.5rem">
         <legend>Sign In</legend>
 
-        <p>
-          {isSuccess ? (
-            <>
-              ✅ Done! <code>{JSON.stringify(data)}</code>
-            </>
-          ) : isError ? (
-            "❌ Error!"
-          ) : null}
-        </p>
-
-        <Field name="email" label="E-mail">
-          <Input type="email" required />
+        <Field
+          label="E-mail"
+          hint={issues?.find(({ path }) => path.includes("email"))?.code}
+        >
+          {({ fieldId, hintId }) => (
+            <Input
+              id={fieldId}
+              aria-describedby={hintId}
+              name="email"
+              type="email"
+              required
+            />
+          )}
         </Field>
-        <Field name="password" label="Password">
-          <Input type="password" required />
+
+        <Field label="Password">
+          {({ fieldId, hintId }) => (
+            <Input
+              id={fieldId}
+              aria-describedby={hintId}
+              name="password"
+              type="password"
+              required
+            />
+          )}
         </Field>
 
         <footer>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Working..." : "Sign In"}
-          </Button>
+          <Submit>Sign In</Submit>
         </footer>
-      </fieldset>
-    </Form>
+      </Flex>
+    </form>
   );
 }
