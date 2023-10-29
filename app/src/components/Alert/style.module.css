@@ -1,0 +1,22 @@
+.alert {
+  padding: 1.5rem;
+}
+
+.alert.neutral {
+  background-color: whitesmoke;
+}
+
+.alert.positive {
+  background-color: mintcream;
+  color: darkgreen;
+}
+
+.alert.negative {
+  background-color: mistyrose;
+  color: firebrick;
+}
+
+.alert.warning {
+  background-color: lemonchiffon;
+  color: darkgoldenrod;
+}

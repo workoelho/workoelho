@@ -19,10 +19,11 @@ model User {
 }
 
 model Session {
-    id        String   @id @default(cuid())
+    id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     expiresAt DateTime
     userId    Int
+    key       String   @default(cuid())
 
     user User @relation(fields: [userId], references: [id])
 }

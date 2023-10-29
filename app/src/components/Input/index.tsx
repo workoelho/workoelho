@@ -7,7 +7,6 @@ type Props = InputHTMLAttributes<HTMLInputElement>;
 export function Input(props: Props) {
   const classList = new ClassList(classes.input);
   classList.add(props.className);
-  props.className = classList.toString();
 
-  return <input {...props} />;
+  return <input {...props} className={classList.toString()} />;
 }

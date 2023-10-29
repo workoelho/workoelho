@@ -1,5 +1,5 @@
 export class ClassList extends Set {
-  constructor(...classes: string[]) {
+  constructor(...classes: unknown[]) {
     super(classes);
   }
 

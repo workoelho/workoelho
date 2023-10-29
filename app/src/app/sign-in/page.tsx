@@ -1,34 +1,39 @@
-import { Session } from "@prisma/client";
-import { Issue } from "~/lib/shared/InvalidInput";
-import { POST } from "~/app/api/sessions/route";
-import { Form } from "./form";
 import { redirect } from "next/navigation";
+import { create } from "~/actions/session";
+import { Form } from "./form";
+import classes from "./style.module.css";
+import { Flex } from "~/components/Flex";
+import { Heading } from "~/components/Heading";
+import { Footer } from "~/components/Footer";
 
 export default function Page() {
-  const action = async (payload: FormData) => {
+  const action = async (state: { message: string }, payload: FormData) => {
     "use server";
 
-    const response = await POST(
-      new Request("/api/sessions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+    try {
+      await create(
+        {},
+        {
           email: payload.get("email"),
           password: payload.get("password"),
-        }),
-      })
-    );
-
-    if (response.status === 422) {
-      return (await response.json()) as Issue[];
-    } else if (response.status < 300) {
+        }
+      );
       redirect("/");
+    } catch (error) {
+      if (error instanceof Error) {
+        return { message: error.message };
+      }
+      throw error;
     }
   };
 
   return (
-    <main>
-      <Form action={action} />
-    </main>
+    <div className={classes.layout}>
+      <Flex as="main" flexDirection="column" className={classes.content}>
+        <Heading level={1}>W</Heading>
+        <Form action={action} initialState={{ message: "" }} />
+      </Flex>
+      <Footer className={classes.footer} />
+    </div>
   );
 }

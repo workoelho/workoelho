@@ -1,7 +1,16 @@
 .field {
 }
 
-.error {
+.field:focus-within {
+}
+
+.label {
+}
+
+.hint {
+}
+
+.invalid {
   color: firebrick;
 }
 

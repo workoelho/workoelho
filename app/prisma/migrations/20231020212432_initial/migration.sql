@@ -12,10 +12,11 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Session" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expiresAt" TIMESTAMP(3) NOT NULL,
     "userId" INTEGER NOT NULL,
+    "key" TEXT NOT NULL,
 
     CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
 );

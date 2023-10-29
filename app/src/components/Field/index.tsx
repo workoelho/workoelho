@@ -1,37 +1,45 @@
 import { ReactNode, useId } from "react";
 import { ClassList } from "~/lib/client/ClassList";
+import { FieldState } from "~/lib/client/form";
 import classes from "./style.module.css";
 
-type Props = {
-  label: ReactNode;
-  valid?: boolean;
-  hint?: ReactNode;
-  children: (props: {
-    fieldId: string;
-    hintId: string | undefined;
-  }) => ReactNode;
+type InputProps = {
+  "aria-describedby"?: string;
 };
 
-export function Field({ label, valid, hint, children }: Props) {
-  const fieldId = `field-${useId()}`;
-  const hintId = hint ? `${fieldId}-hint` : undefined;
+type FieldProps = {
+  label?: ReactNode;
+  state?: FieldState;
+  hint?: ReactNode;
+  children: (props: InputProps) => ReactNode;
+};
+
+export function Field({ label, state, children, ...props }: FieldProps) {
+  const hintId = useId();
+  const hint = state?.error ?? props.hint;
 
   const classList = new ClassList(classes.field);
-  if (valid === true) {
-    classList.add(classes.valid);
-  } else if (valid === false) {
-    classList.add(classes.error);
+  if (state?.touched) {
+    if (state.error) {
+      classList.add(classes.invalid);
+    } else {
+      classList.add(classes.valid);
+    }
   }
 
   return (
-    <div className={classList.toString()}>
-      <label htmlFor={fieldId}>{label}</label>
-      {children({ fieldId, hintId })}
+    <label className={classList.toString()}>
+      {label ? <span className={classes.label}>{label}</span> : null}
+      {children({ "aria-describedby": hintId })}
       {hint ? (
-        <span id={hintId} className={classes.hint}>
+        <span
+          id={hintId}
+          className={classes.hint}
+          aria-live={state?.error ? "polite" : undefined}
+        >
           {hint}
         </span>
       ) : null}
-    </div>
+    </label>
   );
 }

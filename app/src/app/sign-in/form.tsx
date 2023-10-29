@@ -1,55 +1,53 @@
 "use client";
 
 import { useFormState } from "react-dom";
+import { Alert } from "~/components/Alert";
 import { Field } from "~/components/Field";
+import { Flex } from "~/components/Flex";
+import { Heading } from "~/components/Heading";
 import { Input } from "~/components/Input";
 import { Submit } from "~/components/Submit";
-import { Flex } from "~/components/Flex";
-import { Issue } from "~/lib/shared/InvalidInput";
 
 type Props<T> = {
-  action: (state: T, payload: FormData) => Promise<T>;
+  action: (state: T, payload: FormData) => never | Promise<T>;
+  initialState: T;
 };
 
-export function Form({ action: initialAction }: Props<Issue[] | null>) {
-  const [issues, action] = useFormState(initialAction, null);
+export function Form<T extends { message: string }>({
+  action,
+  initialState,
+}: Props<T>) {
+  const [state, handledAction] = useFormState(action, initialState);
 
   return (
-    <form method="POST" action={action}>
+    <Flex as="form" action={handledAction} flexDirection="column" gap="1.5rem">
       <Flex as="fieldset" flexDirection="column" gap="1.5rem">
-        <legend>Sign In</legend>
+        <Heading as="legend" level={2}>
+          Sign in
+        </Heading>
 
-        <Field
-          label="E-mail"
-          hint={issues?.find(({ path }) => path.includes("email"))?.code}
-        >
-          {({ fieldId, hintId }) => (
-            <Input
-              id={fieldId}
-              aria-describedby={hintId}
-              name="email"
-              type="email"
-              required
-            />
-          )}
+        <p>Welcome, back! 👋</p>
+
+        {state.message ? (
+          <Alert variant="negative">
+            <p>{state.message}</p>
+          </Alert>
+        ) : null}
+
+        <Field label="E-mail">
+          {(props) => <Input name="email" type="email" required {...props} />}
         </Field>
 
         <Field label="Password">
-          {({ fieldId, hintId }) => (
-            <Input
-              id={fieldId}
-              aria-describedby={hintId}
-              name="password"
-              type="password"
-              required
-            />
+          {(props) => (
+            <Input name="password" type="password" required {...props} />
           )}
         </Field>
-
-        <footer>
-          <Submit>Sign In</Submit>
-        </footer>
       </Flex>
-    </form>
+
+      <footer>
+        <Submit>Sign in</Submit>
+      </footer>
+    </Flex>
   );
 }
