@@ -3,10 +3,7 @@ import { CSSProperties, ElementType, forwardRef } from "react";
 import classes from "./style.module.css";
 
 import { ClassList } from "~/lib/client/ClassList";
-import {
-  PolymorphicPropsWithRef,
-  PolymorphicRef,
-} from "~/lib/shared/polymorphism";
+import { PolymorphicPropsWithRef, PolymorphicRef } from "~/lib/shared/react";
 
 type AcceptableElementType =
   | "span"
@@ -44,7 +41,7 @@ function Flex<E extends AcceptableElementType = "div">(
     flexWrap,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("div" as ElementType);
 

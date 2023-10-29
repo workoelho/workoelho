@@ -1,10 +1,15 @@
 import { redirect } from "next/navigation";
+import { type Metadata } from "next";
 import { create } from "~/actions/session";
 import { Form } from "./form";
-import classes from "./style.module.css";
 import { Flex } from "~/components/Flex";
 import { Heading } from "~/components/Heading";
 import { Footer } from "~/components/Footer";
+import classes from "./style.module.css";
+
+export const metadata: Metadata = {
+  title: "Sign up",
+};
 
 export default function Page() {
   const action = async (state: { message: string }, payload: FormData) => {

@@ -37,7 +37,7 @@ export class ValidationError<T = never> extends Error {
         return new ValidationError<FormatErrorDetail>(
           issue.path,
           "format",
-          createFormatErrorDetail(issue.validation)
+          createFormatErrorDetail(issue.validation),
         );
       case "invalid_type":
       case "invalid_literal":

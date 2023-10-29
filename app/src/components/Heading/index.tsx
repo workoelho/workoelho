@@ -20,14 +20,14 @@ type Props = {
 
 function Heading<E extends AcceptableElementType>(
   { as, level, children, ...props }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? (("h" + level) as ElementType);
 
   const classList = new ClassList(
     classes.heading,
     classes[`level-${level}`],
-    props.className
+    props.className,
   );
   props.className = classList.toString();
 

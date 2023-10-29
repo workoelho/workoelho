@@ -39,7 +39,7 @@ class Store<S extends State> {
 
   unsubscribe(handler: Handler<S>) {
     this.subscribers = this.subscribers.filter(
-      (subscription) => subscription.handler !== handler
+      (subscription) => subscription.handler !== handler,
     );
   }
 }
@@ -55,7 +55,7 @@ function useStoreState<S extends State>(store: Store<S>) {
       store.subscribe(onStoreChange);
       return () => store.unsubscribe(onStoreChange);
     },
-    () => store.state
+    () => store.state,
   );
 }
 
@@ -65,6 +65,6 @@ function useStoreValue<S extends State>(store: Store<S>, key: string) {
       store.subscribe(key, onStoreChange);
       return () => store.unsubscribe(onStoreChange);
     },
-    () => store.state[key]
+    () => store.state[key],
   );
 }

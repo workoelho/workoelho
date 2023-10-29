@@ -14,7 +14,7 @@ export type FormState = Record<string, FieldState>;
 
 function reducer(
   state: FormState,
-  patch: { name: string; value: FieldValue; error?: string }
+  patch: { name: string; value: FieldValue; error?: string },
 ) {
   return {
     ...state,
@@ -38,7 +38,7 @@ function createInitialState(initialValues: Record<string, FieldValue>) {
 }
 
 function isInputElement(
-  element: HTMLElement
+  element: HTMLElement,
 ): element is HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement {
   return (
     element instanceof HTMLInputElement ||
@@ -73,7 +73,7 @@ export function useForm(initialValues: Record<string, FieldValue> = {}) {
   const [state, dispatch] = useReducer(
     reducer,
     initialValues,
-    createInitialState
+    createInitialState,
   );
 
   const onChange = useCallback((event: ChangeEvent<HTMLFormElement>) => {
