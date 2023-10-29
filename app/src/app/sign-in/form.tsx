@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormState } from "react-dom";
+
 import { Alert } from "~/components/Alert";
 import { Field } from "~/components/Field";
 import { Flex } from "~/components/Flex";
@@ -38,12 +39,27 @@ export function Form<T extends { message: string }>({
         ) : null}
 
         <Field label="E-mail">
-          {(props) => <Input name="email" type="email" required {...props} />}
+          {(props) => (
+            <Input
+              name="email"
+              type="email"
+              placeholder="jane@example.com"
+              required
+              {...props}
+            />
+          )}
         </Field>
 
         <Field label="Password" hint={<Link href="/">Need help?</Link>}>
           {(props) => (
-            <Input name="password" type="password" required {...props} />
+            <Input
+              name="password"
+              type="password"
+              placeholder="⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕"
+              minLength={15}
+              required
+              {...props}
+            />
           )}
         </Field>
       </Flex>

@@ -1,14 +1,15 @@
 import { redirect } from "next/navigation";
 import { type Metadata } from "next";
-import { create } from "~/actions/session";
-import { Form } from "./form";
+
+import { create } from "~/actions/user";
 import { Flex } from "~/components/Flex";
-import { Heading } from "~/components/Heading";
 import { Footer } from "~/components/Footer";
+
+import { Form } from "./form";
 import classes from "./style.module.css";
 
 export const metadata: Metadata = {
-  title: "Sign up",
+  title: "Sign up at Workoelho",
 };
 
 export default function Page() {
@@ -19,17 +20,20 @@ export default function Page() {
       await create(
         {},
         {
+          name: payload.get("name"),
+          organization: payload.get("organization"),
           email: payload.get("email"),
           password: payload.get("password"),
-        },
+        }
       );
-      redirect("/");
     } catch (error) {
       if (error instanceof Error) {
         return { message: error.message };
       }
       throw error;
     }
+
+    redirect("/dashboard");
   };
 
   return (

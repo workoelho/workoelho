@@ -7,10 +7,14 @@
     color-mix(in srgb, var(--background) 87.5%, var(--foreground));
   display: flex;
   height: 2.25rem;
-  padding-inline: 0.25rem;
+  padding-inline: 0.5rem;
   width: 100%;
 }
 
 .input:focus {
   border-color: currentColor;
+}
+
+.input::placeholder {
+  color: var(--outline);
 }

@@ -8,14 +8,17 @@ generator client {
 }
 
 model User {
-    id        Int      @id @default(autoincrement())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
-    email     String   @unique
-    password  String
-    name      String
+    id             Int      @id @default(autoincrement())
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @default(now())
+    email          String   @unique
+    password       String
+    name           String
+    role           String
+    organizationId Int
 
-    sessions Session[]
+    sessions     Session[]
+    organization Organization @relation(fields: [organizationId], references: [id])
 }
 
 model Session {
@@ -26,4 +29,13 @@ model Session {
     key       String   @default(cuid())
 
     user User @relation(fields: [userId], references: [id])
+}
+
+model Organization {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+    name      String
+
+    users User[]
 }

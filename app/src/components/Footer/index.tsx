@@ -1,6 +1,7 @@
 import { ClassList } from "~/lib/client/ClassList";
-import classes from "./style.module.css";
 import { Flex } from "~/components/Flex";
+
+import classes from "./style.module.css";
 
 type Props = {
   className?: string;

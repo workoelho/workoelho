@@ -10,7 +10,7 @@
     0 0.125rem color-mix(in srgb, var(--color) 75%, var(--foreground));
   display: flex;
   height: 2.25rem;
-  padding-inline: 1rem;
+  padding-inline: 1.5rem;
 }
 
 .button:focus {

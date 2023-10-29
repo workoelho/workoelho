@@ -1,10 +1,16 @@
 import { redirect } from "next/navigation";
+import { type Metadata } from "next";
+
 import { create } from "~/actions/session";
+import { Flex } from "~/components/Flex";
+import { Footer } from "~/components/Footer";
+
 import { Form } from "./form";
 import classes from "./style.module.css";
-import { Flex } from "~/components/Flex";
-import { Heading } from "~/components/Heading";
-import { Footer } from "~/components/Footer";
+
+export const metadata: Metadata = {
+  title: "Sign in at Workoelho",
+};
 
 export default function Page() {
   const action = async (state: { message: string }, payload: FormData) => {
@@ -16,15 +22,16 @@ export default function Page() {
         {
           email: payload.get("email"),
           password: payload.get("password"),
-        },
+        }
       );
-      redirect("/");
     } catch (error) {
       if (error instanceof Error) {
         return { message: error.message };
       }
       throw error;
     }
+
+    redirect("/dashboard");
   };
 
   return (

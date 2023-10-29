@@ -1,9 +1,10 @@
 import { ElementType, forwardRef } from "react";
 
-import classes from "./style.module.css";
 
 import { ClassList } from "~/lib/client/ClassList";
 import { PolymorphicPropsWithRef, PolymorphicRef } from "~/lib/shared/react";
+
+import classes from "./style.module.css";
 
 type AcceptableElementType =
   | "h1"
