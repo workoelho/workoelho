@@ -13,7 +13,7 @@ export function Submit({ children }: Props) {
 
   return (
     <Button type="submit" disabled={pending}>
-      {pending ? "⌛ Working..." : children}
+      {pending ? "Working..." : children}
     </Button>
   );
 }

@@ -6,6 +6,7 @@ import { Field } from "~/components/Field";
 import { Flex } from "~/components/Flex";
 import { Heading } from "~/components/Heading";
 import { Input } from "~/components/Input";
+import { Link } from "~/components/Link";
 import { Submit } from "~/components/Submit";
 
 type Props<T> = {
@@ -26,7 +27,9 @@ export function Form<T extends { message: string }>({
           Sign in
         </Heading>
 
-        <p>Welcome, back! 👋</p>
+        <p>
+          Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
+        </p>
 
         {state.message ? (
           <Alert variant="negative">
@@ -38,16 +41,16 @@ export function Form<T extends { message: string }>({
           {(props) => <Input name="email" type="email" required {...props} />}
         </Field>
 
-        <Field label="Password">
+        <Field label="Password" hint={<Link href="/">Need help?</Link>}>
           {(props) => (
             <Input name="password" type="password" required {...props} />
           )}
         </Field>
       </Flex>
 
-      <footer>
+      <Flex justifyContent="end">
         <Submit>Sign in</Submit>
-      </footer>
+      </Flex>
     </Flex>
   );
 }

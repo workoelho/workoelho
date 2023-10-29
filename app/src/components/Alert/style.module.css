@@ -1,5 +1,6 @@
 .alert {
-  padding: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
 }
 
 .alert.neutral {
@@ -7,16 +8,16 @@
 }
 
 .alert.positive {
-  background-color: mintcream;
-  color: darkgreen;
+  background-color: var(--positive-background);
+  color: var(--positive);
 }
 
 .alert.negative {
-  background-color: mistyrose;
-  color: firebrick;
+  background-color: var(--negative-background);
+  color: var(--negative);
 }
 
 .alert.warning {
-  background-color: lemonchiffon;
-  color: darkgoldenrod;
+  background-color: var(--warning-background);
+  color: var(--warning);
 }

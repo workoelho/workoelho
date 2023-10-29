@@ -1,6 +1,13 @@
 # Base image.
 FROM node:20-alpine
 
+# Read user and group ID from arguments.
+ARG UID=1000
+ARG GID=1000
+
+# Set user.
+USER $UID:$GID
+
 # Change working dir.
 WORKDIR /mnt/app
 

@@ -1,15 +1,8 @@
-import "./global.css";
+import "./reset.css";
+import "./theme.css";
 
-import type { Metadata } from "next";
-import { ReactNode } from "react";
-import { Lato } from "next/font/google";
-
-const font = Lato({
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  display: "swap",
-});
+import { type Metadata } from "next";
+import { type ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Workoelho",
@@ -23,7 +16,7 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <html lang="en">
-      <body className={font.className}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

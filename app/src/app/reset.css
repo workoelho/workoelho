@@ -9,7 +9,7 @@
   display: revert;
 }
 
-/* Better control when setting width and height. */
+/* Better control when sizing elements. */
 
 *,
 *::before,
@@ -27,6 +27,10 @@
 }
 
 /* Reset form controls. */
+
+legend {
+  display: contents;
+}
 
 input[type="number"] {
   appearance: textfield; /* Fix for Firefox. Nothing else works. */

@@ -30,7 +30,6 @@ export default function Page() {
   return (
     <div className={classes.layout}>
       <Flex as="main" flexDirection="column" className={classes.content}>
-        <Heading level={1}>W</Heading>
         <Form action={action} initialState={{ message: "" }} />
       </Flex>
       <Footer className={classes.footer} />

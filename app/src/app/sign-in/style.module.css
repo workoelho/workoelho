@@ -1,11 +1,12 @@
 .layout {
   display: grid;
   min-height: 100vh;
-  grid-template: 1fr auto / 1fr minmax(min-content, 32rem) 1fr;
+  grid-template: 1fr auto / 1fr minmax(min-content, 24rem) 1fr;
 }
 
 .content {
   grid-column: 2;
+  align-self: center;
   padding: 1.5rem;
 }
 

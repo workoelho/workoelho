@@ -1,0 +1,35 @@
+:root {
+  --foreground: #111;
+  --background: #fff;
+
+  --outline: color-mix(in srgb, var(--foreground) 50%, var(--background));
+
+  --primary: royalblue;
+  --primary-active: color-mix(in srgb, var(--primary) 87.5%, var(--foreground));
+
+  --positive: forestgreen;
+  --positive-background: color-mix(
+    in srgb,
+    var(--positive) 12.5%,
+    var(--background)
+  );
+
+  --negative: firebrick;
+  --negative-background: color-mix(
+    in srgb,
+    var(--negative) 12.5%,
+    var(--background)
+  );
+
+  --warning: darkgoldenrod;
+  --warning-background: color-mix(
+    in srgb,
+    var(--warning) 12.5%,
+    var(--background)
+  );
+}
+
+html {
+  background-color: var(--background);
+  color: var(--foreground);
+}

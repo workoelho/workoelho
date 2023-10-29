@@ -6,7 +6,7 @@
   "scripts": {
     "prestart": "test -d node_modules || npm i",
     "start": "next start",
-    "develop": "next dev --turbo",
+    "develop": "next dev",
     "lint": "next lint",
     "format": "prettier . --cache --write",
     "prebuild": "npm run format -- --check --log-level error && npm run lint -- --quiet",

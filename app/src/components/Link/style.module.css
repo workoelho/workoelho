@@ -1,0 +1,8 @@
+.link {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.link:focus {
+  color: var(--primary-active);
+}
