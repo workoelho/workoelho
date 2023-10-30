@@ -29,7 +29,7 @@ export function Form<T extends { message: string }>({
         </Heading>
 
         <p>
-          Haven&apos;t signed up yet? <Link href="/sign-up">Try it, free</Link>.
+          Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
         </p>
 
         {state.message ? (

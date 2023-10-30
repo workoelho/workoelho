@@ -13,20 +13,22 @@ export function Footer({ className }: Props) {
   return (
     <footer className={classList.toString()}>
       <Flex style={{ gridColumn: 2 }} gap="3rem">
-        <p>©️ 2023 Workoelho</p>
+        <p>
+          ©️ 2023 <a href="/">Workoelho</a>
+        </p>
 
         <Flex as="ul" gap="1.5rem">
           <li>
-            <a href="/">GitHub</a>
+            <a href="https://github.com/workoelho">GitHub</a>
           </li>
           <li>
-            <a href="/">What&apos;s new?</a>
+            <a href="/changelog">What's new?</a>
           </li>
           <li>
-            <a href="/">Privacy policy</a>
+            <a href="/privacy">Privacy policy</a>
           </li>
           <li>
-            <a href="/">Help</a>
+            <a href="/help">Help</a>
           </li>
         </Flex>
       </Flex>

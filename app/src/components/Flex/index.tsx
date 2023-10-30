@@ -8,6 +8,7 @@ import classes from "./style.module.css";
 type AcceptableElementType =
   | "span"
   | "div"
+  | "nav"
   | "ul"
   | "ol"
   | "li"
