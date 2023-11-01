@@ -23,10 +23,7 @@ services:
       postgres -c config_file=/etc/postgres.conf
 
   app:
-    build:
-      context: ./app
-      args:
-        - UID=$UID
-        - GID=$GID
+    build: ./app
+    user: "$UID:$GID"
     environment:
       - DATABASE_URL=postgresql://postgres:123@db:5432/postgres
