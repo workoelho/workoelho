@@ -1,4 +1,4 @@
-import { CSSProperties, ElementType, forwardRef } from "react";
+import { ElementType, forwardRef } from "react";
 
 import { ClassList } from "~/lib/client/ClassList";
 import { PolymorphicPropsWithRef, PolymorphicRef } from "~/lib/shared/react";
@@ -7,18 +7,18 @@ import classes from "./style.module.css";
 
 type AcceptableElementType = "a" | "button";
 
-type Props = {
-  variant?: "filled";
-  color?: "primary";
-  shape?: "rectangle" | "pill";
+export type Props = {
+  variant?: "primary" | "neutral" | "positive" | "negative" | "attentive";
+  shape?: "text" | "rectangle" | "pill";
+  size?: "small" | "medium" | "large";
 };
 
 function Button<E extends AcceptableElementType = "button">(
   {
     as,
     children,
-    variant = "filled",
-    color = "primary",
+    variant = "neutral",
+    size = "medium",
     shape = "rectangle",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
@@ -28,8 +28,8 @@ function Button<E extends AcceptableElementType = "button">(
 
   const classList = new ClassList(classes.button);
   classList.add(classes[variant]);
-  classList.add(classes[color]);
   classList.add(classes[shape]);
+  classList.add(classes[size]);
   classList.add(props.className);
   props.className = classList.toString();
 

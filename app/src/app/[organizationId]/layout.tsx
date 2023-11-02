@@ -43,7 +43,7 @@ export default function Layout({ children }: Props) {
         </Flex>
       </Topbar>
 
-      <Flex as="main" flexDirection="column" className={classes.content}>
+      <Flex as="main" direction="column" className={classes.content}>
         {children}
       </Flex>
 

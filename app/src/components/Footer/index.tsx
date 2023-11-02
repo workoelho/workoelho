@@ -1,5 +1,6 @@
 import { ClassList } from "~/lib/client/ClassList";
 import { Flex } from "~/components/Flex";
+import { Button } from "~/components/Button";
 
 import classes from "./style.module.css";
 
@@ -12,25 +13,36 @@ export function Footer({ className }: Props) {
 
   return (
     <footer className={classList.toString()}>
-      <Flex style={{ gridColumn: 2 }} gap="3rem">
-        <p>
-          ©️ 2023 <a href="/">Workoelho</a>
-        </p>
+      <div />
 
-        <Flex as="ul" gap="1.5rem">
-          <li>
-            <a href="https://github.com/workoelho">GitHub</a>
-          </li>
-          <li>
-            <a href="/changelog">What's new?</a>
-          </li>
-          <li>
-            <a href="/privacy">Privacy policy</a>
-          </li>
-          <li>
-            <a href="/help">Help</a>
-          </li>
-        </Flex>
+      <p>©️ 2023 Workoelho</p>
+
+      <Flex as="ul" gap="1.5rem">
+        <li>
+          <Button as="a" shape="text" href="/">
+            Workoelho
+          </Button>
+        </li>
+        <li>
+          <Button as="a" shape="text" href="/changelog">
+            What's new?
+          </Button>
+        </li>
+        <li>
+          <Button as="a" shape="text" href="https://github.com/workoelho">
+            GitHub
+          </Button>
+        </li>
+        <li>
+          <Button as="a" shape="text" href="/privacy">
+            Privacy policy
+          </Button>
+        </li>
+        <li>
+          <Button as="a" shape="text" href="/help">
+            Help
+          </Button>
+        </li>
       </Flex>
 
       <p className={classes.version}>v23.10.28-39dd4</p>

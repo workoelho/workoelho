@@ -1,12 +1,11 @@
 .input {
   align-items: center;
-  background-color: var(--background);
+  background-color: var(--background-1);
   border-radius: 0.25rem;
-  border: 0.125rem solid var(--outline);
-  box-shadow: inset 0 0.125rem
-    color-mix(in srgb, var(--background) 87.5%, var(--foreground));
+  border: 0.125rem solid var(--foreground-3);
+  box-shadow: inset 0 0.25rem hsla(0, 0%, 0%, 0.0875);
   display: flex;
-  height: 2.25rem;
+  height: 2.5rem;
   padding-inline: 0.5rem;
   width: 100%;
 }
@@ -16,5 +15,5 @@
 }
 
 .input::placeholder {
-  color: var(--outline);
+  color: var(--foreground-3);
 }

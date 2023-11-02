@@ -1,0 +1,15 @@
+.brand {
+  display: inline-block;
+}
+
+.brand.small {
+  height: 1.5rem;
+}
+
+.brand.medium {
+  height: 3rem;
+}
+
+.brand.large {
+  height: 4.5rem;
+}

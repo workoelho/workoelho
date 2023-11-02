@@ -1,0 +1,19 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  padding-inline: 1.5rem;
+}
+
+.main > :is(header, section) {
+  padding-block: 4.5rem;
+}
+
+.splash h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.splash p {
+  font-size: 1.25rem;
+}

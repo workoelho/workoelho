@@ -36,7 +36,7 @@ export default function Page() {
 
   return (
     <div className={classes.layout}>
-      <Flex as="main" flexDirection="column" className={classes.content}>
+      <Flex as="main" direction="column" className={classes.content}>
         <Form action={action} initialState={{ message: "" }} />
       </Flex>
       <Footer className={classes.footer} />

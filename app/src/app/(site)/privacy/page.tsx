@@ -3,8 +3,8 @@ import { Heading } from "~/components/Heading";
 
 export default function Page() {
   return (
-    <Flex as="main" flexDirection="column" gap="3rem">
-      <Flex as="header" flexDirection="column" gap="1.5rem">
+    <Flex as="main" direction="column" gap="3rem">
+      <Flex as="header" direction="column" gap="1.5rem">
         <Heading level={1}>Privacy policy</Heading>
 
         <p>
@@ -12,7 +12,7 @@ export default function Page() {
         </p>
       </Flex>
 
-      <Flex as="section" flexDirection="column" gap="1.5rem">
+      <Flex as="section" direction="column" gap="1.5rem">
         <Heading level={2}>1. Introduction</Heading>
 
         <p>
@@ -21,7 +21,7 @@ export default function Page() {
         </p>
       </Flex>
 
-      <Flex as="section" flexDirection="column" gap="1.5rem">
+      <Flex as="section" direction="column" gap="1.5rem">
         <Heading level={2}>2. Information we collect</Heading>
 
         <ul>
@@ -51,7 +51,7 @@ export default function Page() {
         </ul>
       </Flex>
 
-      <Flex as="section" flexDirection="column" gap="1.5rem">
+      <Flex as="section" direction="column" gap="1.5rem">
         <Heading level={2}>3. How we use your information</Heading>
         <p>We use the information collected for the following purposes:</p>
         <ul>
@@ -70,7 +70,7 @@ export default function Page() {
         </ul>
       </Flex>
 
-      <Flex as="section" flexDirection="column" gap="1.5rem">
+      <Flex as="section" direction="column" gap="1.5rem">
         <Heading level={2}>4. Data sharing and security</Heading>
 
         <ul>
@@ -85,7 +85,7 @@ export default function Page() {
         </ul>
       </Flex>
 
-      <Flex as="section" flexDirection="column" gap="1.5rem">
+      <Flex as="section" direction="column" gap="1.5rem">
         <Heading level={2}>5. Data retention</Heading>
 
         <p>
@@ -94,7 +94,7 @@ export default function Page() {
         </p>
       </Flex>
 
-      <Flex as="section" flexDirection="column" gap="1.5rem">
+      <Flex as="section" direction="column" gap="1.5rem">
         <Heading level={2}>6. Your choices and rights</Heading>
 
         <p>
@@ -104,7 +104,7 @@ export default function Page() {
         </p>
       </Flex>
 
-      <Flex as="section" flexDirection="column" gap="1.5rem">
+      <Flex as="section" direction="column" gap="1.5rem">
         <Heading level={2}>7. Contact us</Heading>
 
         <p>
@@ -113,7 +113,7 @@ export default function Page() {
         </p>
       </Flex>
 
-      <Flex as="section" flexDirection="column" gap="1.5rem">
+      <Flex as="section" direction="column" gap="1.5rem">
         <Heading level={2}>8. Changes to the policy</Heading>
 
         <p>

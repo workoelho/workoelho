@@ -22,8 +22,8 @@ export function Form<T extends { message: string }>({
   const [state, handledAction] = useFormState(action, initialState);
 
   return (
-    <Flex as="form" action={handledAction} flexDirection="column" gap="1.5rem">
-      <Flex as="fieldset" flexDirection="column" gap="1.5rem">
+    <Flex as="form" action={handledAction} direction="column" gap="1.5rem">
+      <Flex as="fieldset" direction="column" gap="1.5rem">
         <Heading as="legend" level={2}>
           Sign in
         </Heading>
@@ -65,7 +65,9 @@ export function Form<T extends { message: string }>({
       </Flex>
 
       <Flex justifyContent="end">
-        <Submit>Sign in</Submit>
+        <Submit size="large" variant="primary">
+          Sign in
+        </Submit>
       </Flex>
     </Flex>
   );

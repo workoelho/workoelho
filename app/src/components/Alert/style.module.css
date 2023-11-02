@@ -8,16 +8,16 @@
 }
 
 .alert.positive {
-  background-color: var(--positive-background);
-  color: var(--positive);
+  background-color: var(--positive-3);
+  color: var(--positive-1);
 }
 
 .alert.negative {
-  background-color: var(--negative-background);
-  color: var(--negative);
+  background-color: var(--negative-3);
+  color: var(--negative-1);
 }
 
-.alert.warning {
-  background-color: var(--warning-background);
-  color: var(--warning);
+.alert.attentive {
+  background-color: var(--attentive-3);
+  color: var(--attentive-1);
 }

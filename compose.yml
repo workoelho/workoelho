@@ -24,6 +24,5 @@ services:
 
   app:
     build: ./app
-    user: "$UID:$GID"
     environment:
       - DATABASE_URL=postgresql://postgres:123@db:5432/postgres

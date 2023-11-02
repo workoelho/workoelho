@@ -23,24 +23,30 @@ type AcceptableElementType =
   | "form";
 
 type Props = {
-  direction?: CSSProperties["flexDirection"];
-  alignItems?: CSSProperties["alignItems"];
-  justifyContent?: CSSProperties["justifyContent"];
+  template?: CSSProperties["gridTemplate"];
   gap?: CSSProperties["gap"];
-  wrap?: CSSProperties["flexWrap"];
-  flex?: CSSProperties["flex"];
+  autoRows?: CSSProperties["gridAutoRows"];
+  autoColumns?: CSSProperties["gridAutoColumns"];
+  autoFlow?: CSSProperties["gridAutoFlow"];
+  alignItems?: CSSProperties["alignItems"];
+  justifyItems?: CSSProperties["justifyItems"];
+  alignContent?: CSSProperties["alignContent"];
+  justifyContent?: CSSProperties["justifyContent"];
 };
 
-function Flex<E extends AcceptableElementType = "div">(
+function Grid<E extends AcceptableElementType = "div">(
   {
     as,
     children,
-    direction,
-    alignItems = direction !== "column" ? "center" : undefined,
-    justifyContent,
+    template,
     gap,
-    flex,
-    wrap,
+    autoRows,
+    autoColumns,
+    autoFlow = autoRows ? "row" : autoColumns ? "column" : undefined,
+    alignItems,
+    justifyItems,
+    alignContent,
+    justifyContent,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
   ref: PolymorphicRef<E>
@@ -48,19 +54,22 @@ function Flex<E extends AcceptableElementType = "div">(
   const Component = as ?? ("div" as ElementType);
 
   const classList = new ClassList();
-  classList.add(classes.flex);
+  classList.add(classes.grid);
   if (props.className) {
     classList.add(props.className);
   }
   props.className = classList.toString();
 
   props.style = {
-    flexDirection: direction,
+    gridTemplate: template,
+    gridAutoColumns: autoColumns,
+    gridAutoRows: autoRows,
+    gridAutoFlow: autoFlow,
     alignItems: alignItems,
+    justifyItems: justifyItems,
+    alignContent: alignContent,
     justifyContent: justifyContent,
-    gap,
-    flexWrap: wrap,
-    flex,
+    gap: gap,
     ...props.style,
   };
 
@@ -70,6 +79,6 @@ function Flex<E extends AcceptableElementType = "div">(
     </Component>
   );
 }
-const forwardRefFlex = forwardRef(Flex) as typeof Flex;
+const forwardRefGrid = forwardRef(Grid) as typeof Grid;
 
-export { forwardRefFlex as Flex };
+export { forwardRefGrid as Grid };

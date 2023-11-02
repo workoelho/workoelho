@@ -1,5 +1,7 @@
 services:
   app:
+    user: "$UID:$GID"
     volumes:
       - .:/mnt
+      - /.npm
     command: npm run develop
