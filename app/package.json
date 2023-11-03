@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "workoelho",
-  "version": "0.0.0",
+  "version": "23.11.03+c276b",
   "license": "MPL-2.0",
   "scripts": {
     "prestart": "test -d node_modules || npm i",

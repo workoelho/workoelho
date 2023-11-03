@@ -5,10 +5,11 @@ import { Button } from "~/components/Button";
 import classes from "./style.module.css";
 
 type Props = {
+  version?: string;
   className?: string;
 };
 
-export function Footer({ className }: Props) {
+export function Footer({ version, className }: Props) {
   const classList = new ClassList(classes.footer, className);
 
   return (
@@ -42,7 +43,7 @@ export function Footer({ className }: Props) {
       </ul>
 
       <p className={classes.copyright}>
-        ©️ 2023 Workoelho <span>v23.10.28-39dd4</span>
+        ©️ 2023 Workoelho <span>v{version}</span>
       </p>
     </footer>
   );

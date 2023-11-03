@@ -2,9 +2,10 @@ import { type ReactNode } from "react";
 
 import { Footer } from "~/components/Footer";
 import { Brand } from "~/components/Brand";
-import { Flex } from "~/components/Flex";
 
 import classes from "./layout.module.css";
+
+import { version } from "~/../package.json";
 
 type Props = {
   children: ReactNode;
@@ -23,7 +24,7 @@ export default function Layout({ children }: Props) {
         {children}
       </main>
 
-      <Footer className={classes.footer} />
+      <Footer version={version} className={classes.footer} />
     </div>
   );
 }

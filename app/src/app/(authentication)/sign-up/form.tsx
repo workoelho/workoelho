@@ -96,9 +96,7 @@ export function Form<T extends { message: string }>({
       </Flex>
 
       <Flex justifyContent="end">
-        <Submit size="large" variant="primary">
-          Sign up
-        </Submit>
+        <Submit variant="primary">Sign up</Submit>
       </Flex>
     </Flex>
   );

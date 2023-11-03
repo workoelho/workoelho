@@ -6,7 +6,7 @@ import { type ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Workoelho",
-  description: "Software development operations tamed.",
+  description: "Software development operations, tamed.",
 };
 
 export const viewport: Viewport = {
