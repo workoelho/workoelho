@@ -15,19 +15,34 @@ const schema = superstruct.object({
 export async function create(context: Context, data: Record<string, unknown>) {
   superstruct.assert(data, schema);
 
-  const organization = await prisma.organization.create({
-    data: {
-      name: data.organization,
-    },
-  });
-
   return await prisma.user.create({
     data: {
       email: data.email,
       password: await createPassword(data.password),
       name: data.name,
-      role: "administrator",
-      organizationId: organization.id,
+      memberships: {
+        create: [
+          {
+            role: "administrator",
+            organization: {
+              create: {
+                name: data.organization,
+              },
+            },
+          },
+        ],
+      },
+      sessions: {
+        create: [
+          {
+            expiresAt: superstruct.create(undefined, Schema.expiresAt),
+          },
+        ],
+      },
+    },
+    include: {
+      memberships: true,
+      sessions: true,
     },
   });
 }

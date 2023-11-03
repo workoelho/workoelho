@@ -1,12 +1,7 @@
 .topbar {
   background-color: var(--background-1);
   height: 5rem;
-  padding-inline: 3rem;
+  padding-inline: 1.5rem;
   position: sticky;
-  top: -5rem;
-  transition: top 0.125s ease-in-out;
-}
-
-.topbar.sticky {
   top: 0;
 }

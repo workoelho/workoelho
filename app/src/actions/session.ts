@@ -33,5 +33,12 @@ export async function create(context: Context, data: Record<string, unknown>) {
       expiresAt: superstruct.create(undefined, Schema.expiresAt),
       userId: user.id,
     },
+    include: {
+      user: {
+        include: {
+          memberships: true,
+        },
+      },
+    },
   });
 }

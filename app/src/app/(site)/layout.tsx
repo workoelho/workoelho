@@ -5,17 +5,15 @@ import { Topbar } from "~/components/Topbar";
 import { Footer } from "~/components/Footer";
 import { Button } from "~/components/Button";
 
-import classes from "./layout.module.css";
-
 type Props = {
   children: ReactNode;
 };
 
 export default function Layout({ children }: Props) {
   return (
-    <div className={classes.layout}>
-      <Topbar className={classes.topbar}>
-        <Flex as="ul" gap="1.5rem" style={{ flexGrow: 1 }}>
+    <Flex direction="column">
+      <Topbar>
+        <Flex as="ul" gap="1.5rem">
           <li>
             <Button as="a" shape="text" href="/#introduction">
               Introduction
@@ -32,10 +30,13 @@ export default function Layout({ children }: Props) {
             </Button>
           </li>
           <li>
-            <Button as="a" shape="text" href="/#pricing">
+            <Button as="a" shape="text" href="/pricing">
               Pricing
             </Button>
           </li>
+        </Flex>
+
+        <Flex as="ul" gap="1.5rem">
           <li>
             <Button as="a" shape="pill" variant="primary" href="/sign-up">
               Try it, free
@@ -43,18 +44,20 @@ export default function Layout({ children }: Props) {
           </li>
         </Flex>
 
-        <ul>
+        <div style={{ flexGrow: 1 }} />
+
+        <Flex as="ul" gap="1.5rem">
           <li>
             <Button as="a" shape="text" href="/sign-in">
               Sign in
             </Button>
           </li>
-        </ul>
+        </Flex>
       </Topbar>
-      <Flex as="main" direction="column" className={classes.content}>
-        {children}
-      </Flex>
-      <Footer className={classes.footer} />
-    </div>
+
+      <main style={{ flexGrow: 1 }}>{children}</main>
+
+      <Footer />
+    </Flex>
   );
 }

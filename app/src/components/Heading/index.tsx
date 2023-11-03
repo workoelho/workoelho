@@ -1,6 +1,5 @@
 import { ElementType, forwardRef } from "react";
 
-
 import { ClassList } from "~/lib/client/ClassList";
 import { PolymorphicPropsWithRef, PolymorphicRef } from "~/lib/shared/react";
 
@@ -12,23 +11,24 @@ type AcceptableElementType =
   | "h3"
   | "h4"
   | "h5"
+  | "p"
   | "span"
   | "legend";
 
 type Props = {
-  level: 1 | 2 | 3 | 4 | 5;
+  size: "massive" | "large" | "medium" | "small";
 };
 
 function Heading<E extends AcceptableElementType>(
-  { as, level, children, ...props }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  { as, size, children, ...props }: PolymorphicPropsWithRef<E, Props>,
+  ref: PolymorphicRef<E>
 ) {
-  const Component = as ?? (("h" + level) as ElementType);
+  const Component = as ?? ("span" as ElementType);
 
   const classList = new ClassList(
     classes.heading,
-    classes[`level-${level}`],
-    props.className,
+    classes[size],
+    props.className
   );
   props.className = classList.toString();
 

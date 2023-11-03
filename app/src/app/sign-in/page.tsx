@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { type Metadata } from "next";
+import { cookies } from "next/headers";
 
 import { create } from "~/actions/session";
 import { Flex } from "~/components/Flex";
@@ -16,8 +17,9 @@ export default function Page() {
   const action = async (state: { message: string }, payload: FormData) => {
     "use server";
 
+    let session;
     try {
-      await create(
+      session = await create(
         {},
         {
           email: payload.get("email"),
@@ -31,7 +33,17 @@ export default function Page() {
       throw error;
     }
 
-    redirect("/dashboard");
+    cookies().set({
+      name: "session",
+      value: session.secret,
+      httpOnly: true,
+      // secure: true,
+      sameSite: "lax",
+      expires: session.expiresAt,
+      path: "/",
+    });
+
+    redirect(`/${session.user.memberships[0].organizationId}/summary`);
   };
 
   return (

@@ -1,7 +1,8 @@
 .button {
   align-items: center;
+  cursor: pointer;
   display: flex;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .button:focus {
@@ -49,6 +50,7 @@
 
 .button.text {
   color: var(--color);
+  gap: 0.25rem;
 }
 
 .button.text.large {
@@ -59,6 +61,7 @@
   box-shadow:
     inset 0 0.25rem hsla(0, 0%, 100%, 0.125),
     0 0.25rem hsla(0, 0%, 0%, 0.125);
+  gap: 0.5rem;
 }
 
 .button:is(.rectangle, .pill).small {

@@ -19,27 +19,32 @@ export function Footer({ className }: Props) {
 
       <Flex as="ul" gap="1.5rem">
         <li>
-          <Button as="a" shape="text" href="/">
+          <Button as="a" href="/" shape="text" size="small">
             Workoelho
           </Button>
         </li>
         <li>
-          <Button as="a" shape="text" href="/changelog">
+          <Button as="a" href="/changelog" shape="text" size="small">
             What's new?
           </Button>
         </li>
         <li>
-          <Button as="a" shape="text" href="https://github.com/workoelho">
+          <Button
+            as="a"
+            href="https://github.com/workoelho"
+            shape="text"
+            size="small"
+          >
             GitHub
           </Button>
         </li>
         <li>
-          <Button as="a" shape="text" href="/privacy">
+          <Button as="a" href="/privacy" shape="text" size="small">
             Privacy policy
           </Button>
         </li>
         <li>
-          <Button as="a" shape="text" href="/help">
+          <Button as="a" href="/help" shape="text" size="small">
             Help
           </Button>
         </li>

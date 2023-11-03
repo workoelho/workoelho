@@ -39,7 +39,7 @@ export function Form<T extends { message: string }>({
           </Alert>
         ) : null}
 
-        <Field label="Organization" hint="Company or organization you work at.">
+        <Field label="Organization" hint="You can have multiple organizations.">
           {(props) => (
             <Input
               name="organization"
