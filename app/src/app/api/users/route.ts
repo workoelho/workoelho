@@ -1,9 +1,9 @@
 import * as superstruct from "superstruct";
 
 import * as Schema from "~/lib/shared/schema";
-import { Context } from "~/lib/server/Context";
 import prisma from "~/lib/server/prisma";
-import { createPassword } from "~/lib/server/user";
+import { comparePassword, createPassword } from "~/lib/server/user";
+import { withErrorHandled } from "~/lib/server/handler";
 
 const schema = superstruct.object({
   name: Schema.name,
@@ -12,10 +12,10 @@ const schema = superstruct.object({
   password: Schema.password,
 });
 
-export async function create(context: Context, data: Record<string, unknown>) {
-  superstruct.assert(data, schema);
+export const POST = withErrorHandled(async (request: Request) => {
+  const data = superstruct.create(await request.json(), schema);
 
-  return await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       email: data.email,
       password: await createPassword(data.password),
@@ -45,4 +45,6 @@ export async function create(context: Context, data: Record<string, unknown>) {
       sessions: true,
     },
   });
-}
+
+  return Response.json(user);
+});
