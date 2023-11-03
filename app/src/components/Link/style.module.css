@@ -3,5 +3,6 @@
   text-decoration: underline;
 }
 
-.link:focus {
+.link:is(:focus-visible, :hover) {
+  color: var(--primary-2);
 }

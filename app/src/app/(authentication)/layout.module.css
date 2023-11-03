@@ -1,0 +1,25 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 3rem;
+  justify-content: center;
+  margin-inline: auto;
+  max-width: 24rem;
+  min-width: 22.5rem;
+  padding: 3rem 0.75rem;
+}
+
+.brand {
+  display: flex;
+  justify-content: center;
+}
+
+.footer {
+}

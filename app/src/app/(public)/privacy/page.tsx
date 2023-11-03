@@ -3,9 +3,11 @@ import { Heading } from "~/components/Heading";
 
 export default function Page() {
   return (
-    <Flex as="main" direction="column" gap="3rem">
+    <Flex direction="column" gap="3rem">
       <Flex as="header" direction="column" gap="1.5rem">
-        <Heading level={1}>Privacy policy</Heading>
+        <Heading as="h1" size="large">
+          Privacy policy
+        </Heading>
 
         <p>
           Last updated on <strong>October 27th, 2023</strong>.
@@ -13,7 +15,9 @@ export default function Page() {
       </Flex>
 
       <Flex as="section" direction="column" gap="1.5rem">
-        <Heading level={2}>1. Introduction</Heading>
+        <Heading as="h2" size="medium">
+          1. Introduction
+        </Heading>
 
         <p>
           This document outlines how we, at Workoelho, collect, use, and
@@ -22,7 +26,9 @@ export default function Page() {
       </Flex>
 
       <Flex as="section" direction="column" gap="1.5rem">
-        <Heading level={2}>2. Information we collect</Heading>
+        <Heading as="h2" size="medium">
+          2. Information we collect
+        </Heading>
 
         <ul>
           <li>
@@ -52,7 +58,9 @@ export default function Page() {
       </Flex>
 
       <Flex as="section" direction="column" gap="1.5rem">
-        <Heading level={2}>3. How we use your information</Heading>
+        <Heading as="h2" size="medium">
+          3. How we use your information
+        </Heading>
         <p>We use the information collected for the following purposes:</p>
         <ul>
           <li>
@@ -71,7 +79,9 @@ export default function Page() {
       </Flex>
 
       <Flex as="section" direction="column" gap="1.5rem">
-        <Heading level={2}>4. Data sharing and security</Heading>
+        <Heading as="h2" size="medium">
+          4. Data sharing and security
+        </Heading>
 
         <ul>
           <li>
@@ -86,7 +96,9 @@ export default function Page() {
       </Flex>
 
       <Flex as="section" direction="column" gap="1.5rem">
-        <Heading level={2}>5. Data retention</Heading>
+        <Heading as="h2" size="medium">
+          5. Data retention
+        </Heading>
 
         <p>
           We retain your data only for as long as necessary to fulfill the
@@ -95,7 +107,9 @@ export default function Page() {
       </Flex>
 
       <Flex as="section" direction="column" gap="1.5rem">
-        <Heading level={2}>6. Your choices and rights</Heading>
+        <Heading as="h2" size="medium">
+          6. Your choices and rights
+        </Heading>
 
         <p>
           You have the right to access, rectify, or delete your personal
@@ -105,7 +119,9 @@ export default function Page() {
       </Flex>
 
       <Flex as="section" direction="column" gap="1.5rem">
-        <Heading level={2}>7. Contact us</Heading>
+        <Heading as="h2" size="medium">
+          7. Contact us
+        </Heading>
 
         <p>
           If you have any questions or concerns about your privacy or this
@@ -114,7 +130,9 @@ export default function Page() {
       </Flex>
 
       <Flex as="section" direction="column" gap="1.5rem">
-        <Heading level={2}>8. Changes to the policy</Heading>
+        <Heading as="h2" size="medium">
+          8. Changes to the policy
+        </Heading>
 
         <p>
           We may update this document from time to time to reflect changes in

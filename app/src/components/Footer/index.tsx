@@ -13,21 +13,7 @@ export function Footer({ className }: Props) {
 
   return (
     <footer className={classList.toString()}>
-      <div />
-
-      <p>©️ 2023 Workoelho</p>
-
-      <Flex as="ul" gap="1.5rem">
-        <li>
-          <Button as="a" href="/" shape="text" size="small">
-            Workoelho
-          </Button>
-        </li>
-        <li>
-          <Button as="a" href="/changelog" shape="text" size="small">
-            What's new?
-          </Button>
-        </li>
+      <ul className={classes.menu}>
         <li>
           <Button
             as="a"
@@ -36,6 +22,11 @@ export function Footer({ className }: Props) {
             size="small"
           >
             GitHub
+          </Button>
+        </li>
+        <li>
+          <Button as="a" href="/changelog" shape="text" size="small">
+            What's new?
           </Button>
         </li>
         <li>
@@ -48,9 +39,11 @@ export function Footer({ className }: Props) {
             Help
           </Button>
         </li>
-      </Flex>
+      </ul>
 
-      <p className={classes.version}>v23.10.28-39dd4</p>
+      <p className={classes.copyright}>
+        ©️ 2023 Workoelho <span>v23.10.28-39dd4</span>
+      </p>
     </footer>
   );
 }

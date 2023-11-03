@@ -24,9 +24,7 @@ export function Form<T extends { message: string }>({
   return (
     <Flex as="form" action={handledAction} direction="column" gap="1.5rem">
       <Flex as="fieldset" direction="column" gap="1.5rem">
-        <Heading as="legend" level={2}>
-          Sign in
-        </Heading>
+        <legend hidden>Sign in</legend>
 
         <p>
           Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
@@ -38,30 +36,34 @@ export function Form<T extends { message: string }>({
           </Alert>
         ) : null}
 
-        <Field label="E-mail">
-          {(props) => (
-            <Input
-              name="email"
-              type="email"
-              placeholder="jane@example.com"
-              required
-              {...props}
-            />
-          )}
-        </Field>
+        <Flex direction="column" gap="0.75rem">
+          <Field label="E-mail">
+            {(props) => (
+              <Input
+                name="email"
+                type="email"
+                placeholder="jane@example.com"
+                required
+                autoComplete="username"
+                {...props}
+              />
+            )}
+          </Field>
 
-        <Field label="Password" hint={<Link href="/">Need help?</Link>}>
-          {(props) => (
-            <Input
-              name="password"
-              type="password"
-              placeholder="⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕"
-              minLength={15}
-              required
-              {...props}
-            />
-          )}
-        </Field>
+          <Field label="Password" hint={<Link href="/">Need help?</Link>}>
+            {(props) => (
+              <Input
+                name="password"
+                type="password"
+                placeholder="⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕"
+                minLength={15}
+                required
+                autoComplete="current-password"
+                {...props}
+              />
+            )}
+          </Field>
+        </Flex>
       </Flex>
 
       <Flex justifyContent="end">

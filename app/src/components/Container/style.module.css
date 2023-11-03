@@ -1,0 +1,11 @@
+.container {
+  margin-inline: auto;
+}
+
+.container.small {
+  max-width: 24rem;
+}
+
+.container.large {
+  max-width: 64rem;
+}

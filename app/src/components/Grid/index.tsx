@@ -49,7 +49,7 @@ function Grid<E extends AcceptableElementType = "div">(
     justifyContent,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("div" as ElementType);
 

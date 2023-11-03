@@ -22,7 +22,7 @@ function Button<E extends AcceptableElementType = "button">(
     shape = "rectangle",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("button" as ElementType);
 

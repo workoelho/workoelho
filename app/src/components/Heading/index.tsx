@@ -21,14 +21,14 @@ type Props = {
 
 function Heading<E extends AcceptableElementType>(
   { as, size, children, ...props }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("span" as ElementType);
 
   const classList = new ClassList(
     classes.heading,
     classes[size],
-    props.className
+    props.className,
   );
   props.className = classList.toString();
 

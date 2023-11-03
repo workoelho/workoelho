@@ -9,13 +9,14 @@
 }
 
 .hint {
+  color: var(--foreground-2);
   font-size: 0.875rem;
 }
 
 .invalid {
-  color: firebrick;
+  color: var(--negative-1);
 }
 
 .valid {
-  color: forestgreen;
+  color: var(--positive-1);
 }

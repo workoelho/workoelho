@@ -39,7 +39,7 @@ export default async function Layout({ params, children }: Props) {
 
   if (
     !session.user.memberships.some(
-      (membership) => privateOrganizationId === membership.organizationId
+      (membership) => privateOrganizationId === membership.organizationId,
     )
   ) {
     redirect("/sign-in");
@@ -115,9 +115,7 @@ export default async function Layout({ params, children }: Props) {
         </Flex>
       </Topbar>
 
-      <Flex as="main" direction="column" className={classes.content}>
-        {children}
-      </Flex>
+      <main className={classes.main}>{children}</main>
 
       <Footer className={classes.footer} />
     </div>

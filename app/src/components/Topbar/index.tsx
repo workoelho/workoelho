@@ -15,7 +15,7 @@ export function Topbar({ className, children }: Props) {
   const classList = new ClassList(classes.topbar, className);
 
   return (
-    <Flex as="nav" gap="3rem" className={classList.toString()}>
+    <nav className={classList.toString()}>
       <h1>
         <a href="/">
           <Brand size="medium" />
@@ -23,6 +23,6 @@ export function Topbar({ className, children }: Props) {
       </h1>
 
       {children}
-    </Flex>
+    </nav>
   );
 }
