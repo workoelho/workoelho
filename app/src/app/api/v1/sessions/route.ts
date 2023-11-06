@@ -1,4 +1,5 @@
 import * as superstruct from "superstruct";
+import { cookies } from "next/headers";
 
 import * as Schema from "~/lib/shared/schema";
 import prisma from "~/lib/server/prisma";
@@ -11,6 +12,8 @@ const schema = superstruct.object({
 });
 
 export const POST = withErrorHandled(async (request: Request) => {
+  console.log({ body: request.body });
+
   const data = superstruct.create(await request.json(), schema);
 
   const user = await prisma.user.findUnique({
@@ -39,5 +42,15 @@ export const POST = withErrorHandled(async (request: Request) => {
     },
   });
 
-  return Response.json(session);
+  cookies().set({
+    name: "session",
+    value: session.secret,
+    httpOnly: true,
+    // secure: true,
+    sameSite: "strict",
+    expires: session.expiresAt,
+    path: "/",
+  });
+
+  return Response.json(session, { status: 201 });
 });

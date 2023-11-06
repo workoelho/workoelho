@@ -1,28 +1,42 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { type Session } from "@prisma/client";
+import { redirect } from "next/navigation";
+import { FormEvent } from "react";
 
 import { Alert } from "~/components/Alert";
 import { Field } from "~/components/Field";
 import { Flex } from "~/components/Flex";
-import { Heading } from "~/components/Heading";
 import { Input } from "~/components/Input";
 import { Link } from "~/components/Link";
 import { Submit } from "~/components/Submit";
+import { request } from "~/lib/client/api";
+import { useAsync } from "~/lib/client/useAsync";
 
-type Props<T> = {
-  action: (state: T, payload: FormData) => never | Promise<T>;
-  initialState: T;
-};
+type Props = {};
 
-export function Form<T extends { message: string }>({
-  action,
-  initialState,
-}: Props<T>) {
-  const [state, handledAction] = useFormState(action, initialState);
+export function Form() {
+  const { error, state, execute } = useAsync((data: FormData) =>
+    request<Session>("/api/v1/sessions", { method: "post", data })
+  );
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+    const response = await execute(data);
+    if (response) {
+      const {
+        user: {
+          memberships: [{ organizationId }],
+        },
+      } = await response.json();
+      redirect(`/${organizationId}/summary`);
+    }
+  };
 
   return (
-    <Flex as="form" action={handledAction} direction="column" gap="1.5rem">
+    <Flex as="form" direction="column" gap="1.5rem" onSubmit={handleSubmit}>
       <Flex as="fieldset" direction="column" gap="1.5rem">
         <legend hidden>Sign in</legend>
 
@@ -30,9 +44,9 @@ export function Form<T extends { message: string }>({
           Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
         </p>
 
-        {state.message ? (
+        {error ? (
           <Alert variant="negative">
-            <p>{state.message}</p>
+            <pre>{error.toString()}</pre>
           </Alert>
         ) : null}
 
@@ -67,7 +81,9 @@ export function Form<T extends { message: string }>({
       </Flex>
 
       <Flex justifyContent="end">
-        <Submit variant="primary">Sign in</Submit>
+        <Submit variant="primary" loading={state === "loading"}>
+          Sign in
+        </Submit>
       </Flex>
     </Flex>
   );

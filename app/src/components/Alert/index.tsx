@@ -5,7 +5,7 @@ import { ClassList } from "~/lib/client/ClassList";
 import classes from "./style.module.css";
 
 type Props = {
-  variant?: "positive" | "negative" | "warning" | "neutral";
+  variant?: "positive" | "negative" | "attentive" | "neutral";
   children: ReactNode;
 };
 

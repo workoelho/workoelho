@@ -5,7 +5,7 @@ import { Brand } from "~/components/Brand";
 
 import classes from "./layout.module.css";
 
-import { version } from "~/../package.json";
+import pkg from "~/../package.json";
 
 type Props = {
   children: ReactNode;
@@ -24,7 +24,7 @@ export default function Layout({ children }: Props) {
         {children}
       </main>
 
-      <Footer version={version} className={classes.footer} />
+      <Footer version={pkg.version} className={classes.footer} />
     </div>
   );
 }

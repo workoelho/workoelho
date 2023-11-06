@@ -1,8 +1,9 @@
 import * as superstruct from "superstruct";
+import { cookies } from "next/headers";
 
 import * as Schema from "~/lib/shared/schema";
 import prisma from "~/lib/server/prisma";
-import { comparePassword, createPassword } from "~/lib/server/user";
+import { createPassword } from "~/lib/server/user";
 import { withErrorHandled } from "~/lib/server/handler";
 
 const schema = superstruct.object({
@@ -44,6 +45,16 @@ export const POST = withErrorHandled(async (request: Request) => {
       memberships: true,
       sessions: true,
     },
+  });
+
+  cookies().set({
+    name: "session",
+    value: user.sessions[0].secret,
+    httpOnly: true,
+    // secure: true,
+    sameSite: "lax",
+    expires: user.sessions[0].expiresAt,
+    path: "/",
   });
 
   return Response.json(user);

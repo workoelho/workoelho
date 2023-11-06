@@ -1,7 +1,7 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { ZodError } from "zod";
+import { StructError } from "superstruct";
 
-import { InvalidInput } from "~/lib/shared/InvalidInput";
+import { ValidationError } from "~/lib/server/ValidationError";
 
 type Handler = (request: Request) => Promise<Response>;
 
@@ -10,11 +10,11 @@ export function withErrorHandled(handler: Handler) {
     try {
       return await handler(request);
     } catch (err) {
-      if (err instanceof InvalidInput) {
+      if (err instanceof ValidationError) {
         return Response.json(err, { status: 422 });
       }
-      if (err instanceof ZodError) {
-        return Response.json(InvalidInput.fromZodError(err), { status: 422 });
+      if (err instanceof StructError) {
+        return Response.json(err, { status: 422 });
       }
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2002") {
