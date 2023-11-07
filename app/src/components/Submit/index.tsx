@@ -1,16 +1,20 @@
+"use client";
+
 import { ReactNode } from "react";
+import { useFormStatus } from "react-dom";
 
 import { Button, type Props as ButtonProps } from "~/src/components/Button";
 
 type Props = ButtonProps & {
   children: ReactNode;
-  loading?: boolean;
 };
 
-export function Submit({ children, loading, ...props }: Props) {
+export function Submit({ children, ...props }: Props) {
+  const { pending } = useFormStatus();
+
   return (
-    <Button type="submit" disabled={loading} {...props}>
-      {loading ? "Working..." : children}
+    <Button type="submit" disabled={pending} {...props}>
+      {pending ? "Working..." : children}
     </Button>
   );
 }

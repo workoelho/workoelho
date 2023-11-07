@@ -1,47 +1,27 @@
 "use client";
 
-import { redirect } from "next/navigation";
-import { FormEvent } from "react";
+import { useFormState } from "react-dom";
 
-import { type create } from "~/src/actions/session";
 import { Alert } from "~/src/components/Alert";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
 import { Link } from "~/src/components/Link";
 import { Submit } from "~/src/components/Submit";
-import { request } from "~/src/lib/client/api";
-import { useAsync } from "~/src/lib/client/useAsync";
-import { ActionResult } from "~/src/lib/server/action";
 
-type Props = {};
+type Props<T> = {
+  action: (state: T, payload: FormData) => never | Promise<T>;
+  initialState: T;
+};
 
-export function Form() {
-  const { error, state, execute } = useAsync((data: FormData) =>
-    request<ActionResult<typeof create>>("/api/v1/sessions", {
-      method: "post",
-      data,
-    })
-  );
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-    const response = await execute(data);
-
-    if (response) {
-      const {
-        user: {
-          memberships: [{ organizationId }],
-        },
-      } = await response.json();
-      redirect(`/${organizationId}/summary`);
-    }
-  };
+export function Form<T extends { message: string }>({
+  action,
+  initialState,
+}: Props<T>) {
+  const [state, handledAction] = useFormState(action, initialState);
 
   return (
-    <Flex as="form" direction="column" gap="1.5rem" onSubmit={handleSubmit}>
+    <Flex as="form" action={handledAction} direction="column" gap="1.5rem">
       <Flex as="fieldset" direction="column" gap="1.5rem">
         <legend hidden>Sign in</legend>
 
@@ -49,9 +29,9 @@ export function Form() {
           Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
         </p>
 
-        {error ? (
+        {state.message ? (
           <Alert variant="negative">
-            <pre>{error.toString()}</pre>
+            <p>{state.message}</p>
           </Alert>
         ) : null}
 
@@ -86,9 +66,7 @@ export function Form() {
       </Flex>
 
       <Flex justifyContent="end">
-        <Submit variant="primary" loading={state === "loading"}>
-          Sign in
-        </Submit>
+        <Submit variant="primary">Sign in</Submit>
       </Flex>
     </Flex>
   );

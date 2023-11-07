@@ -12,10 +12,7 @@ const schema = superstruct.object({
   password: Schema.password,
 });
 
-export async function create(
-  context: ActionContext,
-  data: Record<string, unknown>
-) {
+export async function create({ data }: ActionContext) {
   superstruct.assert(data, schema);
 
   return await prisma.user.create({

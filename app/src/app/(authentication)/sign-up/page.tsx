@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { create } from "~/src/actions/user";
+import { getPublicId } from "~/src/lib/shared/publicId";
 
 import { Form } from "./form";
 
@@ -16,15 +17,14 @@ export default function Page() {
 
     let user;
     try {
-      user = await create(
-        {},
-        {
+      user = await create({
+        data: {
           name: payload.get("name"),
           organization: payload.get("organization"),
           email: payload.get("email"),
           password: payload.get("password"),
         },
-      );
+      });
     } catch (error) {
       if (error instanceof Error) {
         return { message: error.message };
@@ -42,7 +42,9 @@ export default function Page() {
       path: "/",
     });
 
-    redirect(`/${user.memberships[0].organizationId}/summary`);
+    const organizationId = getPublicId(user.memberships[0].organizationId);
+
+    redirect(`/${organizationId}/summary`);
   };
 
   return <Form action={action} initialState={{ message: "" }} />;

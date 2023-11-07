@@ -19,8 +19,8 @@ type Props = {
 
 export default async function Layout({ params, children }: Props) {
   const secret = cookies().get("session")?.value;
-  const publicOrganizationId = params.organizationId;
-  const privateOrganizationId = getPrivateId(publicOrganizationId);
+  const { organizationId } = params;
+  const privateOrganizationId = getPrivateId(organizationId);
 
   if (!secret) {
     redirect("/sign-in");
@@ -39,7 +39,7 @@ export default async function Layout({ params, children }: Props) {
 
   if (
     !session.user.memberships.some(
-      (membership) => privateOrganizationId === membership.organizationId,
+      (membership) => privateOrganizationId === membership.organizationId
     )
   ) {
     redirect("/sign-in");
@@ -57,38 +57,26 @@ export default async function Layout({ params, children }: Props) {
       <Topbar className={classes.topbar}>
         <Flex as="ul" gap="1.5rem" style={{ flexGrow: 1 }}>
           <li>
-            <Button
-              as="a"
-              href={`/${publicOrganizationId}/summary`}
-              shape="text"
-            >
+            <Button as="a" href={`/${organizationId}/summary`} shape="text">
               Summary
             </Button>
           </li>
           <li>
-            <Button
-              as="a"
-              href={`/${publicOrganizationId}/activity`}
-              shape="text"
-            >
+            <Button as="a" href={`/${organizationId}/activity`} shape="text">
               Activity
             </Button>
           </li>
           <li>
             <Button
               as="a"
-              href={`/${publicOrganizationId}/applications`}
+              href={`/${organizationId}/applications`}
               shape="text"
             >
               Applications
             </Button>
           </li>
           <li>
-            <Button
-              as="a"
-              href={`/${publicOrganizationId}/technology`}
-              shape="text"
-            >
+            <Button as="a" href={`/${organizationId}/technology`} shape="text">
               Technology
             </Button>
           </li>

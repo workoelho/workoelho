@@ -1,41 +1,46 @@
-import { type Prisma } from "@prisma/client";
-
-interface TypedResponse<T> extends Response {
-  json(): Promise<T>;
-}
-
-type ReqConfig = {
-  method?: "get" | "post" | "put" | "patch" | "delete";
-  headers?: Record<string, string>;
-  data?: unknown;
+type RequestConfig<T = unknown> = {
+  method: "get" | "post" | "put" | "patch" | "delete";
+  headers: Record<string, string>;
+  body?: T;
 };
 
-export async function request<Data>(url: string, config: ReqConfig = {}) {
-  const req = {
-    method: config.method ?? "GET",
-    headers: config.headers ?? {},
-    body: "",
-  };
-  req.headers["Content-Type"] ??= "application/json; charset=utf-8";
+type ResponseConfig<T = unknown> = {
+  status: number;
+  headers: Record<string, string>;
+  body: T;
+};
 
-  if ("data" in config) {
-    req.method = config.method ?? "POST";
+export async function request<T>(
+  url: string,
+  reqConfig: Partial<RequestConfig> = {}
+) {
+  reqConfig.headers ??= {};
+  reqConfig.headers["Content-Type"] ??= "application/json; charset=utf-8";
 
-    if (config.data instanceof FormData) {
-      req.body = JSON.stringify(Object.fromEntries(config.data.entries()));
-    } else {
-      req.body = JSON.stringify(config.data);
+  if ("body" in reqConfig) {
+    reqConfig.method ??= "post";
+    if (reqConfig.body instanceof FormData) {
+      reqConfig.body = Object.fromEntries(reqConfig.body.entries());
     }
+  } else {
+    reqConfig.method ??= "get";
   }
 
-  const response: TypedResponse<Data> = await fetch(url, req);
+  const response = await fetch(url, {
+    method: reqConfig.method,
+    headers: reqConfig.headers,
+    body: JSON.stringify(reqConfig.body),
+  });
+
+  const respConfig = {
+    status: response.status,
+    headers: Object.fromEntries(response.headers.entries()),
+    body: (await response.json()) as T,
+  };
 
   if (!response.ok) {
-    throw response;
+    throw respConfig as ResponseConfig<T>;
   }
 
-  return response;
+  return respConfig as ResponseConfig<T>;
 }
-
-export type Session<T extends Prisma.SessionDefaultArgs = {}> =
-  Prisma.SessionGetPayload<T>;

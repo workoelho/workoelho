@@ -1,38 +1,39 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 
 type State<Data> = {
-  state: "idle" | "loading" | "success" | "error";
+  state: "idle" | "busy" | "done" | "failed";
   data?: Data;
   error?: unknown;
 };
 
-type Fetcher<A extends any[], D> = (...args: A) => Promise<D>;
+type Executor<P extends any[], R> = (...args: P) => Promise<R>;
 
-export function useAsync<A extends any[], T>(fetcher: Fetcher<A, T>) {
+export function useAsync<P extends any[], R>(executor: Executor<P, R>) {
   const [{ error, data, state }, dispatch] = useReducer(
-    (state: State<T>, patch: Partial<State<T>>) => {
+    (state: State<R>, patch: Partial<State<R>>) => {
       if (state.state === patch.state) {
         return state;
       }
       return { ...state, ...patch };
     },
-    { state: "idle" },
+    { state: "idle" }
   );
 
-  const fetcherRef = useRef(fetcher);
+  const executorRef = useRef(executor);
   useEffect(() => {
-    fetcherRef.current = fetcher;
+    executorRef.current = executor;
   });
 
-  const execute = useCallback(async (...args: A) => {
-    dispatch({ state: "loading" });
+  const execute = useCallback(async (...args: P) => {
+    dispatch({ state: "busy" });
 
     try {
-      const data = await fetcherRef.current(...args);
-      dispatch({ data, state: "success" });
+      const data = await executorRef.current(...args);
+      dispatch({ data, state: "done" });
       return data;
     } catch (error) {
-      dispatch({ error, state: "error" });
+      dispatch({ error, state: "failed" });
+      throw error;
     }
   }, []);
 

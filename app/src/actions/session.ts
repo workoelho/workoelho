@@ -7,6 +7,8 @@ import prisma from "~/src/lib/server/prisma";
 import { comparePassword } from "~/src/lib/server/user";
 import * as Schema from "~/src/lib/shared/schema";
 
+import { ValidationError } from "../lib/server/ValidationError";
+
 const schema = superstruct.object({
   email: Schema.email,
   password: Schema.password,
@@ -20,11 +22,11 @@ export async function create({ data }: ActionContext) {
   });
 
   if (!user) {
-    throw new Error("E-mail not found");
+    throw new ValidationError("E-mail not found");
   }
 
   if (!(await comparePassword(data.password, user.password))) {
-    throw new Error("Bad password");
+    throw new ValidationError("Bad password");
   }
 
   return await prisma.session.create({
