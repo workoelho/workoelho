@@ -1,15 +1,15 @@
 # Base image.
 FROM node:20-alpine
 
+# Move NPM cache directory.
+ENV NPM_CONFIG_CACHE /home/node/.npm
+
 # Change working dir.
 WORKDIR /mnt/app
 
-# Install dependencies based off package files.
+# Install dependencies.
 COPY --chown=node package*.json ./
 RUN npm ci
-
-# Copy everything else and build the application.
-COPY --chown=node . .
 
 # Expose the port.
 EXPOSE 3000

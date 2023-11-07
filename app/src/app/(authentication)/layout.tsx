@@ -1,11 +1,10 @@
 import { type ReactNode } from "react";
 
-import { Footer } from "~/components/Footer";
-import { Brand } from "~/components/Brand";
+import pkg from "~/package.json";
+import { Brand } from "~/src/components/Brand";
+import { Footer } from "~/src/components/Footer";
 
 import classes from "./layout.module.css";
-
-import pkg from "~/../package.json";
 
 type Props = {
   children: ReactNode;

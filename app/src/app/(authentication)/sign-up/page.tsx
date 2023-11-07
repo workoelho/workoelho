@@ -1,8 +1,8 @@
 import { type Metadata } from "next";
-import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { create } from "~/actions/user";
+import { create } from "~/src/actions/user";
 
 import { Form } from "./form";
 

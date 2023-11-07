@@ -4,7 +4,7 @@
   "version": "23.11.03+c276b",
   "license": "MPL-2.0",
   "scripts": {
-    "prestart": "test -d node_modules || npm i",
+    "prestart": "test -d .next || npm run build",
     "start": "next start",
     "develop": "next dev",
     "lint": "next lint",

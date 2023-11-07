@@ -1,7 +1,7 @@
-import { date, defaulted, number, size, string, define } from "superstruct";
 import isEmail from "is-email";
+import { date, defaulted, define, number, size, string } from "superstruct";
 
-import { Time } from "~/lib/shared/Time";
+import { Time } from "~/src/lib/shared/Time";
 
 export const email = define<string>("email", (value: unknown) =>
   isEmail(value as string),

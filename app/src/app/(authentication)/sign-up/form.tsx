@@ -2,15 +2,12 @@
 
 import { useFormState } from "react-dom";
 
-import { Alert } from "~/components/Alert";
-import { Brand } from "~/components/Brand";
-import { Field } from "~/components/Field";
-import { Flex } from "~/components/Flex";
-import { Heading } from "~/components/Heading";
-import { Input } from "~/components/Input";
-import { Link } from "~/components/Link";
-import { Submit } from "~/components/Submit";
-import * as Schema from "~/lib/shared/schema";
+import { Alert } from "~/src/components/Alert";
+import { Field } from "~/src/components/Field";
+import { Flex } from "~/src/components/Flex";
+import { Input } from "~/src/components/Input";
+import { Link } from "~/src/components/Link";
+import { Submit } from "~/src/components/Submit";
 
 type Props<T> = {
   action: (state: T, payload: FormData) => never | Promise<T>;

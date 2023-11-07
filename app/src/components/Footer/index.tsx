@@ -1,6 +1,5 @@
-import { ClassList } from "~/lib/client/ClassList";
-import { Flex } from "~/components/Flex";
-import { Button } from "~/components/Button";
+import { Button } from "~/src/components/Button";
+import { ClassList } from "~/src/lib/client/ClassList";
 
 import classes from "./style.module.css";
 

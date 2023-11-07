@@ -16,7 +16,7 @@ export function useAsync<A extends any[], T>(fetcher: Fetcher<A, T>) {
       }
       return { ...state, ...patch };
     },
-    { state: "idle" }
+    { state: "idle" },
   );
 
   const fetcherRef = useRef(fetcher);

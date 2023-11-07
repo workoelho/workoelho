@@ -1,7 +1,7 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { StructError } from "superstruct";
 
-import { ValidationError } from "~/lib/server/ValidationError";
+import { ValidationError } from "~/src/lib/server/ValidationError";
 
 type Handler = (request: Request) => Promise<Response>;
 

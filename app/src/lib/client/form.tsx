@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useReducer } from "react";
 
-import { map } from "~/lib/shared/map";
+import { map } from "~/src/lib/shared/map";
 
 type FieldValue = string | number | boolean | File;
 

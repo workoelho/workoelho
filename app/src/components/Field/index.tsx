@@ -1,7 +1,7 @@
 import { ReactNode, useId } from "react";
 
-import { ClassList } from "~/lib/client/ClassList";
-import { FieldState } from "~/lib/client/form";
+import { ClassList } from "~/src/lib/client/ClassList";
+import { FieldState } from "~/src/lib/client/form";
 
 import classes from "./style.module.css";
 
@@ -18,7 +18,7 @@ type FieldProps = {
 
 export function Field({ label, state, children, ...props }: FieldProps) {
   const hintId = useId();
-  const hint = state?.error ?? props.hint;
+  const hint = state?.error?.message ?? props.hint;
 
   const classList = new ClassList(classes.field);
   if (state?.touched) {

@@ -1,8 +1,7 @@
 import { ReactNode } from "react";
 
-import { ClassList } from "~/lib/client/ClassList";
-import { Flex } from "~/components/Flex";
-import { Brand } from "~/components/Brand";
+import { Brand } from "~/src/components/Brand";
+import { ClassList } from "~/src/lib/client/ClassList";
 
 import classes from "./style.module.css";
 

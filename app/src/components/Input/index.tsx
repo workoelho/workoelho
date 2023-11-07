@@ -1,6 +1,6 @@
 import { InputHTMLAttributes } from "react";
 
-import { ClassList } from "~/lib/client/ClassList";
+import { ClassList } from "~/src/lib/client/ClassList";
 
 import classes from "./style.module.css";
 

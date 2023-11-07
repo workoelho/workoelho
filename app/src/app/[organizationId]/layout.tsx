@@ -1,14 +1,14 @@
-import { type ReactNode } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { type ReactNode } from "react";
 
-import prisma from "~/lib/server/prisma";
-import { getPrivateId } from "~/lib/shared/publicId";
-import { Flex } from "~/components/Flex";
-import { Topbar } from "~/components/Topbar";
-import { Footer } from "~/components/Footer";
-import { Button } from "~/components/Button";
-import { Icon } from "~/components/Icon";
+import { Button } from "~/src/components/Button";
+import { Flex } from "~/src/components/Flex";
+import { Footer } from "~/src/components/Footer";
+import { Icon } from "~/src/components/Icon";
+import { Topbar } from "~/src/components/Topbar";
+import prisma from "~/src/lib/server/prisma";
+import { getPrivateId } from "~/src/lib/shared/publicId";
 
 import classes from "./layout.module.css";
 

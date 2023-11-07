@@ -1,23 +1,27 @@
 "use client";
 
-import { type Session } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { FormEvent } from "react";
 
-import { Alert } from "~/components/Alert";
-import { Field } from "~/components/Field";
-import { Flex } from "~/components/Flex";
-import { Input } from "~/components/Input";
-import { Link } from "~/components/Link";
-import { Submit } from "~/components/Submit";
-import { request } from "~/lib/client/api";
-import { useAsync } from "~/lib/client/useAsync";
+import { type create } from "~/src/actions/session";
+import { Alert } from "~/src/components/Alert";
+import { Field } from "~/src/components/Field";
+import { Flex } from "~/src/components/Flex";
+import { Input } from "~/src/components/Input";
+import { Link } from "~/src/components/Link";
+import { Submit } from "~/src/components/Submit";
+import { request } from "~/src/lib/client/api";
+import { useAsync } from "~/src/lib/client/useAsync";
+import { ActionResult } from "~/src/lib/server/action";
 
 type Props = {};
 
 export function Form() {
   const { error, state, execute } = useAsync((data: FormData) =>
-    request<Session>("/api/v1/sessions", { method: "post", data })
+    request<ActionResult<typeof create>>("/api/v1/sessions", {
+      method: "post",
+      data,
+    })
   );
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -25,6 +29,7 @@ export function Form() {
 
     const data = new FormData(event.currentTarget);
     const response = await execute(data);
+
     if (response) {
       const {
         user: {

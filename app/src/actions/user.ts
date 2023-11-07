@@ -1,7 +1,6 @@
-import { cookies } from "next/headers";
 import * as superstruct from "superstruct";
 
-import { withErrorHandled } from "~/src/lib/server/handler";
+import { ActionContext } from "~/src/lib/server/action";
 import prisma from "~/src/lib/server/prisma";
 import { createPassword } from "~/src/lib/server/user";
 import * as Schema from "~/src/lib/shared/schema";
@@ -13,10 +12,13 @@ const schema = superstruct.object({
   password: Schema.password,
 });
 
-export const POST = withErrorHandled(async (request: Request) => {
-  const data = superstruct.create(await request.json(), schema);
+export async function create(
+  context: ActionContext,
+  data: Record<string, unknown>
+) {
+  superstruct.assert(data, schema);
 
-  const user = await prisma.user.create({
+  return await prisma.user.create({
     data: {
       email: data.email,
       password: await createPassword(data.password),
@@ -46,16 +48,4 @@ export const POST = withErrorHandled(async (request: Request) => {
       sessions: true,
     },
   });
-
-  cookies().set({
-    name: "session",
-    value: user.sessions[0].secret,
-    httpOnly: true,
-    // secure: true,
-    sameSite: "lax",
-    expires: user.sessions[0].expiresAt,
-    path: "/",
-  });
-
-  return Response.json(user);
-});
+}

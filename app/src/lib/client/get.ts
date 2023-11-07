@@ -16,7 +16,7 @@ type ReqConfig<ReqData> = {
 
 export async function get<RespData, ReqData = unknown>(
   url: string,
-  config: ReqConfig<ReqData> = {}
+  config: ReqConfig<ReqData> = {},
 ) {
   const init = {
     method: config.method ?? "GET",
