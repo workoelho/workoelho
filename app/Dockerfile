@@ -1,9 +1,6 @@
 # Base image.
 FROM node:20-alpine
 
-# Move NPM cache directory.
-ENV NPM_CONFIG_CACHE /home/node/.npm
-
 # Change working dir.
 WORKDIR /mnt/app
 

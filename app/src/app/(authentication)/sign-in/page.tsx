@@ -44,7 +44,7 @@ export default function Page() {
       session.user.memberships[0].organizationId
     );
 
-    redirect(`/${organizationId}/summary`);
+    redirect(`/${organizationId}`);
   };
 
   return <Form action={action} initialState={{ message: "" }} />;

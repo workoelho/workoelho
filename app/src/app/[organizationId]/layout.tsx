@@ -69,6 +69,11 @@ export default async function Layout({ params, children }: Props) {
             </Button>
           </li>
           <li>
+            <Button as="a" href={`/${organizationId}/tags`} shape="text">
+              Tags
+            </Button>
+          </li>
+          <li>
             <Button
               as="a"
               href={`/${organizationId}/applications`}
@@ -83,15 +88,38 @@ export default async function Layout({ params, children }: Props) {
             </Button>
           </li>
           <li>
-            <Button as="button" shape="text">
-              More
-              <Icon variant="triangle down" />
-            </Button>
-          </li>
-          <li>
-            <Button shape="pill" variant="primary">
-              Quick add
-            </Button>
+            <Popover
+              placement="right"
+              trigger={
+                <Button as="button" shape="text">
+                  More
+                  <Icon variant="triangle down" />
+                </Button>
+              }
+            >
+              <Box padding=".75rem">
+                <Flex as="menu" direction="column">
+                  <li>
+                    <Button
+                      as="a"
+                      href={`/${organizationId}/providers`}
+                      shape="text"
+                    >
+                      Providers
+                    </Button>
+                  </li>
+                  <li>
+                    <Button
+                      as="a"
+                      href={`/${organizationId}/people`}
+                      shape="text"
+                    >
+                      People
+                    </Button>
+                  </li>
+                </Flex>
+              </Box>
+            </Popover>
           </li>
         </Flex>
 
@@ -100,7 +128,7 @@ export default async function Layout({ params, children }: Props) {
             <Popover
               placement="right"
               trigger={
-                <Button shape="text" tabIndex={0}>
+                <Button shape="text">
                   {session.user.name} (
                   {session.user.memberships[0].organization.name})
                   <Icon variant="triangle down" />

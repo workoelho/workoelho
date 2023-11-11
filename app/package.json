@@ -15,14 +15,14 @@
   "dependencies": {
     "@floating-ui/react-dom": "^2.0.4",
     "@prisma/client": "^5.5.2",
-    "@types/node": "20.8.9",
-    "@types/react": "18.2.33",
-    "@types/react-dom": "18.2.14",
+    "@types/node": "20.9.0",
+    "@types/react": "18.2.37",
+    "@types/react-dom": "18.2.15",
     "bcrypt": "^5.1.1",
-    "eslint": "8.52.0",
-    "eslint-config-next": "14.0.0",
+    "eslint": "8.53.0",
+    "eslint-config-next": "14.0.2",
     "is-email": "^1.0.2",
-    "next": "14.0.0",
+    "next": "14.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sqids": "^0.3.0",
@@ -30,7 +30,7 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.1",
+    "@types/bcrypt": "^5.0.2",
     "prettier": "^3.0.3",
     "prisma": "^5.5.2"
   }
