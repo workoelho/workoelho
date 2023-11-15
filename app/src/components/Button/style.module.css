@@ -6,7 +6,7 @@
 }
 
 .button:active:not(:disabled) {
-  translate: 0 0.125rem;
+  translate: 1px 1px;
 }
 
 .button:disabled {
@@ -34,50 +34,50 @@
 }
 
 .button.text.neutral {
-  color: var(--foreground-1);
+  color: var(--neutral);
 }
 
 .button.text.neutral:is(:hover, :focus) {
-  color: var(--foreground-3);
+  color: var(--neutral-highlight);
 }
 
 .button.text.primary {
-  color: var(--primary-1);
+  color: var(--primary);
 }
 
 .button.text.primary:is(:hover, :focus) {
-  color: var(--primary-2);
+  color: var(--primary-highlight);
 }
 
 .button.text.positive {
-  color: var(--positive-1);
+  color: var(--positive);
 }
 
 .button.text.positive:is(:hover, :focus) {
-  color: var(--positive-2);
+  color: var(--positive-highlight);
 }
 
 .button.text.negative {
-  color: var(--negative-1);
+  color: var(--negative);
 }
 
 .button.text.negative:is(:hover, :focus) {
-  color: var(--negative-2);
+  color: var(--negative-highlight);
 }
 
 .button.text.attentive {
-  color: var(--attentive-1);
+  color: var(--attentive);
 }
 
 .button.text.attentive:is(:hover, :focus) {
-  color: var(--attentive-2);
+  color: var(--attentive-highlight);
 }
 
 .button:is(.rectangle, .pill) {
-  box-shadow:
-    inset 0 0.25rem hsla(0, 0%, 100%, 0.125),
-    0 0.25rem hsla(0, 0%, 0%, 0.125);
-  gap: 0.5rem;
+  border: 2px solid currentColor;
+  box-shadow: 1px 1px currentColor;
+  line-height: 1.25;
+  gap: 0.25rem;
 }
 
 .button:is(.rectangle, .pill).small {
@@ -96,57 +96,52 @@
 }
 
 .button:is(.rectangle, .pill).neutral {
-  background-color: var(--background-1);
-  border: 0.125rem solid currentColor;
-  color: var(--foreground-1);
+  color: var(--neutral);
 }
 
 .button:is(.rectangle, .pill).neutral:is(:hover, :focus) {
-  color: var(--foreground-3);
+  color: var(--neutral-highlight);
 }
 
 .button:is(.rectangle, .pill).primary {
-  color: var(--background-1);
-  background-color: var(--primary-1);
+  color: var(--primary);
+  background-color: var(--primary-background);
 }
 
 .button:is(.rectangle, .pill).primary:is(:hover, :focus) {
-  background-color: var(--primary-2);
+  color: var(--primary-highlight);
 }
 
 .button:is(.rectangle, .pill).positive {
-  color: var(--background-1);
-  background-color: var(--positive-1);
+  color: var(--positive);
 }
 
 .button:is(.rectangle, .pill).positive:is(:hover, :focus) {
-  background-color: var(--positive-2);
+  color: var(--positive-highlight);
 }
 
 .button:is(.rectangle, .pill).negative {
-  color: var(--background-1);
-  background-color: var(--negative-1);
+  color: var(--negative);
 }
 
 .button:is(.rectangle, .pill).negative:is(:hover, :focus) {
-  background-color: var(--negative-2);
+  color: var(--negative-highlight);
 }
 
 .button:is(.rectangle, .pill).attentive {
-  color: var(--background-1);
-  background-color: var(--attentive-1);
+  color: var(--attentive);
 }
 
 .button:is(.rectangle, .pill).attentive:is(:hover, :focus) {
-  background-color: var(--attentive-2);
+  color: var(--attentive-highlight);
 }
 
 .button:is(.rectangle, .pill):active:not(:disabled) {
-  box-shadow: inset 0 0.25rem hsla(0, 0%, 0%, 0.1);
+  box-shadow: none;
 }
 
 .button.rectangle {
-  border-radius: 0.25rem;
+  border-radius: 3px;
 }
 
 .button.pill {

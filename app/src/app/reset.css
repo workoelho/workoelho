@@ -1,10 +1,6 @@
-/* Define SVG namespace. */
-
-@namespace svg "http://www.w3.org/2000/svg";
-
 /* Hard reset everything that is not under SVG namespace but revert display property to browser's default. */
 
-:not(svg|*) {
+* {
   all: unset;
   display: revert;
 }
@@ -26,85 +22,10 @@
   vertical-align: inherit;
 }
 
-/* Reset form controls. */
+/* Fix hidden attribute. */
 
-legend {
-  display: contents;
-}
-
-input[type="number"] {
-  appearance: textfield; /* Fix for Firefox. Nothing else works. */
-}
-
-::-webkit-inner-spin-button,
-::-webkit-outer-spin-button {
-  all: unset;
-}
-
-::-webkit-color-swatch-wrapper {
-  all: unset;
-}
-
-::-webkit-color-swatch {
-  all: unset;
-}
-
-::-moz-color-swatch {
-  all: unset;
-}
-
-::-webkit-file-upload-button {
-  all: unset;
-}
-
-::-webkit-search-cancel-button,
-::-webkit-search-results-button,
-::-webkit-search-results-decoration {
-  all: unset;
-}
-
-::-webkit-slider-thumb {
-  all: unset;
-}
-
-::-webkit-slider-runnable-track {
-  all: unset;
-}
-
-::-moz-range-thumb {
-  all: unset;
-}
-
-::-moz-range-track {
-  all: unset;
-}
-
-::-moz-range-progress {
-  all: unset;
-}
-
-::-webkit-datetime-edit-fields-wrapper {
-  all: unset;
-}
-
-::-webkit-calendar-picker-indicator {
-  all: unset;
-}
-
-[list]::-webkit-calendar-picker-indicator {
-  list-style: none !important; /* Fix for input with list where the picker uses style attribute. */
-}
-
-::-webkit-progress-bar {
-  all: unset;
-}
-
-::-webkit-progress-value {
-  all: unset;
-}
-
-::-moz-progress-bar {
-  all: unset;
+[hidden] {
+  display: none;
 }
 
 /* Fix text wrapping. */
@@ -161,7 +82,7 @@ small {
 
 b,
 strong {
-  font-weight: 500;
+  font-weight: 700;
 }
 
 em,
@@ -204,7 +125,7 @@ li {
   list-style: none;
 }
 
-/* Constraint dimensions of embedded content. */
+/* Fix dimensions of media. */
 
 iframe,
 img,
@@ -222,20 +143,12 @@ table {
   text-indent: 0;
 }
 
-/* Remove the inner border and padding in Firefox. */
+/* Reset focus outline. */
 
 ::-moz-focus-inner {
   border-style: none;
   padding: 0;
 }
-
-/* Reset invalid style in Firefox. */
-
-:-moz-ui-invalid {
-  box-shadow: none;
-}
-
-/* Accessbility defaults. */
 
 :-moz-focusring {
   outline: none;
@@ -245,6 +158,8 @@ table {
   outline: none;
 }
 
+/* Accessbility defaults. */
+
 [aria-busy="true"] {
   cursor: progress;
 }
@@ -252,8 +167,4 @@ table {
 [aria-disabled="true"],
 [disabled] {
   cursor: not-allowed;
-}
-
-[hidden] {
-  display: none;
 }

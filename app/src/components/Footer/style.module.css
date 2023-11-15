@@ -16,7 +16,7 @@
 }
 
 .copyright span {
-  color: var(--foreground-2);
+  color: var(--neutral-highlight);
 }
 
 @media (width < 478rem) {

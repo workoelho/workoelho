@@ -9,14 +9,14 @@
 }
 
 .hint {
-  color: var(--foreground-2);
+  color: var(--neutral-highlight);
   font-size: 0.875rem;
 }
 
 .invalid {
-  color: var(--negative-1);
+  color: var(--negative);
 }
 
 .valid {
-  color: var(--positive-1);
+  color: var(--positive);
 }

@@ -13,7 +13,7 @@ export function Footer({ version, className }: Props) {
 
   return (
     <footer className={classList.toString()}>
-      <ul className={classes.menu}>
+      <menu className={classes.menu}>
         <li>
           <Button
             as="a"
@@ -30,16 +30,11 @@ export function Footer({ version, className }: Props) {
           </Button>
         </li>
         <li>
-          <Button as="a" href="/privacy" shape="text" size="small">
-            Privacy policy
-          </Button>
-        </li>
-        <li>
           <Button as="a" href="/help" shape="text" size="small">
             Help
           </Button>
         </li>
-      </ul>
+      </menu>
 
       <p className={classes.copyright}>
         ©️ 2023 Workoelho <span>v{version}</span>

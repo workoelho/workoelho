@@ -4,20 +4,20 @@
 }
 
 .alert.neutral {
-  background-color: whitesmoke;
+  background-color: var(--neutral-background);
 }
 
 .alert.positive {
-  background-color: var(--positive-3);
-  color: var(--positive-1);
+  background-color: var(--positive-background);
+  color: var(--positive);
 }
 
 .alert.negative {
-  background-color: var(--negative-3);
-  color: var(--negative-1);
+  background-color: var(--negative-background);
+  color: var(--negative);
 }
 
 .alert.attentive {
-  background-color: var(--attentive-3);
-  color: var(--attentive-1);
+  background-color: var(--attentive-background);
+  color: var(--attentive);
 }

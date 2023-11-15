@@ -9,7 +9,7 @@ import { useToggle } from "~/src/lib/client/useToggle";
 import classes from "./style.module.css";
 
 type Props = {
-  placement: "left" | "right";
+  placement?: "left" | "right";
   children: ReactNode;
   trigger: ReactNode;
 };

@@ -15,11 +15,10 @@
 }
 
 .content {
-  background-color: var(--background-1);
-  border-radius: 0.25rem;
-  box-shadow:
-    0 0.125rem rgba(0, 0, 0, 0.075),
-    0 0.25rem 0.5rem rgba(0, 0, 0, 0.075);
+  background-color: var(--neutral-background);
+  border-radius: 2px;
+  border: 1px solid currentColor;
+  box-shadow: 1px 1px currentColor;
   margin-block-start: 0.25rem;
   position: absolute;
 }

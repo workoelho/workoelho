@@ -1,8 +1,8 @@
 .link {
-  color: var(--primary-1);
+  color: var(--primary);
   text-decoration: underline;
 }
 
 .link:is(:focus-visible, :hover) {
-  color: var(--primary-2);
+  color: var(--primary-highlight);
 }

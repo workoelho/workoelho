@@ -1,19 +1,20 @@
 .input {
   align-items: center;
-  background-color: var(--background-1);
-  border-radius: 0.25rem;
-  border: 0.075rem solid var(--foreground-3);
-  box-shadow: inset 0 0.25rem hsla(0, 0%, 0%, 0.0875);
+  background-color: var(--background);
+  border-radius: 3px;
+  border: 2px inset #ccc;
+  /* box-shadow: inset 1px 1px currentColor; */
+  color: var(--neutral);
   display: flex;
   height: 2.5rem;
   padding-inline: 0.5rem;
   width: 100%;
 }
 
-.input:focus {
-  border-color: currentColor;
+.input:is(:focus, :hover) {
+  color: var(--neutral);
 }
 
 .input::placeholder {
-  color: var(--foreground-3);
+  color: var(--neutral-highlight);
 }

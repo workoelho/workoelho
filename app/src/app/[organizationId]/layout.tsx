@@ -12,6 +12,7 @@ import { Popover } from "~/src/components/Popover";
 import { Topbar } from "~/src/components/Topbar";
 import prisma from "~/src/lib/server/prisma";
 import { getPrivateId } from "~/src/lib/shared/publicId";
+import { getShortName } from "~/src/lib/shared/api";
 
 import classes from "./layout.module.css";
 
@@ -83,13 +84,7 @@ export default async function Layout({ params, children }: Props) {
             </Button>
           </li>
           <li>
-            <Button as="a" href={`/${organizationId}/technology`} shape="text">
-              Technology
-            </Button>
-          </li>
-          <li>
             <Popover
-              placement="right"
               trigger={
                 <Button as="button" shape="text">
                   More
@@ -97,8 +92,17 @@ export default async function Layout({ params, children }: Props) {
                 </Button>
               }
             >
-              <Box padding=".75rem">
+              <Box padding=".75rem 1.5rem">
                 <Flex as="menu" direction="column">
+                  <li>
+                    <Button
+                      as="a"
+                      href={`/${organizationId}/technology`}
+                      shape="text"
+                    >
+                      Technology
+                    </Button>
+                  </li>
                   <li>
                     <Button
                       as="a"
@@ -129,7 +133,7 @@ export default async function Layout({ params, children }: Props) {
               placement="right"
               trigger={
                 <Button shape="text">
-                  {session.user.name} (
+                  {getShortName(session.user.name)} (
                   {session.user.memberships[0].organization.name})
                   <Icon variant="triangle down" />
                 </Button>
