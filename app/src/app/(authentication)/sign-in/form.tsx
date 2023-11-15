@@ -10,18 +10,18 @@ import { Link } from "~/src/components/Link";
 import { Submit } from "~/src/components/Submit";
 
 type Props<T> = {
-  action: (state: T, payload: FormData) => never | Promise<T>;
-  initialState: T;
+  action: (state: Awaited<T>, payload: FormData) => Promise<T> | never;
+  initialState: Awaited<T>;
 };
 
 export function Form<T extends { message: string }>({
   action,
   initialState,
 }: Props<T>) {
-  const [state, handledAction] = useFormState(action, initialState);
+  const [state, dispatch] = useFormState(action, initialState);
 
   return (
-    <Flex as="form" action={handledAction} direction="column" gap="1.5rem">
+    <Flex as="form" action={dispatch} direction="column" gap="1.5rem">
       <Flex as="fieldset" direction="column" gap="1.5rem">
         <legend hidden>Sign in</legend>
 
@@ -66,7 +66,9 @@ export function Form<T extends { message: string }>({
       </Flex>
 
       <Flex justifyContent="end">
-        <Submit variant="primary">Sign in</Submit>
+        <Submit variant="primary" size="large">
+          Sign in
+        </Submit>
       </Flex>
     </Flex>
   );

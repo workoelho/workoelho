@@ -1,3 +1,5 @@
+"use server";
+
 import * as superstruct from "superstruct";
 
 import { ActionContext } from "~/src/lib/server/action";

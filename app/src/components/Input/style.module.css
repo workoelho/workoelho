@@ -1,9 +1,8 @@
 .input {
   align-items: center;
   background-color: var(--background);
-  border-radius: 3px;
-  border: 2px inset #ccc;
-  /* box-shadow: inset 1px 1px currentColor; */
+  border-radius: var(--radius);
+  border: 1px solid;
   color: var(--neutral);
   display: flex;
   height: 2.5rem;

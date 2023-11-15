@@ -1,13 +1,12 @@
-import "./reset.css";
 import "./global.css";
+import "./reset.css";
 
-import { type Viewport, type Metadata } from "next";
-import { Arimo } from "next/font/google";
+import { type Metadata, type Viewport } from "next";
 import { type ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Workoelho",
-  description: "Software development operations, tamed.",
+  description: "Software development operations, organized.",
 };
 
 export const viewport: Viewport = {
@@ -15,21 +14,13 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const font = Arimo({
-  weight: ["400", "500", "700"],
-  style: ["normal"],
-  display: "swap",
-  subsets: ["latin"],
-});
-
 type Props = {
   children: ReactNode;
 };
 
 export default function Layout({ children }: Props) {
   return (
-    <html lang="en" style={font.style}>
-      <style></style>
+    <html lang="en">
       <body>{children}</body>
     </html>
   );

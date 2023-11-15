@@ -15,10 +15,9 @@
 }
 
 .content {
-  background-color: var(--neutral-background);
-  border-radius: 2px;
-  border: 1px solid currentColor;
-  box-shadow: 1px 1px currentColor;
+  background-color: var(--background);
+  border-radius: var(--radius);
+  border: 1px solid;
   margin-block-start: 0.25rem;
   position: absolute;
 }

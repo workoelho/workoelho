@@ -2,15 +2,11 @@
   align-items: center;
   cursor: pointer;
   display: flex;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .button:active:not(:disabled) {
   translate: 1px 1px;
-}
-
-.button:disabled {
-  filter: grayscale(1);
 }
 
 .button.small {
@@ -19,10 +15,6 @@
 
 .button.medium {
   font-size: 1rem;
-}
-
-.button.large {
-  font-size: 1.125rem;
 }
 
 .button.text {
@@ -74,8 +66,7 @@
 }
 
 .button:is(.rectangle, .pill) {
-  border: 2px solid currentColor;
-  box-shadow: 1px 1px currentColor;
+  border: 1px solid currentColor;
   line-height: 1.25;
   gap: 0.25rem;
 }
@@ -96,52 +87,57 @@
 }
 
 .button:is(.rectangle, .pill).neutral {
-  color: var(--neutral);
+  background-color: var(--neutral);
+  color: var(--background);
 }
 
 .button:is(.rectangle, .pill).neutral:is(:hover, :focus) {
-  color: var(--neutral-highlight);
+  background-color: var(--neutral-highlight);
+  color: var(--background);
 }
 
 .button:is(.rectangle, .pill).primary {
-  color: var(--primary);
-  background-color: var(--primary-background);
+  background-color: var(--primary);
+  color: var(--background);
 }
 
 .button:is(.rectangle, .pill).primary:is(:hover, :focus) {
-  color: var(--primary-highlight);
+  background-color: var(--primary-highlight);
+  color: var(--background);
 }
 
 .button:is(.rectangle, .pill).positive {
-  color: var(--positive);
+  background-color: var(--positive);
+  color: var(--background);
 }
 
 .button:is(.rectangle, .pill).positive:is(:hover, :focus) {
-  color: var(--positive-highlight);
+  background-color: var(--positive-highlight);
+  color: var(--background);
 }
 
 .button:is(.rectangle, .pill).negative {
-  color: var(--negative);
+  background-color: var(--negative);
+  color: var(--background);
 }
 
 .button:is(.rectangle, .pill).negative:is(:hover, :focus) {
-  color: var(--negative-highlight);
+  background-color: var(--negative-highlight);
+  color: var(--background);
 }
 
 .button:is(.rectangle, .pill).attentive {
-  color: var(--attentive);
+  background-color: var(--attentive);
+  color: var(--background);
 }
 
 .button:is(.rectangle, .pill).attentive:is(:hover, :focus) {
-  color: var(--attentive-highlight);
-}
-
-.button:is(.rectangle, .pill):active:not(:disabled) {
-  box-shadow: none;
+  background-color: var(--attentive-highlight);
+  color: var(--background);
 }
 
 .button.rectangle {
-  border-radius: 3px;
+  border-radius: var(--radius);
 }
 
 .button.pill {
