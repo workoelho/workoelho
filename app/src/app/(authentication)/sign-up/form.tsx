@@ -5,6 +5,7 @@ import { useFormState } from "react-dom";
 import { Alert } from "~/src/components/Alert";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
+import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Link } from "~/src/components/Link";
 import { Submit } from "~/src/components/Submit";
@@ -95,6 +96,7 @@ export function Form<T extends { message: string }>({
       <Flex justifyContent="end">
         <Submit variant="primary" size="large">
           Sign up
+          <Icon name="arrow/right" />
         </Submit>
       </Flex>
     </Flex>

@@ -17,7 +17,7 @@
 .content {
   background-color: var(--background);
   border-radius: var(--radius);
-  border: 1px solid;
-  margin-block-start: 0.25rem;
+  border: 1px solid var(--neutral-highlight);
+  margin-block-start: 0.5rem;
   position: absolute;
 }

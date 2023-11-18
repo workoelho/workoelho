@@ -5,6 +5,7 @@ import { useFormState } from "react-dom";
 import { Alert } from "~/src/components/Alert";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
+import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Link } from "~/src/components/Link";
 import { Submit } from "~/src/components/Submit";
@@ -26,7 +27,7 @@ export function Form<T extends { message: string }>({
         <legend hidden>Recovery</legend>
 
         <p>
-          Enter the same e-mail you used to sign up. Recalled your password?{" "}
+          Enter the same e-mail you used to sign up. Remembered your password?{" "}
           <Link href="/sign-in">Sign in</Link>.
         </p>
 
@@ -54,7 +55,7 @@ export function Form<T extends { message: string }>({
 
       <Flex justifyContent="end">
         <Submit variant="primary" size="large">
-          Recover
+          Recover <Icon name="arrow/right" />
         </Submit>
       </Flex>
     </Flex>

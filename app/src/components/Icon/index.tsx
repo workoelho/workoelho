@@ -20,18 +20,18 @@ const icons = {
 };
 
 export function Icon({ name, label, size = "1em", className }: Props) {
+  const classList = new ClassList(classes.icon);
+  classList.add(className);
+
   const style = {
     fontSize: size,
   };
-
-  const classList = new ClassList(classes.icon);
-  classList.add(className);
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      className={classList.toString()}
+      className={String(classList)}
       style={style}
       aria-label={label}
       aria-hidden={label ? undefined : "true"}

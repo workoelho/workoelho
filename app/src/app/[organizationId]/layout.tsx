@@ -13,6 +13,7 @@ import { Topbar } from "~/src/components/Topbar";
 import prisma from "~/src/lib/server/prisma";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getShortName } from "~/src/lib/shared/api";
+import { Menu } from "~/src/components/Menu";
 
 import classes from "./layout.module.css";
 
@@ -60,69 +61,43 @@ export default async function Layout({ params, children }: Props) {
       <Topbar className={classes.topbar}>
         <Flex as="menu" gap="1.5rem" style={{ flexGrow: 1 }}>
           <li>
-            <Button as="a" href={`/${organizationId}/summary`} shape="text">
+            <Button as="a" href={`/${organizationId}/summary`}>
               Summary
             </Button>
           </li>
           <li>
-            <Button as="a" href={`/${organizationId}/activity`} shape="text">
+            <Button as="a" href={`/${organizationId}/activity`}>
               Activity
             </Button>
           </li>
           <li>
-            <Button as="a" href={`/${organizationId}/tags`} shape="text">
+            <Button as="a" href={`/${organizationId}/tags`}>
               Tags
             </Button>
           </li>
           <li>
-            <Button
-              as="a"
-              href={`/${organizationId}/applications`}
-              shape="text"
-            >
+            <Button as="a" href={`/${organizationId}/applications`}>
               Applications
             </Button>
           </li>
           <li>
             <Popover
               trigger={
-                <Button as="button" shape="text">
+                <Button as="button">
                   More
                   <Icon name="chevron/down" />
                 </Button>
               }
             >
-              <Box padding=".75rem 1.5rem">
-                <Flex as="menu" direction="column">
-                  <li>
-                    <Button
-                      as="a"
-                      href={`/${organizationId}/technology`}
-                      shape="text"
-                    >
-                      Technology
-                    </Button>
-                  </li>
-                  <li>
-                    <Button
-                      as="a"
-                      href={`/${organizationId}/providers`}
-                      shape="text"
-                    >
-                      Providers
-                    </Button>
-                  </li>
-                  <li>
-                    <Button
-                      as="a"
-                      href={`/${organizationId}/people`}
-                      shape="text"
-                    >
-                      People
-                    </Button>
-                  </li>
-                </Flex>
-              </Box>
+              <Menu>
+                <Menu.Item href={`/${organizationId}/technology`}>
+                  Technology
+                </Menu.Item>
+                <Menu.Item href={`/${organizationId}/providers`}>
+                  Providers
+                </Menu.Item>
+                <Menu.Item href={`/${organizationId}/people`}>People</Menu.Item>
+              </Menu>
             </Popover>
           </li>
         </Flex>
@@ -132,22 +107,22 @@ export default async function Layout({ params, children }: Props) {
             <Popover
               placement="right"
               trigger={
-                <Button shape="text">
+                <Button>
                   {getShortName(session.user.name)} (
                   {session.user.memberships[0].organization.name})
                   <Icon name="chevron/down" />
                 </Button>
               }
             >
-              <Box padding=".75rem">
-                <Flex as="menu" direction="column">
-                  <li>
-                    <form action={signOut}>
-                      <Button shape="text">Sign out</Button>
-                    </form>
-                  </li>
-                </Flex>
-              </Box>
+              <Menu>
+                <Menu.Item>Workoelho</Menu.Item>
+                <Menu.Item>Corenzan</Menu.Item>
+                <Menu.Item>JogaJunto</Menu.Item>
+                <Menu.Separator />
+                <form action={signOut}>
+                  <Menu.Item>Sign out</Menu.Item>
+                </form>
+              </Menu>
             </Popover>
           </li>
         </Flex>
