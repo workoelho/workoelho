@@ -1,5 +1,5 @@
+import "resetize";
 import "./global.css";
-import "./reset.css";
 
 import { type Metadata, type Viewport } from "next";
 import { type ReactNode } from "react";

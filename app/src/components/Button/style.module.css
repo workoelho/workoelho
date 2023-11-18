@@ -1,12 +1,13 @@
 .button {
   align-items: center;
-  cursor: pointer;
+  border-radius: 0.125rem;
   display: flex;
-  font-weight: 400;
+  font-weight: 500;
+  gap: 0.125rem;
 }
 
 .button:active:not(:disabled) {
-  translate: 1px 1px;
+  translate: 0 0.125rem;
 }
 
 .button.small {
@@ -17,129 +18,56 @@
   font-size: 1rem;
 }
 
-.button.text {
-  gap: 0.25rem;
+.button.large {
+  font-size: 1.25rem;
 }
 
-.button.text.large {
-  font-size: 1.125rem;
-}
-
-.button.text.neutral {
+.button.neutral {
   color: var(--neutral);
 }
 
-.button.text.neutral:is(:hover, :focus) {
+.button.neutral:is(:hover, :focus) {
+  background-color: var(--neutral-background);
+  box-shadow: 0 0 0 0.25em var(--neutral-background);
   color: var(--neutral-highlight);
 }
 
-.button.text.primary {
+.button.primary {
   color: var(--primary);
 }
 
-.button.text.primary:is(:hover, :focus) {
+.button.primary:is(:hover, :focus) {
+  background-color: var(--primary-background);
+  box-shadow: 0 0 0 0.25em var(--primary-background);
   color: var(--primary-highlight);
 }
 
-.button.text.positive {
+.button.positive {
   color: var(--positive);
 }
 
-.button.text.positive:is(:hover, :focus) {
+.button.positive:is(:hover, :focus) {
+  background-color: var(--positive-background);
+  box-shadow: 0 0 0 0.25em var(--positive-background);
   color: var(--positive-highlight);
 }
 
-.button.text.negative {
+.button.negative {
   color: var(--negative);
 }
 
-.button.text.negative:is(:hover, :focus) {
+.button.negative:is(:hover, :focus) {
+  background-color: var(--negative-background);
+  box-shadow: 0 0 0 0.25em var(--negative-background);
   color: var(--negative-highlight);
 }
 
-.button.text.attentive {
+.button.attentive {
   color: var(--attentive);
 }
 
-.button.text.attentive:is(:hover, :focus) {
+.button.attentive:is(:hover, :focus) {
+  background-color: var(--attentive-background);
+  box-shadow: 0 0 0 0.25em var(--attentive-background);
   color: var(--attentive-highlight);
-}
-
-.button:is(.rectangle, .pill) {
-  border: 1px solid currentColor;
-  line-height: 1.25;
-  gap: 0.25rem;
-}
-
-.button:is(.rectangle, .pill).small {
-  height: 2.25rem;
-  padding-inline: 1rem;
-}
-
-.button:is(.rectangle, .pill).medium {
-  height: 2.5rem;
-  padding-inline: 1.5rem;
-}
-
-.button:is(.rectangle, .pill).large {
-  height: 3rem;
-  padding-inline: 1.5rem;
-}
-
-.button:is(.rectangle, .pill).neutral {
-  background-color: var(--neutral);
-  color: var(--background);
-}
-
-.button:is(.rectangle, .pill).neutral:is(:hover, :focus) {
-  background-color: var(--neutral-highlight);
-  color: var(--background);
-}
-
-.button:is(.rectangle, .pill).primary {
-  background-color: var(--primary);
-  color: var(--background);
-}
-
-.button:is(.rectangle, .pill).primary:is(:hover, :focus) {
-  background-color: var(--primary-highlight);
-  color: var(--background);
-}
-
-.button:is(.rectangle, .pill).positive {
-  background-color: var(--positive);
-  color: var(--background);
-}
-
-.button:is(.rectangle, .pill).positive:is(:hover, :focus) {
-  background-color: var(--positive-highlight);
-  color: var(--background);
-}
-
-.button:is(.rectangle, .pill).negative {
-  background-color: var(--negative);
-  color: var(--background);
-}
-
-.button:is(.rectangle, .pill).negative:is(:hover, :focus) {
-  background-color: var(--negative-highlight);
-  color: var(--background);
-}
-
-.button:is(.rectangle, .pill).attentive {
-  background-color: var(--attentive);
-  color: var(--background);
-}
-
-.button:is(.rectangle, .pill).attentive:is(:hover, :focus) {
-  background-color: var(--attentive-highlight);
-  color: var(--background);
-}
-
-.button.rectangle {
-  border-radius: var(--radius);
-}
-
-.button.pill {
-  border-radius: 3rem;
 }

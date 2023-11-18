@@ -2,6 +2,6 @@
   display: inline-block;
   height: 1em;
   line-height: 0;
-  vertical-align: middle;
+  vertical-align: baseline;
   width: 1em;
 }

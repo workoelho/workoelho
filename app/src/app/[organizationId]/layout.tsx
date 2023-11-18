@@ -88,7 +88,7 @@ export default async function Layout({ params, children }: Props) {
               trigger={
                 <Button as="button" shape="text">
                   More
-                  <Icon variant="triangle down" />
+                  <Icon name="chevron/down" />
                 </Button>
               }
             >
@@ -135,7 +135,7 @@ export default async function Layout({ params, children }: Props) {
                 <Button shape="text">
                   {getShortName(session.user.name)} (
                   {session.user.memberships[0].organization.name})
-                  <Icon variant="triangle down" />
+                  <Icon name="chevron/down" />
                 </Button>
               }
             >
