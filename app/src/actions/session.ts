@@ -9,13 +9,20 @@ import * as Schema from "~/src/lib/shared/schema";
 
 import { ValidationError } from "../lib/server/ValidationError";
 
-const schema = superstruct.object({
-  email: Schema.email,
-  password: Schema.password,
-});
-
 export async function create({ data }: ActionContext) {
-  superstruct.assert(data, schema);
+  superstruct.assert(
+    data,
+    superstruct.union([
+      superstruct.object({
+        email: Schema.email,
+        password: Schema.password,
+      }),
+      superstruct.object({
+        email: Schema.email,
+        recovery: superstruct.literal(true),
+      }),
+    ])
+  );
 
   const user = await prisma.user.findUnique({
     where: { email: data.email },
@@ -25,7 +32,10 @@ export async function create({ data }: ActionContext) {
     throw new ValidationError("E-mail not found");
   }
 
-  if (!(await comparePassword(data.password, user.password))) {
+  if (
+    "password" in data &&
+    !(await comparePassword(data.password, user.password))
+  ) {
     throw new ValidationError("Bad password");
   }
 
@@ -37,7 +47,11 @@ export async function create({ data }: ActionContext) {
     include: {
       user: {
         include: {
-          memberships: true,
+          memberships: {
+            include: {
+              organization: true,
+            },
+          },
         },
       },
     },

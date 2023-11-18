@@ -49,10 +49,7 @@ export function Form<T extends { message: string }>({
             )}
           </Field>
 
-          <Field
-            label="Password"
-            hint={<Link href="/recovery">Need help?</Link>}
-          >
+          <Field label="Password" hint={<Link href="/">Need help?</Link>}>
             {(props) => (
               <Input
                 name="password"

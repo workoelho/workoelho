@@ -23,10 +23,11 @@ export function Form<T extends { message: string }>({
   return (
     <Flex as="form" action={dispatch} direction="column" gap="1.5rem">
       <Flex as="fieldset" direction="column" gap="1.5rem">
-        <legend hidden>Sign in</legend>
+        <legend hidden>Recovery</legend>
 
         <p>
-          Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
+          Enter the same e-mail you used to sign up. Recalled your password?{" "}
+          <Link href="/sign-in">Sign in</Link>.
         </p>
 
         {state.message ? (
@@ -48,29 +49,12 @@ export function Form<T extends { message: string }>({
               />
             )}
           </Field>
-
-          <Field
-            label="Password"
-            hint={<Link href="/recovery">Need help?</Link>}
-          >
-            {(props) => (
-              <Input
-                name="password"
-                type="password"
-                placeholder="⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕"
-                minLength={15}
-                required
-                autoComplete="current-password"
-                {...props}
-              />
-            )}
-          </Field>
         </Flex>
       </Flex>
 
       <Flex justifyContent="end">
         <Submit variant="primary" size="large">
-          Sign in
+          Recover
         </Submit>
       </Flex>
     </Flex>

@@ -1,0 +1,6 @@
+.feedback {
+  background-color: var(--neutral-background);
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+}
