@@ -6,6 +6,7 @@
   "scripts": {
     "prestart": "test -d .next || npm run build",
     "start": "next start",
+    "predevelop": "test -d node_modules || npm ci",
     "develop": "next dev",
     "lint": "next lint",
     "format": "prettier . --cache --write",
@@ -25,6 +26,7 @@
     "next": "14.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "resend": "^2.0.0",
     "resetize": "^31.2.0",
     "sqids": "^0.3.0",
     "superstruct": "^1.0.3",

@@ -14,6 +14,11 @@ import prisma from "~/src/lib/server/prisma";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getShortName } from "~/src/lib/shared/api";
 import { Menu } from "~/src/components/Menu";
+import {
+  findValidSessionBySecret,
+  getCurrentSession,
+} from "~/src/lib/server/session";
+import { hasMembershipTo } from "~/src/lib/server/action";
 
 import classes from "./layout.module.css";
 
@@ -23,9 +28,18 @@ type Props = {
 };
 
 export default async function Layout({ params, children }: Props) {
-  const secret = cookies().get("session")?.value;
-  const { organizationId } = params;
-  const privateOrganizationId = getPrivateId(organizationId);
+  const { organizationId: publicOrganizationId } = params;
+  const organizationId = getPrivateId(publicOrganizationId);
+
+  const session = await getCurrentSession();
+
+  if (!session) {
+    throw new Error("Unauthenticated");
+  }
+
+  if (!hasMembershipTo(session, organizationId)) {
+    throw new Error("Unauthorized");
+  }
 
   const signOut = async () => {
     "use server";
@@ -33,50 +47,27 @@ export default async function Layout({ params, children }: Props) {
     redirect("/sign-in");
   };
 
-  if (!secret) {
-    redirect("/sign-in");
-  }
-
-  const session = await prisma.session.findUnique({
-    where: { secret, expiresAt: { gt: new Date() } },
-    include: {
-      user: { include: { memberships: { include: { organization: true } } } },
-    },
-  });
-
-  if (!session) {
-    redirect("/sign-in");
-  }
-
-  if (
-    !session.user.memberships.some(
-      (membership) => privateOrganizationId === membership.organizationId
-    )
-  ) {
-    redirect("/sign-in");
-  }
-
   return (
     <div className={classes.layout}>
       <Topbar className={classes.topbar}>
         <Flex as="menu" gap="1.5rem" style={{ flexGrow: 1 }}>
           <li>
-            <Button as="a" href={`/${organizationId}/summary`}>
+            <Button as="a" href={`/${publicOrganizationId}/summary`}>
               Summary
             </Button>
           </li>
           <li>
-            <Button as="a" href={`/${organizationId}/activity`}>
+            <Button as="a" href={`/${publicOrganizationId}/activity`}>
               Activity
             </Button>
           </li>
           <li>
-            <Button as="a" href={`/${organizationId}/tags`}>
+            <Button as="a" href={`/${publicOrganizationId}/tags`}>
               Tags
             </Button>
           </li>
           <li>
-            <Button as="a" href={`/${organizationId}/applications`}>
+            <Button as="a" href={`/${publicOrganizationId}/applications`}>
               Applications
             </Button>
           </li>
@@ -90,13 +81,15 @@ export default async function Layout({ params, children }: Props) {
               }
             >
               <Menu>
-                <Menu.Item href={`/${organizationId}/technology`}>
+                <Menu.Item href={`/${publicOrganizationId}/technology`}>
                   Technology
                 </Menu.Item>
-                <Menu.Item href={`/${organizationId}/providers`}>
+                <Menu.Item href={`/${publicOrganizationId}/providers`}>
                   Providers
                 </Menu.Item>
-                <Menu.Item href={`/${organizationId}/people`}>People</Menu.Item>
+                <Menu.Item href={`/${publicOrganizationId}/people`}>
+                  People
+                </Menu.Item>
               </Menu>
             </Popover>
           </li>

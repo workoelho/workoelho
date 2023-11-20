@@ -7,15 +7,16 @@ import prisma from "~/src/lib/server/prisma";
 import { createPassword } from "~/src/lib/server/user";
 import * as Schema from "~/src/lib/shared/schema";
 
-const schema = superstruct.object({
-  name: Schema.name,
-  organization: Schema.organization,
-  email: Schema.email,
-  password: Schema.password,
-});
-
 export async function create({ data }: ActionContext) {
-  superstruct.assert(data, schema);
+  superstruct.assert(
+    data,
+    superstruct.object({
+      name: Schema.name,
+      organization: Schema.organization,
+      email: Schema.email,
+      password: Schema.password,
+    }),
+  );
 
   return await prisma.user.create({
     data: {

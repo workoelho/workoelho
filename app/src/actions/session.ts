@@ -21,7 +21,7 @@ export async function create({ data }: ActionContext) {
         email: Schema.email,
         recovery: superstruct.literal(true),
       }),
-    ])
+    ]),
   );
 
   const user = await prisma.user.findUnique({

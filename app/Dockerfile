@@ -4,8 +4,10 @@ FROM node:20-alpine
 # Change working dir.
 WORKDIR /mnt/app
 
+# Copy the source code.
+COPY --chown=node . .
+
 # Install dependencies.
-COPY --chown=node package*.json ./
 RUN npm ci
 
 # Expose the port.

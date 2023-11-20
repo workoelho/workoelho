@@ -1,20 +1,20 @@
 type Key = string | number | symbol;
 
-type Mapable = Record<string | number | symbol, unknown>;
+type Mapable = Record<Key, unknown>;
 
-export type Mapper<T extends Mapable, U, V> = (
-  value: T[keyof T],
-  key: keyof T,
-  object: T,
-) => [U, V];
+export type Mapper<M extends Mapable, K, V> = (
+  value: M[keyof M],
+  key: keyof M,
+  object: M
+) => [K, V];
 
-export function map<T extends Mapable, U extends Key, V>(
-  object: T,
-  map: Mapper<T, U, V>,
+export function map<M extends Mapable, K extends Key, V>(
+  object: M,
+  map: Mapper<M, K, V>
 ) {
   return Object.fromEntries(
     Array.from(Object.entries(object)).map(([key, value]) =>
-      map(value as T[keyof T], key, object),
-    ),
-  ) as Record<U, V>;
+      map(value as M[keyof M], key, object)
+    )
+  ) as Record<K, V>;
 }

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Sign in at Workoelho",
 };
 
-export default function Page() {
+export default async function Page() {
   const action = async (state: { message: string }, payload: FormData) => {
     "use server";
 
@@ -41,7 +41,7 @@ export default function Page() {
     });
 
     const organizationId = getPublicId(
-      session.user.memberships[0].organizationId
+      session.user.memberships[0].organizationId,
     );
 
     redirect(`/${organizationId}`);

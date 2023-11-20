@@ -12,7 +12,7 @@ type ResponseConfig<T = unknown> = {
 
 export async function request<T>(
   url: string,
-  reqConfig: Partial<RequestConfig> = {}
+  reqConfig: Partial<RequestConfig> = {},
 ) {
   reqConfig.headers ??= {};
   reqConfig.headers["Content-Type"] ??= "application/json; charset=utf-8";

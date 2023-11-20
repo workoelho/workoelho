@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Recovery at Workoelho",
 };
 
-export default function Page() {
+export default async function Page() {
   const action = async (state: { message: string }, payload: FormData) => {
     "use server";
 

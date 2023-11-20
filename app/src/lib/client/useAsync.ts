@@ -16,7 +16,7 @@ export function useAsync<P extends any[], R>(executor: Executor<P, R>) {
       }
       return { ...state, ...patch };
     },
-    { state: "idle" }
+    { state: "idle" },
   );
 
   const executorRef = useRef(executor);

@@ -1,4 +1,4 @@
-import Resend from "resend";
+import { Resend } from "resend";
 
 declare const global: { resend: Resend };
 
