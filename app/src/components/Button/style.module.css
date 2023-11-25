@@ -1,9 +1,7 @@
 .button {
   align-items: center;
-  border-radius: 0.125rem;
   display: flex;
-  /* font-weight: 500; */
-  gap: 0.125rem;
+  font-weight: 700;
 }
 
 .button:active:not(:disabled) {
@@ -11,63 +9,76 @@
 }
 
 .button.small {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .button.medium {
-  font-size: 1rem;
+  font-size: 0.875rem;
 }
 
 .button.large {
-  font-size: 1.25rem;
+  font-size: 1rem;
+}
+
+.button.text {
+  color: var(--color);
+}
+
+.button.rectangle {
+  background-color: var(--color);
+  border-radius: 0.375rem;
+  color: var(--background);
+  gap: 0.25rem;
+  height: 2.125rem;
+  padding-inline: 0.75rem;
+}
+
+.button.pill {
+  background-color: var(--background);
+  border-radius: 2.125rem;
+  border: 0.125rem solid var(--color);
+  color: var(--color);
+  gap: 0.25rem;
+  height: 2.125rem;
+  padding-inline: 0.75rem;
 }
 
 .button.neutral {
-  color: var(--neutral);
+  --color: var(--neutral);
 }
 
 .button.neutral:is(:hover, :focus-visible) {
-  background-color: var(--neutral-background);
-  box-shadow: 0 0 0 0.25em var(--neutral-background);
-  color: var(--neutral-highlight);
+  --color: var(--neutral-highlight);
 }
 
 .button.primary {
-  color: var(--primary);
+  --color: var(--primary);
 }
 
 .button.primary:is(:hover, :focus) {
-  background-color: var(--primary-background);
-  box-shadow: 0 0 0 0.25em var(--primary-background);
-  color: var(--primary-highlight);
+  --color: var(--primary-highlight);
 }
 
 .button.positive {
-  color: var(--positive);
+  --color: var(--positive);
 }
 
 .button.positive:is(:hover, :focus) {
-  background-color: var(--positive-background);
-  box-shadow: 0 0 0 0.25em var(--positive-background);
-  color: var(--positive-highlight);
+  --color: var(--positive-highlight);
 }
 
 .button.negative {
-  color: var(--negative);
+  --color: var(--negative);
 }
 
 .button.negative:is(:hover, :focus) {
-  background-color: var(--negative-background);
-  box-shadow: 0 0 0 0.25em var(--negative-background);
-  color: var(--negative-highlight);
+  --color: var(--negative-highlight);
 }
 
 .button.attentive {
-  color: var(--attentive);
+  --color: var(--attentive);
 }
 
 .button.attentive:is(:hover, :focus) {
-  background-color: var(--attentive-background);
-  box-shadow: 0 0 0 0.25em var(--attentive-background);
-  color: var(--attentive-highlight);
+  --color: var(--attentive-highlight);
 }

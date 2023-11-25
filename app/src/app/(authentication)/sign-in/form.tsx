@@ -5,6 +5,7 @@ import { useFormState } from "react-dom";
 import { Alert } from "~/src/components/Alert";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
+import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Link } from "~/src/components/Link";
@@ -24,11 +25,14 @@ export function Form<T extends { message: string }>({
   return (
     <Flex as="form" action={dispatch} direction="column" gap="1.5rem">
       <Flex as="fieldset" direction="column" gap="1.5rem">
-        <legend hidden>Sign in</legend>
-
-        <p>
-          Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
-        </p>
+        <Flex direction="column" gap=".75rem">
+          <Heading as="legend" size="large">
+            Sign in
+          </Heading>
+          <p>
+            Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
+          </p>
+        </Flex>
 
         {state.message ? (
           <Alert variant="negative">
@@ -70,8 +74,8 @@ export function Form<T extends { message: string }>({
       </Flex>
 
       <Flex justifyContent="end">
-        <Submit variant="primary" size="large">
-          Sign in <Icon name="arrow/right" />
+        <Submit>
+          Sign in <Icon name="arrow-right" />
         </Submit>
       </Flex>
     </Flex>

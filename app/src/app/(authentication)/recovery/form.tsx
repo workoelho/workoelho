@@ -5,6 +5,7 @@ import { useFormState } from "react-dom";
 import { Alert } from "~/src/components/Alert";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
+import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Link } from "~/src/components/Link";
@@ -24,12 +25,15 @@ export function Form<T extends { message: string }>({
   return (
     <Flex as="form" action={dispatch} direction="column" gap="1.5rem">
       <Flex as="fieldset" direction="column" gap="1.5rem">
-        <legend hidden>Recovery</legend>
-
-        <p>
-          Enter the same e-mail you used to sign up. Remembered your password?{" "}
-          <Link href="/sign-in">Sign in</Link>.
-        </p>
+        <Flex direction="column" gap=".75rem">
+          <Heading as="legend" size="large">
+            Recovery
+          </Heading>
+          <p>
+            Enter your e-mail. If you remembered your password, you can go{" "}
+            <Link href="/sign-in">back to sign in</Link>.
+          </p>
+        </Flex>
 
         {state.message ? (
           <Alert variant="negative">
@@ -54,8 +58,8 @@ export function Form<T extends { message: string }>({
       </Flex>
 
       <Flex justifyContent="end">
-        <Submit variant="primary" size="large">
-          Recover <Icon name="arrow/right" />
+        <Submit>
+          Recover <Icon name="arrow-right" />
         </Submit>
       </Flex>
     </Flex>

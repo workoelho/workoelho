@@ -1,5 +1,6 @@
 .footer {
   align-items: center;
+  background-color: var(--neutral-background);
   display: flex;
   flex-wrap: wrap;
   font-size: 0.875rem;

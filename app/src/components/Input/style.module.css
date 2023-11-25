@@ -1,16 +1,16 @@
 .input {
   align-items: center;
   background-color: var(--background);
-  border: 1px solid var(--neutral-highlight);
+  border: 0.125rem solid var(--neutral-highlight);
+  border-radius: 0.125rem;
   color: var(--neutral);
   display: flex;
-  height: 2.5rem;
+  height: 2.125rem;
   padding-inline: 0.5rem;
   width: 100%;
 }
 
 .input:is(:focus, :hover) {
-  border-color: var(--neutral);
 }
 
 .input::placeholder {

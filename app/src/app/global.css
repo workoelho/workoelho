@@ -1,32 +1,30 @@
 :root {
-  --primary: #3849d8;
-  --primary-highlight: #7a78ff;
-  --primary-background: #f8f4ff;
+  --background: #0c0c0d;
 
-  --attentive: #864f00;
-  --attentive-highlight: #c17e00;
-  --attentive-background: #fff5e9;
-
-  --positive: #516300;
-  --positive-highlight: #859500;
-  --positive-background: #f8f7e9;
-
-  --negative: #ab293b;
-  --negative-highlight: #e95e68;
-  --negative-background: #fff3f2;
-
-  --neutral: #1a1b1d;
+  --neutral: #f6f6f7;
   --neutral-highlight: #898d92;
-  --neutral-outline: #d9dbdd;
-  --neutral-background: #f6f6f7;
+  --neutral-outline: #585c61;
+  --neutral-background: #1a1b1d;
 
-  --background: #ffffff;
+  --primary: #4a8cea;
+  --primary-highlight: #005cb1;
+  --primary-background: #0d1b32;
 
-  --radius: 0.25rem;
+  --positive: #5a9e00;
+  --positive-highlight: #266b00;
+  --positive-background: #181f00;
+
+  --attentive: #c17e00;
+  --attentive-highlight: #864f00;
+  --attentive-background: #2b1800;
+
+  --negative: #f8522d;
+  --negative-highlight: #b71400;
+  --negative-background: #370e00;
 
   --min-width: 22.5rem;
   --max-width: 64rem;
-  --breakpoint-large: 48rem;
+  --breakpoint: 48rem;
 }
 
 /* @custom-media --small-viewport (width < 48rem); */
@@ -39,4 +37,8 @@ html {
 
 hr {
   border-top: 1px solid var(--neutral-outline);
+}
+
+body {
+  font-size: 0.875rem;
 }

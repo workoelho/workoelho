@@ -2,6 +2,7 @@ import "resetize";
 import "./global.css";
 
 import { type Metadata, type Viewport } from "next";
+import { Open_Sans } from "next/font/google";
 import { type ReactNode } from "react";
 
 export const metadata: Metadata = {
@@ -14,6 +15,16 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+const font = Open_Sans({
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin-ext"],
+  display: "swap",
+});
+
 type Props = {
   children: ReactNode;
 };
@@ -21,7 +32,7 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={font.className}>{children}</body>
     </html>
   );
 }

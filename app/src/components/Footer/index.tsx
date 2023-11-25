@@ -12,7 +12,7 @@ export function Footer({ version, className }: Props) {
   const classList = new ClassList(classes.footer, className);
 
   return (
-    <footer className={classList.toString()}>
+    <footer className={String(classList)}>
       <menu className={classes.menu}>
         <li>
           <Button

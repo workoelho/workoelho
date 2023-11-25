@@ -3,22 +3,16 @@ import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
 
 import pkg from "~/package.json";
-import { Box } from "~/src/components/Box";
 import { Button } from "~/src/components/Button";
 import { Flex } from "~/src/components/Flex";
 import { Footer } from "~/src/components/Footer";
 import { Icon } from "~/src/components/Icon";
+import { Menu } from "~/src/components/Menu";
 import { Popover } from "~/src/components/Popover";
 import { Topbar } from "~/src/components/Topbar";
-import prisma from "~/src/lib/server/prisma";
-import { getPrivateId } from "~/src/lib/shared/publicId";
+import { getCurrentSession, hasMembershipTo } from "~/src/lib/server/session";
 import { getShortName } from "~/src/lib/shared/api";
-import { Menu } from "~/src/components/Menu";
-import {
-  findValidSessionBySecret,
-  getCurrentSession,
-} from "~/src/lib/server/session";
-import { hasMembershipTo } from "~/src/lib/server/action";
+import { getPrivateId } from "~/src/lib/shared/publicId";
 
 import classes from "./layout.module.css";
 
