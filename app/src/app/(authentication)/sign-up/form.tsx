@@ -23,9 +23,9 @@ export function Form<T extends { message: string }>({
   const [state, dispatch] = useFormState(action, initialState);
 
   return (
-    <Flex as="form" action={dispatch} direction="column" gap="1.5rem">
-      <Flex as="fieldset" direction="column" gap="1.5rem">
-        <Flex direction="column" gap=".75rem">
+    <Flex as="form" action={dispatch} direction="column" gap="3rem">
+      <Flex as="fieldset" direction="column" gap="3rem">
+        <Flex direction="column" gap="1rem">
           <Heading as="legend" size="large">
             Sign up
           </Heading>
@@ -40,7 +40,7 @@ export function Form<T extends { message: string }>({
           </Alert>
         ) : null}
 
-        <Flex direction="column" gap="0.75rem">
+        <Flex direction="column" gap="1rem">
           <Field
             label="Organization"
             hint="You can have multiple organizations."

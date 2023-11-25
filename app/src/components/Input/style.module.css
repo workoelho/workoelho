@@ -1,7 +1,7 @@
 .input {
   align-items: center;
   background-color: var(--background);
-  border: 0.125rem solid var(--neutral-highlight);
+  border: 0.125rem solid var(--neutral-outline);
   border-radius: 0.125rem;
   color: var(--neutral);
   display: flex;
@@ -14,5 +14,5 @@
 }
 
 .input::placeholder {
-  color: var(--neutral-highlight);
+  color: var(--neutral-outline);
 }

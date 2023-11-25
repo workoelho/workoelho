@@ -15,6 +15,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// @todo This seems to fix an issue with reloading during
+// development, but it probably should be removed.
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 

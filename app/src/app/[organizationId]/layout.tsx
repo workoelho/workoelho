@@ -12,7 +12,7 @@ import { Popover } from "~/src/components/Popover";
 import { Topbar } from "~/src/components/Topbar";
 import { getCurrentSession, hasMembershipTo } from "~/src/lib/server/session";
 import { getShortName } from "~/src/lib/shared/api";
-import { getPrivateId } from "~/src/lib/shared/publicId";
+import { getPrivateId, getPublicId } from "~/src/lib/shared/publicId";
 
 import classes from "./layout.module.css";
 
@@ -46,46 +46,40 @@ export default async function Layout({ params, children }: Props) {
       <Topbar className={classes.topbar}>
         <Flex as="menu" gap="1.5rem" style={{ flexGrow: 1 }}>
           <li>
-            <Button as="a" href={`/${publicOrganizationId}/summary`}>
+            <Button
+              as="a"
+              href={`/${publicOrganizationId}/summary`}
+              shape="text"
+            >
               Summary
             </Button>
           </li>
           <li>
-            <Button as="a" href={`/${publicOrganizationId}/activity`}>
-              Activity
-            </Button>
-          </li>
-          <li>
-            <Button as="a" href={`/${publicOrganizationId}/tags`}>
-              Tags
-            </Button>
-          </li>
-          <li>
-            <Button as="a" href={`/${publicOrganizationId}/applications`}>
+            <Button
+              as="a"
+              href={`/${publicOrganizationId}/applications`}
+              shape="text"
+            >
               Applications
             </Button>
           </li>
           <li>
-            <Popover
-              trigger={
-                <Button as="button">
-                  More
-                  <Icon name="chevron/down" />
-                </Button>
-              }
+            <Button
+              as="a"
+              href={`/${publicOrganizationId}/resources`}
+              shape="text"
             >
-              <Menu>
-                <Menu.Item href={`/${publicOrganizationId}/technology`}>
-                  Technology
-                </Menu.Item>
-                <Menu.Item href={`/${publicOrganizationId}/providers`}>
-                  Providers
-                </Menu.Item>
-                <Menu.Item href={`/${publicOrganizationId}/people`}>
-                  People
-                </Menu.Item>
-              </Menu>
-            </Popover>
+              Resources
+            </Button>
+          </li>
+          <li>
+            <Button
+              as="a"
+              href={`/${publicOrganizationId}/people`}
+              shape="text"
+            >
+              People
+            </Button>
           </li>
         </Flex>
 
@@ -94,18 +88,24 @@ export default async function Layout({ params, children }: Props) {
             <Popover
               placement="right"
               trigger={
-                <Button>
+                <Button shape="text">
                   {getShortName(session.user.name)} (
                   {session.user.memberships[0].organization.name})
-                  <Icon name="chevron/down" />
+                  <Icon name="chevron-down" />
                 </Button>
               }
             >
               <Menu>
-                <Menu.Item>Workoelho</Menu.Item>
-                <Menu.Item>Corenzan</Menu.Item>
-                <Menu.Item>JogaJunto</Menu.Item>
+                {session.user.memberships.map((membership) => (
+                  <Menu.Item
+                    key={membership.organizationId}
+                    href={`/${getPublicId(membership.organizationId)}/summary`}
+                  >
+                    {membership.organization.name}
+                  </Menu.Item>
+                ))}
                 <Menu.Separator />
+                <Menu.Item>My profile</Menu.Item>
                 <form action={signOut}>
                   <Menu.Item>Sign out</Menu.Item>
                 </form>

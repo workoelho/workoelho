@@ -16,9 +16,9 @@
   "dependencies": {
     "@floating-ui/react-dom": "^2.0.4",
     "@prisma/client": "^5.6.0",
-    "@types/node": "20.9.1",
-    "@types/react": "18.2.37",
-    "@types/react-dom": "18.2.15",
+    "@types/node": "20.10.0",
+    "@types/react": "18.2.38",
+    "@types/react-dom": "18.2.17",
     "bcrypt": "^5.1.1",
     "eslint": "8.54.0",
     "eslint-config-next": "14.0.3",
@@ -30,7 +30,7 @@
     "resetize": "^31.2.0",
     "sqids": "^0.3.0",
     "superstruct": "^1.0.3",
-    "typescript": "5.2.2"
+    "typescript": "5.3.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

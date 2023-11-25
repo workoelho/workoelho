@@ -1,23 +1,11 @@
 .button {
   align-items: center;
-  display: flex;
+  display: flex inline;
   font-weight: 700;
 }
 
 .button:active:not(:disabled) {
   translate: 0 0.125rem;
-}
-
-.button.small {
-  font-size: 0.75rem;
-}
-
-.button.medium {
-  font-size: 0.875rem;
-}
-
-.button.large {
-  font-size: 1rem;
 }
 
 .button.text {

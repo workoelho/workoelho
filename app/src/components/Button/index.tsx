@@ -13,7 +13,6 @@ type AcceptableElementType = "a" | "button";
 export type Props = {
   variant?: "primary" | "neutral" | "positive" | "negative" | "attentive";
   shape?: "text" | "rectangle" | "pill";
-  size?: "small" | "medium" | "large";
 };
 
 function Button<E extends AcceptableElementType = "button">(
@@ -21,7 +20,6 @@ function Button<E extends AcceptableElementType = "button">(
     as,
     children,
     variant = "neutral",
-    size = "medium",
     shape = "rectangle",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
@@ -32,7 +30,6 @@ function Button<E extends AcceptableElementType = "button">(
   const classList = new ClassList(classes.button);
   classList.add(classes[variant]);
   classList.add(classes[shape]);
-  classList.add(classes[size]);
   classList.add(props.className);
   props.className = classList.toString();
 

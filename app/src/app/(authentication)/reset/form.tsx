@@ -5,8 +5,9 @@ import { useFormState } from "react-dom";
 import { Alert } from "~/src/components/Alert";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
+import { Heading } from "~/src/components/Heading";
+import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
-import { Link } from "~/src/components/Link";
 import { Submit } from "~/src/components/Submit";
 
 type Props<T> = {
@@ -21,13 +22,15 @@ export function Form<T extends { message: string }>({
   const [state, dispatch] = useFormState(action, initialState);
 
   return (
-    <Flex as="form" action={dispatch} direction="column" gap="1.5rem">
-      <Flex as="fieldset" direction="column" gap="1.5rem">
-        <legend hidden>Sign in</legend>
+    <Flex as="form" action={dispatch} direction="column" gap="3rem">
+      <Flex as="fieldset" direction="column" gap="3rem">
+        <Flex direction="column" gap="1rem">
+          <Heading as="legend" size="large">
+            Recovery
+          </Heading>
 
-        <p>
-          Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
-        </p>
+          <p>Enter your new password.</p>
+        </Flex>
 
         {state.message ? (
           <Alert variant="negative">
@@ -35,21 +38,8 @@ export function Form<T extends { message: string }>({
           </Alert>
         ) : null}
 
-        <Flex direction="column" gap="0.75rem">
-          <Field label="E-mail">
-            {(props) => (
-              <Input
-                name="email"
-                type="email"
-                placeholder="jane@example.com"
-                required
-                autoComplete="username"
-                {...props}
-              />
-            )}
-          </Field>
-
-          <Field label="Password" hint={<Link href="/">Need help?</Link>}>
+        <Flex direction="column" gap="01rem">
+          <Field label="Password" hint="At least 15 characters long.">
             {(props) => (
               <Input
                 name="password"
@@ -57,7 +47,7 @@ export function Form<T extends { message: string }>({
                 placeholder="⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕"
                 minLength={15}
                 required
-                autoComplete="current-password"
+                autoComplete="new-password"
                 {...props}
               />
             )}
@@ -66,8 +56,9 @@ export function Form<T extends { message: string }>({
       </Flex>
 
       <Flex justifyContent="end">
-        <Submit variant="primary" size="large">
-          Sign in
+        <Submit>
+          Reset
+          <Icon name="arrow-right" />
         </Submit>
       </Flex>
     </Flex>

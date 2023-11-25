@@ -23,12 +23,13 @@ export function Form<T extends { message: string }>({
   const [state, dispatch] = useFormState(action, initialState);
 
   return (
-    <Flex as="form" action={dispatch} direction="column" gap="1.5rem">
-      <Flex as="fieldset" direction="column" gap="1.5rem">
-        <Flex direction="column" gap=".75rem">
+    <Flex as="form" action={dispatch} direction="column" gap="3rem">
+      <Flex as="fieldset" direction="column" gap="3rem">
+        <Flex direction="column" gap="1rem">
           <Heading as="legend" size="large">
             Recovery
           </Heading>
+
           <p>
             Enter your e-mail. If you remembered your password, you can go{" "}
             <Link href="/sign-in">back to sign in</Link>.
@@ -41,7 +42,7 @@ export function Form<T extends { message: string }>({
           </Alert>
         ) : null}
 
-        <Flex direction="column" gap="0.75rem">
+        <Flex direction="column" gap="1rem">
           <Field label="E-mail">
             {(props) => (
               <Input

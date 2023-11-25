@@ -1,16 +1,17 @@
 .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .field:focus-within {
 }
 
 .label {
-  font-size: 0.875rem;
 }
 
 .hint {
   color: var(--neutral-highlight);
-  font-size: 0.875rem;
 }
 
 .invalid {

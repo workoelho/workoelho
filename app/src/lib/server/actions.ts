@@ -11,7 +11,8 @@ type Session = Prisma.SessionGetPayload<{
 }>;
 
 export type Context = {
-  data: Record<string, unknown>;
+  query?: Record<string, unknown>;
+  data?: Record<string, unknown>;
   session?: Session | null;
 };
 
