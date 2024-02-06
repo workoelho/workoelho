@@ -22,10 +22,13 @@ export default function Layout({ title, children }: Props) {
 
           <ul>
             <li>
-              <a href="/">Not found</a>
-            </li>
-            <li>
               <a href="/applications">All applications</a>
+            </li>
+          </ul>
+
+          <ul>
+            <li>
+              <a href="/sessions/new">Sign-in</a>
             </li>
           </ul>
         </nav>
