@@ -6,16 +6,93 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-model Project {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  name        String   @unique
-  description String?
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  name      String?
+  password  String
+  role      String   @default("administrator")
 
-  @@map("projects")
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  token     String   @unique
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("sessions")
+}
+
+model Organization {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+
+  applications Application[]
+  providers    Provider[]
+  users        User[]
+
+  @@map("organizations")
+}
+
+model Application {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  url       String
+
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  Service        Service[]
+
+  @@map("applications")
+}
+
+model Provider {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  url       String
+
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  services Service[]
+
+  @@map("providers")
+}
+
+model Service {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  category  String
+
+  providerId Int
+  provider   Provider @relation(fields: [providerId], references: [id])
+
+  applicationId Int
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  @@map("services")
 }
