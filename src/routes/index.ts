@@ -41,7 +41,7 @@ function push(route: Route) {
     urlHandlers.set(route.url, route.handler);
   } else {
     throw new Error(
-      `Expected route module to export either a "url" or a "statusCode"`,
+      `Expected route module to export either a "url" or a "statusCode"`
     );
   }
 }
@@ -51,6 +51,7 @@ function push(route: Route) {
  */
 push(await import("./500"));
 push(await import("./404"));
+push(await import("./401"));
 
 push(await import("./sessions/new"));
 push(await import("./sessions/index"));
