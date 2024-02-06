@@ -16,6 +16,10 @@ export default function Layout({ title, children }: Props) {
       </head>
       <body>
         <nav>
+          <h1>
+            <a href="/">Workoelho</a>
+          </h1>
+
           <ul>
             <li>
               <a href="/">Not found</a>

@@ -1,11 +1,25 @@
-import { Handler } from "~/src/handler";
+import { Handler } from "~/src/shared/handler";
 
 /**
- * A request constraint (either URL or status code) and a handler.
+ * A request constraint by URL and its handler.
  */
-export type Route =
-  | { url: string; handler: Handler }
-  | { statusCode: number; handler: Handler };
+export type UrlRoute = {
+  url: string;
+  handler: Handler;
+};
+
+/**
+ * A request constraint by status code and its handler.
+ */
+export type StatusRoute = {
+  statusCode: number;
+  handler: Handler;
+};
+
+/**
+ * A request constraint by URL or status code and its handler.
+ */
+export type Route = UrlRoute | StatusRoute;
 
 /**
  * Status code routes.
@@ -27,11 +41,14 @@ function push(route: Route) {
     urlHandlers.set(route.url, route.handler);
   } else {
     throw new Error(
-      `Expected route module to export either a "url" or a "statusCode"`
+      `Expected route module to export either a "url" or a "statusCode"`,
     );
   }
 }
 
+/**
+ * Build routing table.
+ */
 push(await import("./500"));
 push(await import("./404"));
 

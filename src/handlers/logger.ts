@@ -1,6 +1,6 @@
 import log from "npmlog";
 
-import { Context, Handle } from "~/src/handler";
+import { Context, Handle } from "~/src/shared/handler";
 
 /**
  * Log incoming requests.
@@ -17,7 +17,7 @@ export function getLoggerHandler() {
       "request",
       `${String(request.method)} ${String(url.inputs[0])} ${
         response.statusCode
-      } ${duration.toFixed(0)}ms`
+      } ${duration.toFixed(0)}ms`,
     );
   };
 }

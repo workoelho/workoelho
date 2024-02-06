@@ -2,11 +2,11 @@ import { createServer } from "http";
 
 import log from "npmlog";
 
-import { getLoggerHandler } from "~/src/middlewares/logger";
-import { getErrorHandler } from "~/src/middlewares/error";
-import { getStaticHandler } from "~/src/middlewares/static";
-import { getUrlHandler } from "~/src/middlewares/url";
-import { Handler, getInitialHandler } from "~/src/handler";
+import { getLoggerHandler } from "~/src/handlers/logger";
+import { getErrorHandler } from "~/src/handlers/error";
+import { getStaticHandler } from "~/src/handlers/static";
+import { getUrlHandler } from "~/src/handlers/url";
+import { Handler, getInitialHandler } from "~/src/shared/handler";
 import { getConfig } from "~/src/config";
 import { statusCodeHandlers, urlHandlers } from "~/src/routes";
 
@@ -16,7 +16,7 @@ if (config.verbose) {
   log.level = "verbose";
 }
 
-log.verbose("config", "Configuration", config);
+log.verbose("config", "Configuration dump", config);
 
 log.verbose("handler", "Status code handlers", statusCodeHandlers);
 log.verbose("handler", "URL handlers", urlHandlers);

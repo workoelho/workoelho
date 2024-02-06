@@ -2,8 +2,8 @@ import path from "path";
 
 import send from "send";
 
-import { HttpError } from "~/src/shared";
-import { Context, Handle } from "~/src/handler";
+import { HttpError } from "~/src/shared/error";
+import { Context, Handle } from "~/src/shared/handler";
 
 /**
  * Handle static files, but only if previous handler threw 404.

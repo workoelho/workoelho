@@ -1,8 +1,9 @@
 import { useId } from "react";
 
-import { HttpError, render } from "~/src/shared";
+import { render } from "~/src/shared/response";
+import { HttpError } from "~/src/shared/error";
 import Layout from "~/src/routes/layout";
-import { Context } from "~/src/handler";
+import { Context } from "~/src/shared/handler";
 
 export const url = "/projects/new";
 

@@ -1,12 +1,12 @@
-import { render } from "~/src/shared";
+import { render } from "~/src/shared/response";
 import Layout from "~/src/routes/layout";
-import { Context } from "~/src/handler";
+import { Context } from "~/src/shared/handler";
 
 export const statusCode = 500;
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function handler(context: Context) {
-  render(context.response, <Page />);
+  void render(context.response, <Page />);
 }
 
 // type Props = {};

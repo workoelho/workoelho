@@ -1,11 +1,13 @@
 import { IncomingMessage, ServerResponse } from "http";
 
-import { renderToStaticNodeStream } from "react-dom/server";
-import { ReactElement } from "react";
 import * as superstruct from "superstruct";
 import { ObjectSchema } from "superstruct/dist/utils";
 import * as contentType from "content-type";
 import iconv from "iconv-lite";
+import { ReactElement } from "react";
+import { renderToStaticNodeStream } from "react-dom/server";
+
+import { HttpError } from "~/src/shared/error";
 
 const supportedRequestTypes = [
   "application/x-www-form-urlencoded",
@@ -27,7 +29,7 @@ function parseBody(body: string, type: string) {
 }
 
 /**
- * Parse request content type.
+ * Get request content type.
  */
 function getContentType(request: IncomingMessage) {
   try {
@@ -75,7 +77,7 @@ function decodeBody(request: IncomingMessage, charset: string) {
  */
 export async function getBody<T extends ObjectSchema>(
   request: IncomingMessage,
-  schema: T
+  schema: T,
 ) {
   const {
     type,
@@ -87,7 +89,7 @@ export async function getBody<T extends ObjectSchema>(
   try {
     return superstruct.create(
       parseBody(body, type),
-      superstruct.object(schema)
+      superstruct.object(schema),
     );
   } catch (cause) {
     throw new HttpError(400, "Invalid request body", { cause });
@@ -102,53 +104,4 @@ export function render(response: ServerResponse, root: ReactElement) {
   response.setHeader("Content-Type", "text/html; charset=utf-8");
   const stream = renderToStaticNodeStream(root);
   stream.pipe(response);
-}
-
-/**
- * Id coercing struct.
- */
-export const Id = superstruct.coerce(
-  superstruct.number(),
-  superstruct.string(),
-  (value) => parseInt(value, 10)
-);
-
-/**
- * Validate and coerce object against schema, returning compatible object but with nullified values on failure.
- */
-export function validate<
-  T extends Record<string, unknown>,
-  S extends ObjectSchema
->(data: T, schema: S) {
-  try {
-    return superstruct.create(data, superstruct.object(schema));
-  } catch (error) {
-    return {} as { [K in keyof T]: null };
-  }
-}
-
-/**
- * Error with an HTTP status code.
- */
-export class HttpError extends Error {
-  public statusCode: number;
-
-  constructor(statusCode: number, ...error: Parameters<typeof Error>) {
-    super(...error);
-    this.statusCode = statusCode;
-  }
-
-  /**
-   * Extract HTTP status code from an error object.
-   */
-  static getStatusCode(error: unknown) {
-    if (
-      typeof error === "object" &&
-      error !== null &&
-      "statusCode" in error &&
-      typeof error.statusCode === "number"
-    ) {
-      return error.statusCode;
-    }
-  }
 }

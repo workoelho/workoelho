@@ -1,7 +1,7 @@
 import log from "npmlog";
 
-import { HttpError } from "~/src/shared";
-import { Handler } from "~/src/handler";
+import { HttpError } from "~/src/shared/error";
+import { Handler } from "~/src/shared/handler";
 
 /**
  * Handle uncaught errors.

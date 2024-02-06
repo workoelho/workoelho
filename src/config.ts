@@ -1,5 +1,5 @@
 /**
- * Get configuration object for the application.
+ * Get application configuration.
  */
 export function getConfig() {
   return {

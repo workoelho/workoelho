@@ -1,5 +1,5 @@
-import { HttpError } from "~/src/shared";
-import { Handler } from "~/src/handler";
+import { HttpError } from "~/src/shared/error";
+import { Handler } from "~/src/shared/handler";
 
 /**
  * Handle URL routes.
