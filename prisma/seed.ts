@@ -1,27 +1,21 @@
 import { PrismaClient } from "@prisma/client";
 
+import { createPassword } from "~/src/shared/password";
+
 const prisma = new PrismaClient();
 
 try {
-  await prisma.project.create({
+  const workoelho = await prisma.organization.create({
     data: {
-      name: "Project 1",
-      description:
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente aperiam eaque necessitatibus illo impedit nulla minima nostrum inventore tempore. Ea placeat eaque architecto debitis dolor consectetur voluptatibus odio explicabo illo.",
+      name: "Workoelho",
     },
   });
-  await prisma.project.create({
+  await prisma.user.create({
     data: {
-      name: "Project 2",
-      description:
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente aperiam eaque necessitatibus illo impedit nulla minima nostrum inventore tempore. Ea placeat eaque architecto debitis dolor consectetur voluptatibus odio explicabo illo.",
-    },
-  });
-  await prisma.project.create({
-    data: {
-      name: "Project 3",
-      description:
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente aperiam eaque necessitatibus illo impedit nulla minima nostrum inventore tempore. Ea placeat eaque architecto debitis dolor consectetur voluptatibus odio explicabo illo.",
+      name: "Arthur",
+      email: "arthur@workoelho.com",
+      password: await createPassword("123456"),
+      organizationId: workoelho.id,
     },
   });
 } finally {
