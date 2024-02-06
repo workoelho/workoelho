@@ -5,7 +5,7 @@ import { HttpError } from "~/src/shared/error";
 import Layout from "~/src/routes/layout";
 import { Context } from "~/src/shared/handler";
 
-export const url = "/projects/new";
+export const url = "/applications/new";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function handler(context: Context) {
@@ -20,24 +20,24 @@ export async function handler(context: Context) {
 
 function Page() {
   const nameId = useId();
-  const descriptionId = useId();
+  const urlId = useId();
 
   return (
     <Layout>
-      <h1>Create new project</h1>
+      <h1>Create new application</h1>
 
-      <form method="POST" action="/projects">
+      <form method="POST" action="/applications">
         <div>
           <label htmlFor={nameId}>Name:</label>
           <input id={nameId} type="text" name="name" required autoFocus />
         </div>
 
         <div>
-          <label htmlFor={descriptionId}>Description:</label>
-          <textarea id={descriptionId} name="description" required />
+          <label htmlFor={urlId}>URL:</label>
+          <input id={urlId} type="url" name="url" required />
         </div>
 
-        <button type="submit">Create project</button>
+        <button type="submit">Create application</button>
       </form>
     </Layout>
   );

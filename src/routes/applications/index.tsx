@@ -3,29 +3,32 @@ import * as superstruct from "superstruct";
 import { HttpError } from "~/src/shared/error";
 import { render, getBody } from "~/src/shared/response";
 import Layout from "~/src/routes/layout";
-import { Project, database } from "~/src/shared/database";
+import { Application, database } from "~/src/shared/database";
 import { Context } from "~/src/shared/handler";
 
-export const url = "/projects";
+export const url = "/applications";
 
 async function handleGet(context: Context) {
-  const projects = await database.project.findMany();
-  render(context.response, <Page projects={projects} />);
+  const applications = await database.application.findMany();
+  render(context.response, <Page applications={applications} />);
 }
 
 async function handlePost(context: Context) {
   const data = await getBody(context.request, {
+    url: superstruct.string(),
     name: superstruct.string(),
-    description: superstruct.string(),
   });
 
-  const project = await database.project.create({
-    data,
+  const application = await database.application.create({
+    data: {
+      ...data,
+      organizationId: 1,
+    },
     select: { id: true },
   });
 
   context.response.writeHead(302, {
-    Location: `/projects/${project.id}`,
+    Location: `/applications/${application.id}`,
   });
   context.response.end();
 }
@@ -42,25 +45,25 @@ export async function handler(context: Context) {
 }
 
 type Props = {
-  projects: Project[];
+  applications: Application[];
 };
 
-function Page({ projects }: Props) {
+function Page({ applications }: Props) {
   return (
     <Layout>
-      <h1>All projects</h1>
+      <h1>All applications</h1>
 
       <aside>
-        <a href="/projects/new">Create new project</a>
+        <a href="/applications/new">Create new application</a>
       </aside>
 
-      {projects.length === 0 ? (
-        <p>No projects found.</p>
+      {applications.length === 0 ? (
+        <p>No applications found.</p>
       ) : (
         <ul>
-          {projects.map(({ id, name }) => (
+          {applications.map(({ id, name }) => (
             <li key={id}>
-              <a href={`/projects/${id}`}>{name}</a>
+              <a href={`/applications/${id}`}>{name}</a>
             </li>
           ))}
         </ul>

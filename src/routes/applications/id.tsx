@@ -2,29 +2,29 @@ import { HttpError } from "~/src/shared/error";
 import { render } from "~/src/shared/response";
 import { Id, validate } from "~/src/shared/validation";
 import Layout from "~/src/routes/layout";
-import { Project, database } from "~/src/shared/database";
+import { Application, database } from "~/src/shared/database";
 import { Context } from "~/src/shared/handler";
 
-export const url = "/projects/:id(\\d+)";
+export const url = "/applications/:id(\\d+)";
 
 async function handleGet(context: Context) {
-  const { id: projectId } = validate(context.url.pathname.groups, {
+  const { id: applicationId } = validate(context.url.pathname.groups, {
     id: Id,
   });
 
-  if (projectId === null) {
+  if (applicationId === null) {
     throw new HttpError(400);
   }
 
-  const project = await database.project.findUnique({
-    where: { id: projectId },
+  const application = await database.application.findUnique({
+    where: { id: applicationId },
   });
 
-  if (!project) {
+  if (!application) {
     throw new HttpError(404);
   }
 
-  render(context.response, <Page project={project} />);
+  render(context.response, <Page application={application} />);
 }
 
 export async function handler(context: Context) {
@@ -37,14 +37,14 @@ export async function handler(context: Context) {
 }
 
 type Props = {
-  project: Project;
+  application: Application;
 };
 
-function Page({ project }: Props) {
+function Page({ application }: Props) {
   return (
-    <Layout title={project.name}>
-      <h1>{project.name}</h1>
-      <p>{project.description}</p>
+    <Layout title={application.name}>
+      <h1>{application.name}</h1>
+      <p>{application.url}</p>
     </Layout>
   );
 }

@@ -52,6 +52,6 @@ function push(route: Route) {
 push(await import("./500"));
 push(await import("./404"));
 
-push(await import("./projects/id"));
-push(await import("./projects/new"));
-push(await import("./projects/index"));
+push(await import("./applications/id"));
+push(await import("./applications/new"));
+push(await import("./applications/index"));
