@@ -42,7 +42,7 @@ async function handlePost(context: Context) {
 
   context.response.setHeader(
     "Set-Cookie",
-    `sid=${session.id}; Path=/; HttpOnly; SameSite=Strict; Expires=${expiresAt.toUTCString()}`,
+    `sid=${session.id}; Path=/; HttpOnly; SameSite=Strict; Expires=${expiresAt.toUTCString()}`
   );
   context.response.writeHead(302, {
     Location: `/applications`,
@@ -54,7 +54,7 @@ async function handlePost(context: Context) {
 async function handleDelete(context: Context) {
   context.response.setHeader(
     "Set-Cookie",
-    `sid=; Path=/; HttpOnly; SameSite=Strict; Expires=${new Date().toUTCString()}`,
+    `sid=; Path=/; HttpOnly; SameSite=Strict; Expires=${new Date().toUTCString()}`
   );
   context.response.writeHead(302, {
     Location: `/sessions/new`,

@@ -2,7 +2,7 @@ import { useId } from "react";
 
 import { render } from "~/src/shared/response";
 import { HttpError } from "~/src/shared/error";
-import Layout from "~/src/routes/layout";
+import { Layout } from "~/src/routes/layout";
 import { Context } from "~/src/shared/handler";
 
 export const url = "/sessions/new";
@@ -23,7 +23,7 @@ function Page() {
   const passwordId = useId();
 
   return (
-    <Layout>
+    <Layout title="Sign-in">
       <h1>Sign-in</h1>
 
       <form method="POST" action="/sessions">

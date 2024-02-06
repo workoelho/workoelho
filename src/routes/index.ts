@@ -52,10 +52,11 @@ function push(route: Route) {
 push(await import("./500"));
 push(await import("./404"));
 push(await import("./401"));
+push(await import("./400"));
 
 push(await import("./sessions/new"));
-push(await import("./sessions/index"));
+push(await import("./sessions/root"));
 
-push(await import("./applications/id"));
-push(await import("./applications/new"));
-push(await import("./applications/index"));
+push(await import("./organization/applications/id"));
+push(await import("./organization/applications/new"));
+push(await import("./organization/applications/root"));

@@ -1,16 +1,21 @@
 import { HttpError } from "~/src/shared/error";
 import { render } from "~/src/shared/response";
 import { Id, validate } from "~/src/shared/validation";
-import Layout from "~/src/routes/layout";
+import { Layout } from "~/src/routes/organization/layout";
 import { Application, database } from "~/src/shared/database";
 import { Context } from "~/src/shared/handler";
 
-export const url = "/applications/:id(\\d+)";
+export const url =
+  "/organizations/:organizationId(\\d+)/applications/:applicationId(\\d+)";
 
 async function handleGet(context: Context) {
-  const { id: applicationId } = validate(context.url.pathname.groups, {
-    id: Id,
-  });
+  const { organizationId, applicationId } = validate(
+    context.url.pathname.groups,
+    {
+      organizationId: Id,
+      applicationId: Id,
+    }
+  );
 
   if (applicationId === null) {
     throw new HttpError(400);

@@ -2,16 +2,21 @@ import { useId } from "react";
 
 import { render } from "~/src/shared/response";
 import { HttpError } from "~/src/shared/error";
-import Layout from "~/src/routes/layout";
+import { Layout } from "~/src/routes/organization/layout";
 import { Context } from "~/src/shared/handler";
+import { Id, validate } from "~/src/shared/validation";
 
-export const url = "/applications/new";
+export const url = "/organizations/:id(\\d+)/applications/new";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function handler(context: Context) {
   if (context.request.method !== "GET") {
     throw new HttpError(405);
   }
+
+  const { organizationId } = validate(context.url.pathname.groups, {
+    applicationId: Id,
+  });
 
   render(context.response, <Page />);
 }

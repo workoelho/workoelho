@@ -2,11 +2,11 @@ import * as superstruct from "superstruct";
 
 import { HttpError } from "~/src/shared/error";
 import { render, getBody } from "~/src/shared/response";
-import Layout from "~/src/routes/layout";
+import { Layout } from "~/src/routes/organization/layout";
 import { Application, database } from "~/src/shared/database";
 import { Context } from "~/src/shared/handler";
 
-export const url = "/applications";
+export const url = "/organizations/:id(\\d+)/applications";
 
 async function handleGet(context: Context) {
   const applications = await database.application.findMany();
