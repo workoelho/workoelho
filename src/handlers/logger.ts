@@ -15,9 +15,9 @@ export function getLoggerHandler() {
 
     log.info(
       "request",
-      `${String(request.method)} ${String(url.inputs[0])} ${
+      `${String(request.method)} ${String(url.pathname.input)} ${
         response.statusCode
-      } ${duration.toFixed(0)}ms`,
+      } ${duration.toFixed(0)}ms`
     );
   };
 }
