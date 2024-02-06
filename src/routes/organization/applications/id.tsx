@@ -2,13 +2,26 @@ import { HttpError } from "~/src/shared/error";
 import { render } from "~/src/shared/response";
 import { Id, validate } from "~/src/shared/validation";
 import { Layout } from "~/src/routes/organization/layout";
-import { Application, database } from "~/src/shared/database";
+import {
+  Application,
+  Organization,
+  Session,
+  User,
+  database,
+} from "~/src/shared/database";
 import { Context } from "~/src/shared/handler";
+import { getSession } from "~/src/shared/session";
 
 export const url =
   "/organizations/:organizationId(\\d+)/applications/:applicationId(\\d+)";
 
 async function handleGet(context: Context) {
+  const session = await getSession(context.request);
+
+  if (!session) {
+    throw new HttpError(401);
+  }
+
   const { organizationId, applicationId } = validate(
     context.url.pathname.groups,
     {
@@ -16,6 +29,10 @@ async function handleGet(context: Context) {
       applicationId: Id,
     }
   );
+
+  if (organizationId !== session.user.organizationId) {
+    throw new HttpError(401);
+  }
 
   if (applicationId === null) {
     throw new HttpError(400);
@@ -29,7 +46,10 @@ async function handleGet(context: Context) {
     throw new HttpError(404);
   }
 
-  render(context.response, <Page application={application} />);
+  render(
+    context.response,
+    <Page session={session} application={application} />
+  );
 }
 
 export async function handler(context: Context) {
@@ -42,12 +62,13 @@ export async function handler(context: Context) {
 }
 
 type Props = {
+  session: Session & { user: User & { organization: Organization } };
   application: Application;
 };
 
-function Page({ application }: Props) {
+function Page({ session, application }: Props) {
   return (
-    <Layout title={application.name}>
+    <Layout title={application.name} organization={session.user.organization}>
       <h1>{application.name}</h1>
       <p>{application.url}</p>
     </Layout>

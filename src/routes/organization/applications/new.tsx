@@ -5,33 +5,58 @@ import { HttpError } from "~/src/shared/error";
 import { Layout } from "~/src/routes/organization/layout";
 import { Context } from "~/src/shared/handler";
 import { Id, validate } from "~/src/shared/validation";
+import { getSession } from "~/src/shared/session";
+import { Organization, Session, User } from "~/src/shared/database";
 
-export const url = "/organizations/:id(\\d+)/applications/new";
+export const url = "/organizations/:organizationId(\\d+)/applications/new";
 
-// eslint-disable-next-line @typescript-eslint/require-await
-export async function handler(context: Context) {
+export async function handleGet(context: Context) {
   if (context.request.method !== "GET") {
     throw new HttpError(405);
   }
 
+  const session = await getSession(context.request);
+
+  if (!session) {
+    throw new HttpError(401);
+  }
+
   const { organizationId } = validate(context.url.pathname.groups, {
-    applicationId: Id,
+    organizationId: Id,
   });
 
-  render(context.response, <Page />);
+  if (organizationId !== session.user.organizationId) {
+    throw new HttpError(401);
+  }
+
+  render(context.response, <Page session={session} />);
 }
 
-// type Props = {};
+export async function handler(context: Context) {
+  switch (context.request.method) {
+    case "GET":
+      return handleGet(context);
+    default:
+      throw new HttpError(405);
+  }
+}
 
-function Page() {
+type Props = {
+  session: Session & { user: User & { organization: Organization } };
+};
+
+function Page({ session }: Props) {
   const nameId = useId();
   const urlId = useId();
 
   return (
-    <Layout>
+    <Layout title="New application" organization={session.user.organization}>
       <h1>Create new application</h1>
 
-      <form method="POST" action="/applications">
+      <form
+        method="POST"
+        action={`/organizations/${session.user.organizationId}/applications`}
+      >
         <div>
           <label htmlFor={nameId}>Name:</label>
           <input id={nameId} type="text" name="name" required autoFocus />

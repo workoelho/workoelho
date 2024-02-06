@@ -22,7 +22,7 @@ export function Layout({ title, children }: Props) {
         </ul>
       </nav>
 
-      {children}
+      <main>{children}</main>
     </Root>
   );
 }

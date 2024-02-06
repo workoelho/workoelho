@@ -2,7 +2,7 @@ import { useId } from "react";
 
 import { render } from "~/src/shared/response";
 import { HttpError } from "~/src/shared/error";
-import { Layout } from "~/src/routes/layout";
+import { Layout } from "~/src/routes/public/layout";
 import { Context } from "~/src/shared/handler";
 
 export const url = "/sessions/new";

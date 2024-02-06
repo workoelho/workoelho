@@ -5,6 +5,7 @@ import { getBody } from "~/src/shared/response";
 import { database } from "~/src/shared/database";
 import { Context } from "~/src/shared/handler";
 import { comparePassword } from "~/src/shared/password";
+import { getSessionExpiration, setSessionCookie } from "~/src/shared/session";
 
 export const url = "/sessions";
 
@@ -28,7 +29,7 @@ async function handlePost(context: Context) {
     throw new HttpError(401);
   }
 
-  const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+  const expiresAt = getSessionExpiration();
 
   const session = await database.session.create({
     data: {
@@ -37,15 +38,18 @@ async function handlePost(context: Context) {
     },
     select: {
       id: true,
+      user: {
+        select: {
+          organizationId: true,
+        },
+      },
     },
   });
 
-  context.response.setHeader(
-    "Set-Cookie",
-    `sid=${session.id}; Path=/; HttpOnly; SameSite=Strict; Expires=${expiresAt.toUTCString()}`
-  );
+  setSessionCookie(context.response, session.id, expiresAt);
+
   context.response.writeHead(302, {
-    Location: `/applications`,
+    Location: `/organizations/${session.user.organizationId}/applications`,
   });
   context.response.end();
 }

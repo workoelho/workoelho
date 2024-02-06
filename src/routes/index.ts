@@ -49,13 +49,13 @@ function push(route: Route) {
 /**
  * Build routing table.
  */
-push(await import("./500"));
-push(await import("./404"));
-push(await import("./401"));
-push(await import("./400"));
+push(await import("./public/500"));
+push(await import("./public/404"));
+push(await import("./public/401"));
+push(await import("./public/400"));
 
-push(await import("./sessions/new"));
-push(await import("./sessions/root"));
+push(await import("./public/sessions/new"));
+push(await import("./public/sessions/root"));
 
 push(await import("./organization/applications/id"));
 push(await import("./organization/applications/new"));

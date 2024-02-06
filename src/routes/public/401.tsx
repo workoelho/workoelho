@@ -1,8 +1,8 @@
 import { render } from "~/src/shared/response";
-import { Layout } from "~/src/routes/layout";
+import { Layout } from "~/src/routes/public/layout";
 import { Context } from "~/src/shared/handler";
 
-export const statusCode = 400;
+export const statusCode = 401;
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function handler(context: Context) {
@@ -15,9 +15,11 @@ export async function handler(context: Context) {
 
 function Page() {
   return (
-    <Layout title="Unauthenticated">
-      <h1>Bad request</h1>
-      <p>The request could not be understood.</p>
+    <Layout title="Unauthorized">
+      <h1>Unauthorized</h1>
+      <p>
+        Please try to <a href={`/sessions/new`}>sign in</a> again.
+      </p>
     </Layout>
   );
 }
