@@ -39,7 +39,7 @@ async function handleGet(context: Context) {
   }
 
   const application = await database.application.findUnique({
-    where: { id: applicationId },
+    where: { organizationId: session.user.organizationId, id: applicationId },
   });
 
   if (!application) {

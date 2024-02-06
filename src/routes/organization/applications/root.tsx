@@ -62,7 +62,7 @@ async function handlePost(context: Context) {
   });
 
   context.response.writeHead(302, {
-    Location: `/applications/${application.id}`,
+    Location: `/organizations/${session.user.organizationId}/applications/${application.id}`,
   });
   context.response.end();
 }
