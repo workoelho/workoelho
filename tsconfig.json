@@ -1,18 +1,8 @@
 {
+  "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["esnext"],
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "isolatedModules": true,
-    "allowSyntheticDefaultImports": true,
-    "incremental": true,
+    "lib": ["ESNext"], // Remove DOM libs from template.
     "baseUrl": ".",
-    "jsx": "react-jsx",
     "paths": { "~/*": ["./*"] }
   },
   "include": ["."],
