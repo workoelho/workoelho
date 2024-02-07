@@ -59,7 +59,6 @@ async function handlePost(context: Context) {
   context.response.end();
 }
 
- 
 async function handleDelete(context: Context) {
   const sessionId = getSessionId(context.request);
 

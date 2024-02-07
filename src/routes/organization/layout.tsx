@@ -37,6 +37,11 @@ export function Layout({ title, session, children }: Props) {
               All providers
             </a>
           </li>
+          <li>
+            <a href={`/organizations/${session.user.organization.id}/users`}>
+              All users
+            </a>
+          </li>
         </ul>
 
         <ul>

@@ -74,3 +74,8 @@ push(await import("./organization/services/id"));
 push(await import("./organization/services/new"));
 push(await import("./organization/services/root"));
 push(await import("./organization/services/edit"));
+
+push(await import("./organization/users/id"));
+push(await import("./organization/users/new"));
+push(await import("./organization/users/root"));
+push(await import("./organization/users/edit"));
