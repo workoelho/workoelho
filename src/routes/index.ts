@@ -60,3 +60,4 @@ push(await import("./public/sessions/root"));
 push(await import("./organization/applications/id"));
 push(await import("./organization/applications/new"));
 push(await import("./organization/applications/root"));
+push(await import("./organization/applications/edit"));
