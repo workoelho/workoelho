@@ -31,12 +31,12 @@ cp example.env .env
 Start the application.
 
 ```sh
-npm start
+env $(cat .env | xargs) npm start
 ```
 
 The `start` script will:
 
-- Install dependencies.
+- Install dependencies, if needed.
 - Start application in "watch mode", if `NODE_ENV` is set to `development`.
 
 ## Debugging
