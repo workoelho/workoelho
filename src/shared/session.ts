@@ -47,9 +47,19 @@ export function clearSessionCookie(response: ServerResponse) {
   );
 }
 
-export async function getSession(request: IncomingMessage) {
+/**
+ * Get session id from request cookies.
+ */
+export function getSessionId(request: IncomingMessage) {
   const cookies = parse(request.headers.cookie ?? "");
-  const sessionId = cookies[sessionCookieId];
+  return cookies[sessionCookieId];
+}
+
+/**
+ * Get current session from request.
+ */
+export async function getSession(request: IncomingMessage) {
+  const sessionId = getSessionId(request);
 
   if (!sessionId) {
     return null;

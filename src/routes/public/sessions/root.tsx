@@ -8,6 +8,7 @@ import { comparePassword } from "~/src/shared/password";
 import {
   clearSessionCookie,
   getSessionExpiration,
+  getSessionId,
   setSessionCookie,
 } from "~/src/shared/session";
 
@@ -60,6 +61,19 @@ async function handlePost(context: Context) {
 
 // eslint-disable-next-line @typescript-eslint/require-await
 async function handleDelete(context: Context) {
+  const sessionId = getSessionId(context.request);
+
+  if (sessionId) {
+    await database.session.update({
+      where: {
+        id: sessionId,
+      },
+      data: {
+        expiresAt: new Date(),
+      },
+    });
+  }
+
   clearSessionCookie(context.response);
 
   context.response.writeHead(302, {
