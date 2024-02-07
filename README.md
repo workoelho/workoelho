@@ -11,10 +11,14 @@
 - Prisma for dealing with the database.
 - Superstruct for coercion and validation.
 
-### Roadmap
+## Roadmap
 
-- Session
-- Client bundle
+- [x] Basic web server
+- [x] Middlewares for logging, routing, etc.
+- [x] Error handling
+- [x] Database
+- [x] Session
+- [ ] Client bundle
 
 ## Development
 
@@ -33,8 +37,17 @@ npm start
 The `start` script will:
 
 - Install dependencies.
-- Copy pre-commit script into place, if it's a Git repository.
 - Start application in "watch mode", if `NODE_ENV` is set to `development`.
+
+## Debugging
+
+Start the server with `--inspect-brk` flag:
+
+```shell
+npm start -- --inspect-brk
+```
+
+Start the debugger on VSCode.
 
 ## Legal
 
