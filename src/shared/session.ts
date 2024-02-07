@@ -38,7 +38,12 @@ export function setSessionCookie(
 export function clearSessionCookie(response: ServerResponse) {
   response.setHeader(
     "Set-Cookie",
-    `${sessionCookieId}=; Path=/; HttpOnly; SameSite=Strict; Expires=${new Date(0).toUTCString()}`
+    serialize(sessionCookieId, "", {
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      expires: new Date(),
+    })
   );
 }
 
