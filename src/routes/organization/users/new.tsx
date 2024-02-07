@@ -48,7 +48,6 @@ type Props = {
 function Page({ session }: Props) {
   const nameId = useId();
   const emailId = useId();
-  const passwordId = useId();
 
   return (
     <Layout title="New user" session={session}>
