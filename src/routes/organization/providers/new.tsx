@@ -64,7 +64,7 @@ function Page({ session }: Props) {
 
         <div>
           <label htmlFor={urlId}>URL:</label>
-          <input id={urlId} type="url" name="url" required />
+          <input id={urlId} type="url" name="url" />
         </div>
 
         <button type="submit">Create provider</button>

@@ -94,13 +94,7 @@ function Page({ session, application }: Props) {
 
         <div>
           <label htmlFor={urlId}>URL:</label>
-          <input
-            id={urlId}
-            type="url"
-            name="url"
-            value={application.url}
-            required
-          />
+          <input id={urlId} type="url" name="url" value={application.url} />
         </div>
 
         <button type="submit">Save application</button>

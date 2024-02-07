@@ -66,3 +66,8 @@ push(await import("./organization/providers/id"));
 push(await import("./organization/providers/new"));
 push(await import("./organization/providers/root"));
 push(await import("./organization/providers/edit"));
+
+push(await import("./organization/services/id"));
+push(await import("./organization/services/new"));
+push(await import("./organization/services/root"));
+push(await import("./organization/services/edit"));

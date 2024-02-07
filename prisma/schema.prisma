@@ -10,6 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Organization {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+
+  applications Application[]
+  providers    Provider[]
+  users        User[]
+  services     Service[]
+
+  @@map("organizations")
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -38,19 +52,6 @@ model Session {
   @@map("sessions")
 }
 
-model Organization {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @unique
-
-  applications Application[]
-  providers    Provider[]
-  users        User[]
-
-  @@map("organizations")
-}
-
 model Application {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -60,7 +61,8 @@ model Application {
 
   organizationId Int
   organization   Organization @relation(fields: [organizationId], references: [id])
-  Service        Service[]
+
+  Service Service[]
 
   @@map("applications")
 }
@@ -85,6 +87,9 @@ model Service {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
+
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
 
   providerId Int
   provider   Provider @relation(fields: [providerId], references: [id])
