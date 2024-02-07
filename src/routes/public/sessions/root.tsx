@@ -1,7 +1,7 @@
 import * as superstruct from "superstruct";
 
 import { HttpError } from "~/src/shared/error";
-import { getBody, getMethod } from "~/src/shared/request";
+import { getBody } from "~/src/shared/request";
 import { database } from "~/src/shared/database";
 import { Context } from "~/src/shared/handler";
 import { comparePassword } from "~/src/shared/password";
@@ -69,9 +69,7 @@ async function handleDelete(context: Context) {
 }
 
 export async function handler(context: Context) {
-  const method = getMethod(context.request);
-
-  switch (method) {
+  switch (context.request.method) {
     case "POST":
       return handlePost(context);
     case "DELETE":

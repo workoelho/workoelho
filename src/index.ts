@@ -9,6 +9,7 @@ import { getUrlHandler } from "~/src/handlers/url";
 import { Handler, getInitialHandler } from "~/src/shared/handler";
 import { getConfig } from "~/src/config";
 import { statusCodeHandlers, urlHandlers } from "~/src/routes";
+import { getMethodHandler } from "~/src/handlers/method";
 
 const config = getConfig();
 
@@ -26,6 +27,7 @@ const handlers: Handler[] = [];
 handlers.push(getLoggerHandler());
 handlers.push(getErrorHandler(statusCodeHandlers));
 handlers.push(getStaticHandler());
+handlers.push(getMethodHandler());
 handlers.push(getUrlHandler(urlHandlers));
 
 log.verbose("handler", "Handlers", handlers);
