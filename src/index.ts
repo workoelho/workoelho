@@ -13,14 +13,16 @@ import { getMethodHandler } from "~/src/handlers/method";
 
 const config = getConfig();
 
-if (config.verbose) {
+if (config.env === "development") {
   log.level = "verbose";
 }
 
+log.info("config", "Environment", config.env);
+
 log.verbose("config", "Configuration dump", config);
 
-log.verbose("handler", "Status code handlers", statusCodeHandlers);
-log.verbose("handler", "URL handlers", urlHandlers);
+log.verbose("http", "Status code handlers", statusCodeHandlers);
+log.verbose("http", "URL handlers", urlHandlers);
 
 const handlers: Handler[] = [];
 
@@ -30,7 +32,7 @@ handlers.push(getStaticHandler());
 handlers.push(getMethodHandler());
 handlers.push(getUrlHandler(urlHandlers));
 
-log.verbose("handler", "Handlers", handlers);
+log.verbose("http", "Handlers", handlers);
 
 const server = createServer(getInitialHandler(handlers));
 

@@ -14,7 +14,7 @@ export function getLoggerHandler() {
     const { duration } = performance.measure("request", "request");
 
     log.info(
-      "request",
+      "http",
       `${String(request.method)} ${String(url.pathname.input)} ${
         response.statusCode
       } ${duration.toFixed(0)}ms`
