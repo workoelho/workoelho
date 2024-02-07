@@ -13,6 +13,7 @@ export function Layout({ title, children }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title ? `${title} — Workoelho` : "Workoelho"}</title>
         <link rel="stylesheet" href="/style.css" />
+        <script src="/script.js" type="module"></script>
       </head>
       <body>{children}</body>
     </html>

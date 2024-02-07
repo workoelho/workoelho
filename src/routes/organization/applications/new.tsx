@@ -50,7 +50,7 @@ function Page({ session }: Props) {
   const urlId = useId();
 
   return (
-    <Layout title="New application" organization={session.user.organization}>
+    <Layout title="New application" session={session}>
       <h1>Create new application</h1>
 
       <form

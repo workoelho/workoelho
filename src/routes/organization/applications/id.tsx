@@ -68,7 +68,7 @@ type Props = {
 
 function Page({ session, application }: Props) {
   return (
-    <Layout title={application.name} organization={session.user.organization}>
+    <Layout title={application.name} session={session}>
       <h1>{application.name}</h1>
       <p>{application.url}</p>
     </Layout>

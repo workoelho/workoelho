@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { Layout as Root } from "~/src/routes/layout";
+import { Layout as Parent } from "~/src/routes/layout";
 
 type Props = {
   title?: string;
@@ -9,7 +9,7 @@ type Props = {
 
 export function Layout({ title, children }: Props) {
   return (
-    <Root title={title}>
+    <Parent title={title}>
       <nav>
         <h1>
           <a href="/">Workoelho</a>
@@ -23,6 +23,6 @@ export function Layout({ title, children }: Props) {
       </nav>
 
       <main>{children}</main>
-    </Root>
+    </Parent>
   );
 }

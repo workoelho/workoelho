@@ -1,7 +1,8 @@
 import * as superstruct from "superstruct";
 
 import { HttpError } from "~/src/shared/error";
-import { render, getBody } from "~/src/shared/response";
+import { getBody } from "~/src/shared/request";
+import { render } from "~/src/shared/response";
 import { Layout } from "~/src/routes/organization/layout";
 import {
   Application,
@@ -85,7 +86,7 @@ type Props = {
 
 function Page({ session, applications }: Props) {
   return (
-    <Layout title="Applications" organization={session.user.organization}>
+    <Layout title="Applications" session={session}>
       <h1>All applications</h1>
 
       <aside>

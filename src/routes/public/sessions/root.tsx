@@ -1,11 +1,15 @@
 import * as superstruct from "superstruct";
 
 import { HttpError } from "~/src/shared/error";
-import { getBody } from "~/src/shared/response";
+import { getBody, getMethod } from "~/src/shared/request";
 import { database } from "~/src/shared/database";
 import { Context } from "~/src/shared/handler";
 import { comparePassword } from "~/src/shared/password";
-import { getSessionExpiration, setSessionCookie } from "~/src/shared/session";
+import {
+  clearSessionCookie,
+  getSessionExpiration,
+  setSessionCookie,
+} from "~/src/shared/session";
 
 export const url = "/sessions";
 
@@ -56,10 +60,8 @@ async function handlePost(context: Context) {
 
 // eslint-disable-next-line @typescript-eslint/require-await
 async function handleDelete(context: Context) {
-  context.response.setHeader(
-    "Set-Cookie",
-    `sid=; Path=/; HttpOnly; SameSite=Strict; Expires=${new Date().toUTCString()}`
-  );
+  clearSessionCookie(context.response);
+
   context.response.writeHead(302, {
     Location: `/sessions/new`,
   });
@@ -67,7 +69,9 @@ async function handleDelete(context: Context) {
 }
 
 export async function handler(context: Context) {
-  switch (context.request.method) {
+  const method = getMethod(context.request);
+
+  switch (method) {
     case "POST":
       return handlePost(context);
     case "DELETE":
