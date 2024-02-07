@@ -17,7 +17,10 @@ export function Layout({ title, children }: Props) {
 
         <ul>
           <li>
-            <a href="/sessions/new">Sign-in</a>
+            <a href="/sessions/new">Sign in</a>
+          </li>
+          <li>
+            <a href="/organizations/new">Sign up</a>
           </li>
         </ul>
       </nav>

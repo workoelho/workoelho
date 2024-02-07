@@ -23,8 +23,8 @@ function Page() {
   const passwordId = useId();
 
   return (
-    <Layout title="Sign-in">
-      <h1>Sign-in</h1>
+    <Layout title="Sign in">
+      <h1>Sign in</h1>
 
       <form method="POST" action="/sessions">
         <div>
@@ -37,7 +37,7 @@ function Page() {
           <input id={passwordId} type="password" name="password" required />
         </div>
 
-        <button type="submit">Sign-in</button>
+        <button type="submit">Sign in</button>
       </form>
     </Layout>
   );

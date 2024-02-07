@@ -54,6 +54,9 @@ push(await import("./public/404"));
 push(await import("./public/401"));
 push(await import("./public/400"));
 
+push(await import("./public/organizations/new"));
+push(await import("./public/organizations/root"));
+
 push(await import("./public/sessions/new"));
 push(await import("./public/sessions/root"));
 
