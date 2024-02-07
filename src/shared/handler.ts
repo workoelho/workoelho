@@ -61,7 +61,7 @@ export function getInitialHandler(handlers: Handler[]) {
 
     const handle = handlers.reduceRight<Handle>(
       (handle, middleware) => () => middleware(context, handle),
-      () => Promise.reject(new Error("No handler was found")),
+      () => Promise.reject(new Error("No handler was found"))
     );
 
     void handle();

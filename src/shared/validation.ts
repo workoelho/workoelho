@@ -7,7 +7,7 @@ import { ObjectSchema } from "superstruct/dist/utils";
 export const Id = superstruct.coerce(
   superstruct.number(),
   superstruct.string(),
-  (value) => parseInt(value, 10),
+  (value) => parseInt(value, 10)
 );
 
 /**

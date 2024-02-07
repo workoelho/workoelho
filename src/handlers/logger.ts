@@ -17,7 +17,7 @@ export function getLoggerHandler() {
       "request",
       `${String(request.method)} ${String(url.pathname.input)} ${
         response.statusCode
-      } ${duration.toFixed(0)}ms`,
+      } ${duration.toFixed(0)}ms`
     );
   };
 }
