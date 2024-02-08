@@ -17,7 +17,7 @@ export function getUrlHandler(routes: Map<string, Handler>): Handler {
       }
     }
 
-    log.warn("http", "No handler for URL", context.url.inputs[0]);
+    log.verbose("http", "No handler for route", context.url.pathname.input);
 
     throw new HttpError(404);
   };
