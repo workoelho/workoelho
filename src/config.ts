@@ -13,10 +13,16 @@ const port = parseInt(process.env.PORT || "3000", 10);
  */
 const databaseUrl = process.env.DATABASE_URL;
 
+/**
+ * Log level: verbose, info, warn, or error.
+ */
+const logLevel = process.env.LOG_LEVEL || "warn";
+
 const config = {
   env,
   port,
   databaseUrl,
+  logLevel,
 } as const;
 
 /**

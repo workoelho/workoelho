@@ -13,9 +13,7 @@ import { getMethodHandler } from "~/src/handlers/method";
 
 const config = getConfig();
 
-if (config.env === "development") {
-  log.level = "verbose";
-}
+log.level = config.logLevel;
 
 log.info("config", "Environment", config.env);
 
