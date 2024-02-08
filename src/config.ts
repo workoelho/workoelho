@@ -16,7 +16,7 @@ const databaseUrl = process.env.DATABASE_URL;
 /**
  * Log level: verbose, info, warn, or error.
  */
-const logLevel = process.env.LOG_LEVEL || "warn";
+const logLevel = process.env.LOG_LEVEL || "info";
 
 const config = {
   env,
