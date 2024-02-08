@@ -1,3 +1,5 @@
+import log from "npmlog";
+
 import { HttpError } from "~/src/shared/error";
 import { Handler } from "~/src/shared/handler";
 
@@ -14,6 +16,8 @@ export function getUrlHandler(routes: Map<string, Handler>): Handler {
         return await handler(context, next);
       }
     }
+
+    log.warn("http", "No handler for URL", context.url.inputs[0]);
 
     throw new HttpError(404);
   };
