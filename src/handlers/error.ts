@@ -14,8 +14,10 @@ export function getErrorHandler(routes: Map<number, Handler>): Handler {
       const statusCode = HttpError.getStatusCode(error);
       context.response.statusCode = statusCode ?? 500;
 
-      if (!statusCode) {
-        log.error("router", "Error handled", error);
+      if (statusCode) {
+        log.verbose("http", "Expected error", error);
+      } else {
+        log.error("http", "Unexpected error", error);
       }
     }
 
@@ -23,6 +25,12 @@ export function getErrorHandler(routes: Map<number, Handler>): Handler {
 
     if (handler) {
       return await handler(context, next);
+    } else {
+      log.warn(
+        "http",
+        "No handler for status code",
+        context.response.statusCode
+      );
     }
 
     context.response.end();
