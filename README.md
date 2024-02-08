@@ -4,8 +4,9 @@
 
 ## About
 
-- Bespoke Node web application with middleware support.
-- URLPattern for matching routes.
+- Bespoke web application in TypeScript.
+- Middleware support.
+- URLPattern for routing.
 - esbuild via tsx.
 - JSX for templating.
 - Prisma for dealing with the database.
@@ -18,6 +19,8 @@
 - [x] Error handling
 - [x] Database
 - [x] Session
+- [ ] Leave serving static files to proxy
+- [ ] Read method override from body
 - [ ] Client bundle
 
 ## Development
