@@ -11,7 +11,7 @@
     "prestart": "test -d node_modules || npm ci",
     "start": "npm run start:${NODE_ENV:-development}",
     "start:production": "tsx src/index.ts",
-    "start:development": "tsx --watch src/index.ts"
+    "start:development": "tsx watch src/index.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
