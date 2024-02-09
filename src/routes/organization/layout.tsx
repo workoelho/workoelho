@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 
 import { Organization, Session, User } from "~/src/shared/database";
 import { Layout as Parent } from "~/src/routes/layout";
+import { Button } from "~/src/components/Button";
 
 type Props = {
   session: Session & { user: User & { organization: Organization } };
@@ -49,9 +50,9 @@ export function Layout({ title, session, children }: Props) {
             {session.user.name} ({session.user.organization.name})
           </li>
           <li>
-            <form method="post" action="/sessions?method=DELETE">
-              <button type="submit">Sign out</button>
-            </form>
+            <Button method="post" action="/sessions?method=delete">
+              Sign out
+            </Button>
           </li>
         </ul>
       </nav>

@@ -16,6 +16,7 @@ import {
 import { Context } from "~/src/shared/handler";
 import { getSession } from "~/src/shared/session";
 import { getBody } from "~/src/shared/request";
+import { Button } from "~/src/components/Button";
 
 export const url =
   "/organizations/:organizationId(\\d+)/services/:serviceId(\\d+)";
@@ -157,12 +158,12 @@ function Page({ session, service }: Props) {
             </a>
           </li>
           <li>
-            <form
-              method="POST"
-              action={`/organizations/${session.user.organizationId}/services/${service.id}?method=DELETE`}
+            <Button
+              method="post"
+              action={`/organizations/${session.user.organizationId}/services/${service.id}?method=delete`}
             >
-              <button>Delete</button>
-            </form>
+              Delete
+            </Button>
           </li>
         </ul>
       </aside>
