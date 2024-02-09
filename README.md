@@ -1,8 +1,25 @@
 # Workoelho
 
-> ...
+> Workoelho is an open-source knowledge hub designed specially for web development teams, DevOps, SRE, etc.
 
 ## About
+
+- It’s open-source, can be self hosted and supports data exfil.
+- It centralizes information without replacing your preferred tools.
+- New teammates can find everything they need on their own and with proper authorization.
+- Impact can be gauged in minutes, from service provider swaps to security vulnerabilities.
+- You can track changes over time, across your organization, and identify patterns and trends.
+
+It helps answering questions like:
+
+1. What service providers my company use?
+2. Who oversees what?
+3. What technologies this project depends on?
+4. Where can I find the credentials to this service?
+5. Since when we use this service?
+6. What information a newcomer needs to get started?
+
+## Development
 
 - Bespoke web application in TypeScript.
 - Middleware support.
@@ -12,18 +29,7 @@
 - Prisma for dealing with the database.
 - Superstruct for coercion and validation.
 
-## Roadmap
-
-- [x] Basic web server
-- [x] Middlewares for logging, routing, etc.
-- [x] Error handling
-- [x] Database
-- [x] Session
-- [ ] Leave serving static files to proxy
-- [ ] Read method override from body
-- [ ] Client bundle
-
-## Development
+### Getting started
 
 Copy environment file from example:
 
@@ -42,7 +48,7 @@ The `start` script will:
 - Install dependencies, if needed.
 - Start application in "watch mode", if `NODE_ENV` is set to `development`.
 
-## Debugging
+### Debugging
 
 Start the server with `--inspect-brk` flag:
 
