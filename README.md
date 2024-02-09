@@ -31,10 +31,10 @@ It helps answering questions like:
 
 ### Getting started
 
-Copy environment file from example:
+Create an environment file from the template:
 
 ```sh
-cp example.env .env
+cp .env.example .env
 ```
 
 Start the application.
@@ -53,7 +53,7 @@ The `start` script will:
 Start the server with `--inspect-brk` flag:
 
 ```shell
-npm start -- --inspect-brk
+env $(cat .env | xargs) npm start -- --inspect-brk
 ```
 
 Start the debugger on VSCode.
