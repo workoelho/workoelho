@@ -1,7 +1,10 @@
-html {
-  font:
-    14px/1.5 ui-system,
-    sans-serif;
-  background-color: white;
-  color: black;
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  border: 0;
+  padding: 0;
+  background-color: transparent;
 }
