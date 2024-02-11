@@ -26,43 +26,45 @@ function Page() {
 
   return (
     <Layout title="Sign up">
-      <h1>Sign up</h1>
+      <main>
+        <form method="post" action="/organizations" className="stack">
+          <legend className="title">Sign up</legend>
 
-      <form method="POST" action="/organizations">
-        <div>
-          <label htmlFor={organizationId}>Organization:</label>
-          <input
-            id={organizationId}
-            type="text"
-            name="organization"
-            required
-            autoFocus
-          />
-        </div>
+          <div>
+            <label htmlFor={organizationId}>Organization:</label>
+            <input
+              id={organizationId}
+              type="text"
+              name="organization"
+              required
+              autoFocus
+            />
+          </div>
 
-        <div>
-          <label htmlFor={nameId}>Name:</label>
-          <input id={nameId} type="name" name="name" required />
-        </div>
+          <div>
+            <label htmlFor={nameId}>Name:</label>
+            <input id={nameId} type="name" name="name" required />
+          </div>
 
-        <div>
-          <label htmlFor={emailId}>E-mail:</label>
-          <input id={emailId} type="email" name="email" required />
-        </div>
+          <div>
+            <label htmlFor={emailId}>E-mail:</label>
+            <input id={emailId} type="email" name="email" required />
+          </div>
 
-        <div>
-          <label htmlFor={passwordId}>Password:</label>
-          <input
-            id={passwordId}
-            type="password"
-            name="password"
-            required
-            autoComplete="new-password"
-          />
-        </div>
+          <div>
+            <label htmlFor={passwordId}>Password:</label>
+            <input
+              id={passwordId}
+              type="password"
+              name="password"
+              required
+              autoComplete="new-password"
+            />
+          </div>
 
-        <button type="submit">Sign up</button>
-      </form>
+          <button type="submit">Sign up</button>
+        </form>
+      </main>
     </Layout>
   );
 }

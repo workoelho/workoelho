@@ -10,8 +10,8 @@ type Props = {
 export function Layout({ title, children }: Props) {
   return (
     <Parent title={title}>
-      <nav>
-        <h1>
+      <nav className="stack">
+        <h1 className="title">
           <a href="/">Workoelho</a>
         </h1>
 
@@ -25,7 +25,7 @@ export function Layout({ title, children }: Props) {
         </ul>
       </nav>
 
-      <main>{children}</main>
+      {children}
     </Parent>
   );
 }

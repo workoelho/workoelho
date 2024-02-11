@@ -1,9 +1,8 @@
-import { useId } from "react";
-
 import { render } from "~/src/shared/response";
 import { HttpError } from "~/src/shared/error";
 import { Layout } from "~/src/routes/public/layout";
 import { Context } from "~/src/shared/handler";
+import { Field } from "~/src/components/Field";
 
 export const url = "/sessions/new";
 
@@ -19,26 +18,45 @@ export async function handler(context: Context) {
 // type Props = {};
 
 function Page() {
-  const emailId = useId();
-  const passwordId = useId();
-
   return (
     <Layout title="Sign in">
-      <h1>Sign in</h1>
+      <main>
+        <form method="post" action="/sessions" className="stack">
+          <legend className="title">Sign in</legend>
 
-      <form method="POST" action="/sessions">
-        <div>
-          <label htmlFor={emailId}>E-mail:</label>
-          <input id={emailId} type="email" name="email" required autoFocus />
-        </div>
+          <fieldset className="stack" style={{ gap: ".75rem" }}>
+            <Field label="E-mail">
+              {({ id }) => (
+                <input
+                  className="input"
+                  id={id}
+                  type="email"
+                  name="email"
+                  required
+                  autoFocus
+                />
+              )}
+            </Field>
 
-        <div>
-          <label htmlFor={passwordId}>Password:</label>
-          <input id={passwordId} type="password" name="password" required />
-        </div>
+            <Field label="Password">
+              {({ id }) => (
+                <input
+                  className="input"
+                  id={id}
+                  type="password"
+                  name="password"
+                  required
+                  autoComplete="current-password"
+                />
+              )}
+            </Field>
+          </fieldset>
 
-        <button type="submit">Sign in</button>
-      </form>
+          <footer className="form-footer">
+            <button className="button">Sign in</button>
+          </footer>
+        </form>
+      </main>
     </Layout>
   );
 }

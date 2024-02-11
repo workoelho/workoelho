@@ -87,37 +87,39 @@ type Props = {
 function Page({ session, applications }: Props) {
   return (
     <Layout title="Applications" session={session}>
-      <h1>All applications</h1>
+      <main className="stack">
+        <h1 className="title">All applications</h1>
 
-      <aside>
-        <nav>
-          <ul>
-            <li>
-              <a
-                href={`/organizations/${session.user.organizationId}/applications/new`}
-              >
-                Create new application
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
+        <aside>
+          <nav>
+            <ul>
+              <li>
+                <a
+                  href={`/organizations/${session.user.organizationId}/applications/new`}
+                >
+                  Create new application
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </aside>
 
-      {applications.length === 0 ? (
-        <p>No applications found.</p>
-      ) : (
-        <ol>
-          {applications.map(({ id, name }) => (
-            <li key={id}>
-              <a
-                href={`/organizations/${session.user.organizationId}/applications/${id}`}
-              >
-                {name}
-              </a>
-            </li>
-          ))}
-        </ol>
-      )}
+        {applications.length === 0 ? (
+          <p>No applications found.</p>
+        ) : (
+          <ol>
+            {applications.map(({ id, name }) => (
+              <li key={id}>
+                <a
+                  href={`/organizations/${session.user.organizationId}/applications/${id}`}
+                >
+                  {name}
+                </a>
+              </li>
+            ))}
+          </ol>
+        )}
+      </main>
     </Layout>
   );
 }

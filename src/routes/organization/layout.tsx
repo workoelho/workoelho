@@ -13,8 +13,8 @@ type Props = {
 export function Layout({ title, session, children }: Props) {
   return (
     <Parent title={`${title} at ${session.user.organization.name}`}>
-      <nav>
-        <h1>
+      <nav className="stack">
+        <h1 style={{ fontWeight: "bold" }}>
           <a href="/">Workoelho</a>
         </h1>
 
@@ -23,24 +23,24 @@ export function Layout({ title, session, children }: Props) {
             <a
               href={`/organizations/${session.user.organization.id}/applications`}
             >
-              All applications
+              Applications
             </a>
           </li>
           <li>
             <a href={`/organizations/${session.user.organization.id}/services`}>
-              All services
+              Services
             </a>
           </li>
           <li>
             <a
               href={`/organizations/${session.user.organization.id}/providers`}
             >
-              All providers
+              Providers
             </a>
           </li>
           <li>
             <a href={`/organizations/${session.user.organization.id}/users`}>
-              All users
+              People
             </a>
           </li>
         </ul>

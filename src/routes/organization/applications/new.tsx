@@ -1,5 +1,3 @@
-import { useId } from "react";
-
 import { render } from "~/src/shared/response";
 import { HttpError } from "~/src/shared/error";
 import { Layout } from "~/src/routes/organization/layout";
@@ -7,6 +5,7 @@ import { Context } from "~/src/shared/handler";
 import { Id, validate } from "~/src/shared/validation";
 import { getSession } from "~/src/shared/session";
 import { Organization, Session, User } from "~/src/shared/database";
+import { Field } from "~/src/components/Field";
 
 export const url = "/organizations/:organizationId(\\d+)/applications/new";
 
@@ -46,29 +45,28 @@ type Props = {
 };
 
 function Page({ session }: Props) {
-  const nameId = useId();
-  const urlId = useId();
-
   return (
     <Layout title="New application" session={session}>
-      <h1>Create new application</h1>
+      <main className="stack">
+        <form
+          method="post"
+          action={`/organizations/${session.user.organizationId}/applications`}
+        >
+          <legend className="title">Create new application</legend>
 
-      <form
-        method="POST"
-        action={`/organizations/${session.user.organizationId}/applications`}
-      >
-        <div>
-          <label htmlFor={nameId}>Name:</label>
-          <input id={nameId} type="text" name="name" required autoFocus />
-        </div>
+          <Field label="Name">
+            {({ id }) => (
+              <input id={id} type="text" name="name" required autoFocus />
+            )}
+          </Field>
 
-        <div>
-          <label htmlFor={urlId}>URL:</label>
-          <input id={urlId} type="url" name="url" />
-        </div>
+          <Field label="URL">
+            {({ id }) => <input id={id} type="url" name="url" required />}
+          </Field>
 
-        <button type="submit">Create application</button>
-      </form>
+          <button className="button">Create application</button>
+        </form>
+      </main>
     </Layout>
   );
 }

@@ -12,10 +12,13 @@ export function Layout({ title, children }: Props) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title ? `${title} — Workoelho` : "Workoelho"}</title>
+        <link rel="stylesheet" href="/modern-normalize.css" />
         <link rel="stylesheet" href="/style.css" />
         <script src="/script.js" type="module"></script>
       </head>
-      <body>{children}</body>
+      <body>
+        <div className="container">{children}</div>
+      </body>
     </html>
   );
 }
