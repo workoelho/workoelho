@@ -1,1 +1,15 @@
-.env
+# npm files.
+node_modules
+
+# TypeScript files.
+*.tsbuildinfo
+
+# Next.js files.
+build
+next-env.d.ts
+.next
+.env*.local
+
+# Database files.
+*.sqlite
+*.sqlite-journal

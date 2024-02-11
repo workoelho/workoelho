@@ -1,6 +1,0 @@
-services:
-  app:
-    volumes:
-      - .:/mnt
-    command: |
-      npm run develop

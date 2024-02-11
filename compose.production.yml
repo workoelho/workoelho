@@ -1,9 +1,0 @@
-services:
-  proxy:
-    restart: unless-stopped
-
-  db:
-    restart: unless-stopped
-
-  app:
-    restart: unless-stopped
