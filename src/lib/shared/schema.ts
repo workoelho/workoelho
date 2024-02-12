@@ -12,7 +12,7 @@ export const id = number();
  * E-mail schema.
  */
 export const email = define<string>("email", (value: unknown) =>
-  isEmail(value as string)
+  isEmail(value as string),
 );
 
 /**

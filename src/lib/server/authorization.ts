@@ -1,4 +1,4 @@
-import { getCurrentSession } from "~/src/lib/server/session";
+import { getSession } from "~/src/lib/server/session";
 import { ForbiddenError, UnauthorizedError } from "~/src/lib/shared/errors";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 
@@ -14,7 +14,7 @@ export async function authorize({ organizationId }: Context) {
     organizationId = getPrivateId(organizationId);
   }
 
-  const session = await getCurrentSession();
+  const session = await getSession();
 
   if (!session) {
     throw new UnauthorizedError("Session not found");

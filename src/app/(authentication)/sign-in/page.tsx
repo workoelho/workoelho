@@ -1,9 +1,10 @@
 import { type Metadata } from "next";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { create } from "~/src/actions/session";
 import { getPublicId } from "~/src/lib/shared/publicId";
+import { setSession } from "~/src/lib/server/session";
+import { setDeviceId } from "~/src/lib/server/device";
 
 import { Form } from "./form";
 
@@ -15,34 +16,16 @@ export default async function Page() {
   const action = async (state: { message: string }, payload: FormData) => {
     "use server";
 
-    let session;
-    try {
-      session = await create({
-        payload: {
-          email: payload.get("email"),
-          password: payload.get("password"),
-        },
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        return { message: error.message };
-      }
-      throw error;
-    }
-
-    cookies().set({
-      name: "session",
-      value: session.secret,
-      httpOnly: true,
-      // secure: true,
-      sameSite: "lax",
-      expires: session.expiresAt,
-      path: "/",
+    const session = await create({
+      payload: {
+        email: payload.get("email"),
+        password: payload.get("password"),
+      },
     });
 
-    const organizationId = getPublicId(
-      session.user.memberships[0].organizationId
-    );
+    setSession(session);
+
+    const organizationId = getPublicId(session.user.organizationId);
 
     redirect(`/${organizationId}`);
   };

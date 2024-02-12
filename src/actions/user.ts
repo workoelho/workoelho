@@ -14,13 +14,12 @@ export async function signUp({ payload }: Context) {
     superstruct.object({
       email: schema.email,
       name: schema.name,
-      role: schema.role,
       organization: schema.name,
       password: schema.password,
       remoteAddress: superstruct.string(),
       userAgent: superstruct.string(),
       deviceId: superstruct.string(),
-    })
+    }),
   );
 
   return await db.user.create({
@@ -61,7 +60,7 @@ export async function create({ payload }: Context) {
       name: schema.name,
       role: schema.role,
       organizationId: schema.id,
-    })
+    }),
   );
 
   return await db.user.create({
@@ -91,7 +90,7 @@ export async function list({ query }: Context) {
 
     superstruct.object({
       organizationId: schema.id,
-    })
+    }),
   );
 
   return await db.user.findMany({

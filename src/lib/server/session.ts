@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 
 import { db, Session } from "~/src/lib/server/prisma";
 
-export const sessionCookieId = "sid";
+export const sessionCookieId = "session";
 
 export async function findValidSession(id: string) {
   return await db.session.findUnique({
@@ -13,7 +13,7 @@ export async function findValidSession(id: string) {
   });
 }
 
-export async function getCurrentSession() {
+export async function getSession() {
   const id = cookies().get(sessionCookieId)?.value;
   if (!id) {
     return;
@@ -21,7 +21,7 @@ export async function getCurrentSession() {
   return await findValidSession(id);
 }
 
-export async function setCurrentSession(session: Session) {
+export async function setSession(session: Session) {
   cookies().set(sessionCookieId, session.id, {
     path: "/",
     expires: session.expiresAt,
@@ -31,6 +31,6 @@ export async function setCurrentSession(session: Session) {
   });
 }
 
-export function clearCurrentSession() {
+export function clearSession() {
   cookies().delete("session");
 }

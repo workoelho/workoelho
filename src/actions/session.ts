@@ -6,8 +6,7 @@ import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
 import { comparePassword } from "~/src/lib/server/password";
 import * as schema from "~/src/lib/shared/schema";
-
-import { ValidationError } from "../lib/server/ValidationError";
+import { ValidationError } from "~/src/lib/server/ValidationError";
 
 export async function create({ payload: data }: Context) {
   superstruct.assert(
@@ -27,7 +26,7 @@ export async function create({ payload: data }: Context) {
         userAgent: superstruct.string(),
         deviceId: superstruct.string(),
       }),
-    ])
+    ]),
   );
 
   const user = await db.user.findUnique({

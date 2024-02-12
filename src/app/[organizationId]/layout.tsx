@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
+import { cookies } from "next/headers";
 
 import pkg from "~/package.json";
 import { Button } from "~/src/components/Button";
@@ -9,7 +10,7 @@ import { Icon } from "~/src/components/Icon";
 import { Menu } from "~/src/components/Menu";
 import { Popover } from "~/src/components/Popover";
 import { Topbar } from "~/src/components/Topbar";
-import { clearCurrentSession } from "~/src/lib/server/session";
+import { clearSession } from "~/src/lib/server/session";
 import { authorize } from "~/src/lib/server/authorization";
 import { getShortName } from "~/src/lib/shared/api";
 import { getPublicId } from "~/src/lib/shared/publicId";
@@ -29,13 +30,13 @@ export default async function Layout({ params, children }: Props) {
   const session = await authorize({ organizationId });
 
   const sessions = await db.session.findMany({
-    where: { deviceId: getDeviceId(), expiresAt: { gt: new Date() } },
+    where: { deviceId: getDeviceId(cookies()), expiresAt: { gt: new Date() } },
     include: { user: { include: { organization: true } } },
   });
 
   const signOut = async () => {
     "use server";
-    clearCurrentSession();
+    clearSession();
     redirect("/sign-in");
   };
 

@@ -1,10 +1,10 @@
 import { type Metadata } from "next";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { signUp } from "~/src/actions/user";
 import { getPublicId } from "~/src/lib/shared/publicId";
-import { setCurrentSession } from "~/src/lib/server/session";
+import { setSession } from "~/src/lib/server/session";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { getDeviceId } from "~/src/lib/server/device";
 
@@ -26,11 +26,11 @@ export default async function Page() {
         password: payload.get("password"),
         remoteAddress: getRemoteAddress(),
         userAgent: headers().get("user-agent"),
-        deviceId: getDeviceId(),
+        deviceId: getDeviceId(cookies()),
       },
     });
 
-    setCurrentSession(user.sessions[0]);
+    setSession(user.sessions[0]);
 
     redirect(`/${getPublicId(user.organizationId)}`);
   };

@@ -41,7 +41,7 @@ export default async function Page() {
     });
 
     const organizationId = getPublicId(
-      session.user.memberships[0].organizationId
+      session.user.memberships[0].organizationId,
     );
 
     redirect(`/${organizationId}`);

@@ -41,10 +41,7 @@ export function Form<T extends { message: string }>({
         ) : null}
 
         <Flex direction="column" gap="1rem">
-          <Field
-            label="Organization"
-            hint="You can have multiple organizations."
-          >
+          <Field label="Organization" hint="Name of your team or company.">
             {(props) => (
               <Input
                 name="organization"

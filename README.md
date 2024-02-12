@@ -1,6 +1,6 @@
 # Workoelho
 
-> Workoelho is an open-source knowledge hub designed specially for web development teams, DevOps, SRE, etc.
+> Workoelho is an open-source knowledge hub for web development teams, DevOps, SREs, etc.
 
 ## About
 
