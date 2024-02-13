@@ -32,7 +32,7 @@ export default async function Page() {
 
     setSession(user.sessions[0]);
 
-    redirect(`/${getPublicId(user.organizationId)}`);
+    redirect(`/org/${getPublicId(user.organizationId)}/summary`);
   };
 
   return <Form action={action} initialState={{ message: "" }} />;

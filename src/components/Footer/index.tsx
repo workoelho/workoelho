@@ -15,23 +15,18 @@ export function Footer({ version, className }: Props) {
     <footer className={String(classList)}>
       <menu className={classes.menu}>
         <li>
-          <Button
-            as="a"
-            href="https://github.com/workoelho"
-            shape="text"
-            size="small"
-          >
-            GitHub
-          </Button>
-        </li>
-        <li>
-          <Button as="a" href="/changelog" shape="text" size="small">
+          <Button as="a" href="/changelog" shape="text">
             What's new?
           </Button>
         </li>
         <li>
-          <Button as="a" href="/help" shape="text" size="small">
+          <Button as="a" href="/help" shape="text">
             Help
+          </Button>
+        </li>
+        <li>
+          <Button as="a" href="https://github.com/workoelho" shape="text">
+            GitHub
           </Button>
         </li>
       </menu>

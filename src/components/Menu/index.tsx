@@ -1,4 +1,4 @@
-import { ComponentProps, HTMLAttributes, ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 
 import classes from "./style.module.css";
 
@@ -10,35 +10,20 @@ export function Menu({ children }: MenuProps) {
   return <menu className={classes.menu}>{children}</menu>;
 }
 
-type ItemProps = { action?: (...args: any[]) => any } & (
-  | ComponentProps<"a">
-  | ComponentProps<"button">
-);
+type ItemProps = ComponentProps<"a"> | ComponentProps<"button">;
 
 function Item(props: ItemProps) {
   if ("href" in props) {
     return (
       <li>
-        <a {...props} className={classes.item} />
-      </li>
-    );
-  }
-
-  const { action, ...button } = props;
-
-  if (action) {
-    return (
-      <li>
-        <form action={action}>
-          <button {...(button as any)} className={classes.item} />
-        </form>
+        <a {...(props as any)} className={classes.item} />
       </li>
     );
   }
 
   return (
     <li>
-      <button {...(button as any)} className={classes.item} />
+      <button {...(props as any)} className={classes.item} />
     </li>
   );
 }

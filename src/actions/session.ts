@@ -8,25 +8,16 @@ import { comparePassword } from "~/src/lib/server/password";
 import * as schema from "~/src/lib/shared/schema";
 import { ValidationError } from "~/src/lib/server/ValidationError";
 
-export async function create({ payload: data }: Context) {
-  superstruct.assert(
-    data,
-    superstruct.union([
-      superstruct.object({
-        email: schema.email,
-        password: schema.password,
-        remoteAddress: superstruct.string(),
-        userAgent: superstruct.string(),
-        deviceId: superstruct.string(),
-      }),
-      superstruct.object({
-        email: schema.email,
-        recovery: superstruct.literal(true),
-        remoteAddress: superstruct.string(),
-        userAgent: superstruct.string(),
-        deviceId: superstruct.string(),
-      }),
-    ]),
+export async function create({ payload }: Context) {
+  const data = superstruct.create(
+    payload,
+    superstruct.object({
+      email: schema.email,
+      remoteAddress: superstruct.string(),
+      userAgent: superstruct.string(),
+      deviceId: superstruct.string(),
+      password: superstruct.optional(schema.password),
+    })
   );
 
   const user = await db.user.findUnique({
@@ -39,10 +30,20 @@ export async function create({ payload: data }: Context) {
 
   if (
     "password" in data &&
-    !(await comparePassword(data.password, user.password))
+    !(await comparePassword(String(data.password), user.password))
   ) {
     throw new ValidationError("Bad password");
   }
+
+  await db.session.updateMany({
+    where: {
+      userId: user.id,
+      deviceId: data.deviceId,
+    },
+    data: {
+      expiresAt: new Date(),
+    },
+  });
 
   return await db.session.create({
     data: {

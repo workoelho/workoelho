@@ -1,29 +1,25 @@
 // import { randomUUID } from "crypto";
 
-type Cookies = {
-  set(name: string, value: string, options: Record<string, unknown>): void;
-  get(name: string): undefined | { value: string };
-};
+import {
+  RequestCookies,
+  ResponseCookies,
+} from "next/dist/compiled/@edge-runtime/cookies";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+
+import { Time } from "~/src/lib/shared/Time";
 
 export const cookieId = "device";
 
-export function getDeviceId(cookies: Cookies) {
-  console.log("getDeviceId", { cookieId, cookie: cookies.get(cookieId) });
-
+export function getDeviceId(cookies: RequestCookies | ReadonlyRequestCookies) {
   return cookies.get(cookieId)?.value;
 }
 
-export function setDeviceId(cookies: Cookies) {
-  console.log("setDeviceId", { cookies });
-
-  if (getDeviceId(cookies)) {
-    return;
-  }
-
+export function setDeviceId(cookies: ResponseCookies) {
   const id = crypto.randomUUID();
 
   cookies.set(cookieId, id, {
     path: "/",
+    expires: new Date(Date.now() + Time.Year * 100),
     sameSite: "strict",
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

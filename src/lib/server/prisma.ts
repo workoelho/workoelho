@@ -13,7 +13,7 @@ export const db =
           const result = await query(args);
           const { duration } = performance.measure("query", "query");
 
-          console.log(" i database", { model, operation, args, duration });
+          // console.log(" i database", { model, operation, args, duration });
 
           return result;
         },
