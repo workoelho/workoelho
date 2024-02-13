@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "workoelho",
-  "version": "23.11.03+c276b",
+  "version": "24.2.13",
   "license": "MPL-2.0",
   "scripts": {
     "prestart": "test -d .next || npm run build",
@@ -12,7 +12,7 @@
     "format": "prettier . --cache --write",
     "prebuild": "npm run format -- --check --log-level error && npm run lint -- --quiet",
     "build": "next build",
-    "release": "tag=$(date +'%y.%m.%d')+$(git rev-parse --short=5 HEAD); npm version $tag && git tag $tag && git push --follow-tags"
+    "release": "npm version \"$(date +'%y.%m.%d')+$(git rev-parse --short=5 HEAD)\""
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.0.8",
