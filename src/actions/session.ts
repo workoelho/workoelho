@@ -17,7 +17,7 @@ export async function create({ payload }: Context) {
       userAgent: superstruct.string(),
       deviceId: superstruct.string(),
       password: superstruct.optional(schema.password),
-    })
+    }),
   );
 
   const user = await db.user.findUnique({

@@ -11,7 +11,8 @@
     "lint": "next lint",
     "format": "prettier . --cache --write",
     "prebuild": "npm run format -- --check --log-level error && npm run lint -- --quiet",
-    "build": "next build"
+    "build": "next build",
+    "release": "tag=$(date +'%y.%m.%d')+$(git rev-parse --short=5 HEAD); npm version $tag && git tag $tag && git push --follow-tags"
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.0.8",

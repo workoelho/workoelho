@@ -46,7 +46,8 @@ export default async function Layout({ params, children }: Props) {
     (sessions, session) => {
       if (
         sessions.some(
-          ({ organizationId }) => organizationId === session.user.organizationId
+          ({ organizationId }) =>
+            organizationId === session.user.organizationId,
         )
       ) {
         return sessions;
@@ -60,7 +61,7 @@ export default async function Layout({ params, children }: Props) {
         },
       ];
     },
-    [] as { id: string; name: string; organizationId: number }[]
+    [] as { id: string; name: string; organizationId: number }[],
   );
 
   const signIn = async (sessionId: string) => {
