@@ -26,7 +26,7 @@ export default async function Page() {
 
     const organizationId = getPublicId(session.user.organizationId);
 
-    redirect(`/org/${organizationId}`);
+    redirect(`/organizations/${organizationId}`);
   };
 
   return <Form action={action} initialState={{ message: "" }} />;

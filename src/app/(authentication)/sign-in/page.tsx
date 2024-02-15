@@ -32,7 +32,7 @@ export default async function Page() {
 
     const organizationId = getPublicId(session.user.organizationId);
 
-    redirect(`/org/${organizationId}/summary`);
+    redirect(`/organizations/${organizationId}/summary`);
   };
 
   return <Form action={action} initialState={{ message: "" }} />;

@@ -46,8 +46,7 @@ export default async function Layout({ params, children }: Props) {
     (sessions, session) => {
       if (
         sessions.some(
-          ({ organizationId }) =>
-            organizationId === session.user.organizationId,
+          ({ organizationId }) => organizationId === session.user.organizationId
         )
       ) {
         return sessions;
@@ -61,7 +60,7 @@ export default async function Layout({ params, children }: Props) {
         },
       ];
     },
-    [] as { id: string; name: string; organizationId: number }[],
+    [] as { id: string; name: string; organizationId: number }[]
   );
 
   const signIn = async (sessionId: string) => {
@@ -78,7 +77,9 @@ export default async function Layout({ params, children }: Props) {
 
     setSession(session);
 
-    redirect(`/org/${getPublicId(session.user.organizationId)}/summary`);
+    redirect(
+      `/organizations/${getPublicId(session.user.organizationId)}/summary`
+    );
   };
 
   const signOut = async () => {
@@ -101,14 +102,18 @@ export default async function Layout({ params, children }: Props) {
       <Topbar className={classes.topbar}>
         <Flex as="menu" gap="1.5rem" style={{ flexGrow: 1 }}>
           <li>
-            <Button as="a" href={`/org/${organizationId}/summary`} shape="text">
+            <Button
+              as="a"
+              href={`/organizations/${organizationId}/summary`}
+              shape="text"
+            >
               Summary
             </Button>
           </li>
           <li>
             <Button
               as="a"
-              href={`/org/${organizationId}/activity`}
+              href={`/organizations/${organizationId}/activity`}
               shape="text"
             >
               Activity
@@ -117,7 +122,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as="a"
-              href={`/org/${organizationId}/applications`}
+              href={`/organizations/${organizationId}/applications`}
               shape="text"
             >
               Applications
@@ -126,14 +131,18 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as="a"
-              href={`/org/${organizationId}/providers`}
+              href={`/organizations/${organizationId}/providers`}
               shape="text"
             >
               Providers
             </Button>
           </li>
           <li>
-            <Button as="a" href={`/org/${organizationId}/people`} shape="text">
+            <Button
+              as="a"
+              href={`/organizations/${organizationId}/people`}
+              shape="text"
+            >
               People
             </Button>
           </li>
