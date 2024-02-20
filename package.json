@@ -12,7 +12,7 @@
     "format": "prettier . --cache --write",
     "prebuild": "npm run format -- --check --log-level error && npm run lint -- --quiet",
     "build": "next build",
-    "release": "echo npm version \"$(date +'%y.%m.%d')+$(git rev-parse --short=5 HEAD)\""
+    "release": "npm version \"$(date +'%y.%-m.%-d')+$(git rev-parse --short=5 HEAD)\""
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.0.8",

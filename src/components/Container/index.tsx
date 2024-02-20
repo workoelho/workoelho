@@ -1,6 +1,6 @@
 import { forwardRef, type CSSProperties, type ElementType } from "react";
 
-import { ClassList } from "~/src/lib/client/ClassList";
+import { ClassList } from "~/src/lib/shared/ClassList";
 import {
   type PolymorphicPropsWithRef,
   type PolymorphicRef,

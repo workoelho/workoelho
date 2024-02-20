@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { ClassList } from "~/src/lib/client/ClassList";
+import { ClassList } from "~/src/lib/shared/ClassList";
 
 import classes from "./style.module.css";
 

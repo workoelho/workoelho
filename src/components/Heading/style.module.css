@@ -1,16 +1,14 @@
 .heading {
-  font-weight: 700;
+  font-weight: 900;
 }
 
 .heading.massive {
-  font-size: 4rem;
-  font-weight: 900;
+  font-size: 2.75rem;
   line-height: 1;
 }
 
 .heading.large {
-  font-size: 2rem;
-  font-weight: 900;
+  font-size: 2.25rem;
   line-height: 1;
 }
 

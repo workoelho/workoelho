@@ -25,7 +25,7 @@ export function Form<T extends { message: string }>({
   return (
     <Flex as="form" action={dispatch} direction="column" gap="3rem">
       <Flex as="fieldset" direction="column" gap="3rem">
-        <Flex direction="column" gap="1rem">
+        <Flex direction="column" gap="1rem" style={{ textAlign: "center" }}>
           <Heading as="legend" size="large">
             Sign up
           </Heading>

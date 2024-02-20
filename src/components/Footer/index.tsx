@@ -1,5 +1,5 @@
 import { Button } from "~/src/components/Button";
-import { ClassList } from "~/src/lib/client/ClassList";
+import { ClassList } from "~/src/lib/shared/ClassList";
 
 import classes from "./style.module.css";
 

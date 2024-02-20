@@ -2,9 +2,10 @@ import { type Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { signUp } from "~/src/actions/user";
+import { create as createOrganization } from "~/src/actions/organization";
+import { create as createSession } from "~/src/actions/session";
 import { getPublicId } from "~/src/lib/shared/publicId";
-import { setSession } from "~/src/lib/server/session";
+import { setSessionCookie } from "~/src/lib/server/session";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { getDeviceId } from "~/src/lib/server/device";
 
@@ -18,21 +19,29 @@ export default async function Page() {
   const action = async (state: { message: string }, payload: FormData) => {
     "use server";
 
-    const user = await signUp({
+    const organization = await createOrganization({
       payload: {
         name: payload.get("name"),
         organization: payload.get("organization"),
         email: payload.get("email"),
         password: payload.get("password"),
+      },
+    });
+
+    const session = await createSession({
+      payload: {
+        userId: organization.users[0].id,
         remoteAddress: getRemoteAddress(),
         userAgent: headers().get("user-agent"),
         deviceId: getDeviceId(cookies()),
       },
     });
 
-    setSession(user.sessions[0]);
+    setSessionCookie(session);
 
-    redirect(`/organizations/${getPublicId(user.organizationId)}/summary`);
+    const organizationId = getPublicId(organization.id);
+
+    redirect(`/organizations/${organizationId}`);
   };
 
   return <Form action={action} initialState={{ message: "" }} />;

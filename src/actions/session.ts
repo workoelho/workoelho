@@ -4,19 +4,66 @@ import * as superstruct from "superstruct";
 
 import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
-import { comparePassword } from "~/src/lib/server/password";
+import * as password from "~/src/lib/server/password";
 import * as schema from "~/src/lib/shared/schema";
 import { ValidationError } from "~/src/lib/server/ValidationError";
 
+/**
+ * Create new session.
+ */
 export async function create({ payload }: Context) {
   const data = superstruct.create(
     payload,
     superstruct.object({
-      email: schema.email,
-      remoteAddress: superstruct.string(),
-      userAgent: superstruct.string(),
+      userId: superstruct.number(),
+      expiresAt: superstruct.optional(schema.session.expiresAt),
       deviceId: superstruct.string(),
-      password: superstruct.optional(schema.password),
+      userAgent: superstruct.string(),
+      remoteAddress: superstruct.string(),
+    }),
+  );
+
+  // Reduce impact of leakage by expiring all other sessions from the same device.
+  // await db.session.updateMany({
+  //   where: {
+  //     userId: data.userId,
+  //     deviceId: data.deviceId,
+  //   },
+  //   data: {
+  //     expiresAt: new Date(),
+  //   },
+  // });
+
+  return await db.session.create({
+    data: {
+      userId: data.userId,
+      expiresAt: superstruct.create(data.expiresAt, schema.session.expiresAt),
+      deviceId: data.deviceId,
+      userAgent: data.userAgent,
+      remoteAddress: data.remoteAddress,
+    },
+    include: {
+      user: {
+        include: {
+          organization: true,
+        },
+      },
+    },
+  });
+}
+
+/**
+ * Create new session from credentials.
+ */
+export async function authenticate({ payload }: Context) {
+  const data = superstruct.create(
+    payload,
+    superstruct.object({
+      email: schema.email,
+      password: schema.password,
+      deviceId: superstruct.string(),
+      userAgent: superstruct.string(),
+      remoteAddress: superstruct.string(),
     }),
   );
 
@@ -28,37 +75,56 @@ export async function create({ payload }: Context) {
     throw new ValidationError("E-mail not found");
   }
 
-  if (
-    "password" in data &&
-    !(await comparePassword(String(data.password), user.password))
-  ) {
+  if (!(await password.validate(String(data.password), user.password))) {
     throw new ValidationError("Bad password");
   }
 
-  await db.session.updateMany({
-    where: {
+  return await create({
+    payload: {
       userId: user.id,
       deviceId: data.deviceId,
+      userAgent: data.userAgent,
+      remoteAddress: data.remoteAddress,
     },
+  });
+}
+
+/**
+ * Create new session from an existing valid session.
+ */
+export async function refresh({ payload }: Context) {
+  const data = superstruct.create(
+    payload,
+    superstruct.object({
+      sessionId: superstruct.string(),
+      deviceId: superstruct.string(),
+      userAgent: superstruct.string(),
+      remoteAddress: superstruct.string(),
+    }),
+  );
+
+  const session = await db.session.findUnique({
+    where: { id: data.sessionId, expiresAt: { gt: new Date() } },
+  });
+
+  if (!session) {
+    throw new ValidationError("Session not found or expired");
+  }
+
+  // Invalidate the old session.
+  await db.session.update({
+    where: { id: session.id },
     data: {
       expiresAt: new Date(),
     },
   });
 
-  return await db.session.create({
-    data: {
-      userId: user.id,
-      expiresAt: superstruct.create(undefined, schema.session.expiresAt),
+  return await create({
+    payload: {
+      userId: session.userId,
       deviceId: data.deviceId,
       remoteAddress: data.remoteAddress,
       userAgent: data.userAgent,
-    },
-    include: {
-      user: {
-        include: {
-          organization: true,
-        },
-      },
     },
   });
 }

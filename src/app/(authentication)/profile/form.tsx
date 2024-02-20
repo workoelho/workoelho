@@ -6,20 +6,14 @@ import { Alert } from "~/src/components/Alert";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
-import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Link } from "~/src/components/Link";
 import { Submit } from "~/src/components/Submit";
+import { Props } from "~/src/lib/server/form";
 
-type Props<T> = {
-  action: (state: Awaited<T>, payload: FormData) => Promise<T> | never;
-  initialState: Awaited<T>;
-};
+type State = { message: string; payload: { email: string; name: string } };
 
-export function Form<T extends { message: string }>({
-  action,
-  initialState,
-}: Props<T>) {
+export function Form({ action, initialState }: Props<State>) {
   const [state, dispatch] = useFormState(action, initialState);
 
   return (
@@ -27,10 +21,11 @@ export function Form<T extends { message: string }>({
       <Flex as="fieldset" direction="column" gap="3rem">
         <Flex direction="column" gap="1rem" style={{ textAlign: "center" }}>
           <Heading as="legend" size="large">
-            Sign in
+            My profile
           </Heading>
           <p>
-            Haven't signed up yet? <Link href="/sign-up">Try it, free</Link>.
+            Update your information below. Optionally you may want to{" "}
+            <Link href="/reset">reset your password</Link>.
           </p>
         </Flex>
 
@@ -41,31 +36,28 @@ export function Form<T extends { message: string }>({
         ) : null}
 
         <Flex direction="column" gap="1rem">
-          <Field label="E-mail">
+          <Field label="Name">
             {(props) => (
               <Input
-                name="email"
-                type="email"
-                placeholder="jane@example.com"
+                name="name"
+                value={state.payload.name}
                 required
-                autoComplete="username"
+                placeholder="Jane Doe"
+                minLength={1}
                 {...props}
               />
             )}
           </Field>
 
-          <Field
-            label="Password"
-            hint={<Link href="/recovery">Need help?</Link>}
-          >
+          <Field label="E-mail">
             {(props) => (
               <Input
-                name="password"
-                type="password"
-                placeholder="⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕⁕"
-                minLength={15}
+                type="email"
+                name="email"
+                value={state.payload.email}
+                placeholder="jane@example.com"
                 required
-                autoComplete="current-password"
+                autoComplete="username"
                 {...props}
               />
             )}
@@ -74,9 +66,7 @@ export function Form<T extends { message: string }>({
       </Flex>
 
       <Flex justifyContent="end">
-        <Submit>
-          Sign in <Icon name="arrow-right" />
-        </Submit>
+        <Submit>Save</Submit>
       </Flex>
     </Flex>
   );

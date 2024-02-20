@@ -25,14 +25,14 @@ export function Form<T extends { message: string }>({
   return (
     <Flex as="form" action={dispatch} direction="column" gap="3rem">
       <Flex as="fieldset" direction="column" gap="3rem">
-        <Flex direction="column" gap="1rem">
+        <Flex direction="column" gap="1rem" style={{ textAlign: "center" }}>
           <Heading as="legend" size="large">
             Recovery
           </Heading>
 
           <p>
-            Enter your e-mail. If you remembered your password, you can go{" "}
-            <Link href="/sign-in">back to sign in</Link>.
+            Enter your registered e-mail. If you remember your password, you may
+            go <Link href="/sign-in">back to sign in</Link>.
           </p>
         </Flex>
 

@@ -1,6 +1,6 @@
 import { ReactNode, useId } from "react";
 
-import { ClassList } from "~/src/lib/client/ClassList";
+import { ClassList } from "~/src/lib/shared/ClassList";
 import { FieldState } from "~/src/lib/client/form";
 
 import classes from "./style.module.css";

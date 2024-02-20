@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 
-import { ClassList } from "~/src/lib/client/ClassList";
+import { ClassList } from "~/src/lib/shared/ClassList";
 import { useClickAway } from "~/src/lib/client/useClickAway";
 import { useToggle } from "~/src/lib/client/useToggle";
 

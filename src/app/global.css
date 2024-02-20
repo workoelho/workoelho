@@ -42,3 +42,15 @@ hr {
 body {
   font-size: 0.875rem;
 }
+
+@keyframes autofill {
+  to {
+    background: transparent;
+    color: inherit;
+    font: inherit;
+  }
+}
+
+input:-webkit-autofill {
+  animation: autofill 1s forwards;
+}

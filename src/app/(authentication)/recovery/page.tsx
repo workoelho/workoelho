@@ -1,7 +1,15 @@
 import { type Metadata } from "next";
 import { redirect } from "next/navigation";
+import { cookies, headers } from "next/headers";
+import * as superstruct from "superstruct";
 
+import * as schema from "~/src/lib/shared/schema";
 import { create } from "~/src/actions/session";
+import { getDeviceId } from "~/src/lib/server/device";
+import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
+import { db } from "~/src/lib/server/prisma";
+import { getFormProps } from "~/src/lib/server/form";
+import { send } from "~/src/emails/recovery";
 
 import { Form } from "./form";
 
@@ -10,26 +18,28 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const action = async (state: { message: string }, payload: FormData) => {
+  const [action, initialState] = getFormProps(async (state, payload) => {
     "use server";
 
-    let session;
-    try {
-      session = await create({
-        payload: {
-          email: payload.get("email"),
-          recovery: true,
-        },
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        return { message: error.message };
-      }
-      throw error;
-    }
+    const user = await db.user.findUniqueOrThrow({
+      where: {
+        email: superstruct.create(payload.get("email"), schema.email),
+      },
+    });
 
-    redirect(`/recovery/message`);
-  };
+    const session = await create({
+      payload: {
+        userId: user.id,
+        deviceId: getDeviceId(cookies()),
+        remoteAddress: getRemoteAddress(),
+        userAgent: headers().get("user-agent"),
+      },
+    });
 
-  return <Form action={action} initialState={{ message: "" }} />;
+    await send({ session });
+
+    redirect(`/recovery/result`);
+  });
+
+  return <Form action={action} initialState={initialState} />;
 }

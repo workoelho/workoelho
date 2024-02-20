@@ -9,7 +9,7 @@ import { Footer } from "~/src/components/Footer";
 import { Icon } from "~/src/components/Icon";
 import { Popover } from "~/src/components/Popover";
 import { Topbar } from "~/src/components/Topbar";
-import { clearSession, setSession } from "~/src/lib/server/session";
+import { clearSessionCookie, setSessionCookie } from "~/src/lib/server/session";
 import { authorize } from "~/src/lib/server/authorization";
 import { getShortName } from "~/src/lib/shared/api";
 import { getPublicId } from "~/src/lib/shared/publicId";
@@ -46,7 +46,8 @@ export default async function Layout({ params, children }: Props) {
     (sessions, session) => {
       if (
         sessions.some(
-          ({ organizationId }) => organizationId === session.user.organizationId
+          ({ organizationId }) =>
+            organizationId === session.user.organizationId,
         )
       ) {
         return sessions;
@@ -60,7 +61,7 @@ export default async function Layout({ params, children }: Props) {
         },
       ];
     },
-    [] as { id: string; name: string; organizationId: number }[]
+    [] as { id: string; name: string; organizationId: number }[],
   );
 
   const signIn = async (sessionId: string) => {
@@ -75,10 +76,10 @@ export default async function Layout({ params, children }: Props) {
       throw new UnauthorizedError();
     }
 
-    setSession(session);
+    setSessionCookie(session);
 
     redirect(
-      `/organizations/${getPublicId(session.user.organizationId)}/summary`
+      `/organizations/${getPublicId(session.user.organizationId)}/summary`,
     );
   };
 
@@ -92,7 +93,7 @@ export default async function Layout({ params, children }: Props) {
       where: { id: session.id },
     });
 
-    clearSession();
+    clearSessionCookie();
 
     redirect("/sign-in");
   };

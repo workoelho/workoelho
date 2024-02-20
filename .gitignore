@@ -1,4 +1,4 @@
-# npm files.
+# npm modules.
 node_modules
 
 # TypeScript files.
@@ -8,8 +8,14 @@ node_modules
 build
 next-env.d.ts
 .next
+
+# Local environment config.
+.env
 .env*.local
 
 # Database files.
 *.sqlite
 *.sqlite-journal
+
+# Temporary files.
+tmp/*

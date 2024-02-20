@@ -4,7 +4,16 @@ import { db, Session } from "~/src/lib/server/prisma";
 
 export const sessionCookieId = "session";
 
-export async function findValidSession(id: string) {
+/**
+ * Get valid session by ID. If no ID is provided, read it from the session cookie.
+ */
+export async function getValidSession(id?: string) {
+  id ??= cookies().get(sessionCookieId)?.value;
+
+  if (!id) {
+    return;
+  }
+
   return await db.session.findUnique({
     where: { id, expiresAt: { gt: new Date() } },
     include: {
@@ -13,15 +22,12 @@ export async function findValidSession(id: string) {
   });
 }
 
-export async function getSession() {
-  const id = cookies().get(sessionCookieId)?.value;
-  if (!id) {
-    return;
-  }
-  return await findValidSession(id);
-}
+/**
+ * Set session cookie.
+ */
+export async function setSessionCookie(session: Session) {
+  "use server";
 
-export async function setSession(session: Session) {
   cookies().set(sessionCookieId, session.id, {
     path: "/",
     expires: session.expiresAt,
@@ -31,6 +37,9 @@ export async function setSession(session: Session) {
   });
 }
 
-export function clearSession() {
+/**
+ * Clear session cookie.
+ */
+export function clearSessionCookie() {
   cookies().delete("session");
 }

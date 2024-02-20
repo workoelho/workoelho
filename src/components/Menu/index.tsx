@@ -1,5 +1,7 @@
 import { ComponentProps, ReactNode } from "react";
 
+import { ClassList } from "~/src/lib/shared/ClassList";
+
 import classes from "./style.module.css";
 
 type MenuProps = {
@@ -12,18 +14,26 @@ export function Menu({ children }: MenuProps) {
 
 type ItemProps = ComponentProps<"a"> | ComponentProps<"button">;
 
-function Item(props: ItemProps) {
-  if ("href" in props) {
+function isAnchor(props: ItemProps): props is ComponentProps<"a"> {
+  return "href" in props;
+}
+
+function Item({ ...props }: ItemProps) {
+  const classList = new ClassList(classes.item);
+  classList.add(props.className);
+  props.className = String(classList);
+
+  if (isAnchor(props)) {
     return (
       <li>
-        <a {...(props as any)} className={classes.item} />
+        <a {...props} className={classes.item} />
       </li>
     );
   }
 
   return (
     <li>
-      <button {...(props as any)} className={classes.item} />
+      <button {...props} className={classes.item} />
     </li>
   );
 }

@@ -1,6 +1,8 @@
 .feedback {
-  background-color: var(--neutral-background);
+  text-align: center;
+  /* background-color: var(--neutral-background); */
   display: flex;
   flex-direction: column;
-  padding: 3rem;
+  gap: 3rem;
+  /* padding: 3rem; */
 }
