@@ -32,41 +32,41 @@
 }
 
 .button.neutral {
-  --color: var(--neutral);
+  --color: var(--neutral-5);
 }
 
 .button.neutral:is(:hover, :focus-visible) {
-  --color: var(--neutral-highlight);
+  --color: var(--neutral-3);
 }
 
-.button.primary {
-  --color: var(--primary);
+.button.interactive {
+  --color: var(--interactive-5);
 }
 
-.button.primary:is(:hover, :focus) {
-  --color: var(--primary-highlight);
+.button.interactive:is(:hover, :focus) {
+  --color: var(--interactive-4);
 }
 
 .button.positive {
-  --color: var(--positive);
+  --color: var(--positive-5);
 }
 
 .button.positive:is(:hover, :focus) {
-  --color: var(--positive-highlight);
+  --color: var(--positive-4);
 }
 
 .button.negative {
-  --color: var(--negative);
+  --color: var(--negative-5);
 }
 
 .button.negative:is(:hover, :focus) {
-  --color: var(--negative-highlight);
+  --color: var(--negative-4);
 }
 
 .button.attentive {
-  --color: var(--attentive);
+  --color: var(--attentive-5);
 }
 
 .button.attentive:is(:hover, :focus) {
-  --color: var(--attentive-highlight);
+  --color: var(--attentive-4);
 }

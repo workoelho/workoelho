@@ -15,8 +15,8 @@
   gap: 0 1.5rem;
 }
 
-.copyright span {
-  color: var(--neutral-highlight);
+.version {
+  color: var(--neutral-3);
 }
 
 @media (width < 478rem) {

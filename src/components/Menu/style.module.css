@@ -15,8 +15,8 @@
 }
 
 .item:is(:hover, :focus-visible) {
-  background-color: var(--background);
-  color: var(--neutral-highlight);
+  background-color: var(--neutral-1);
+  color: var(--neutral-4);
 }
 
 .separator {

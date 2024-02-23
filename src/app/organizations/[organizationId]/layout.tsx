@@ -1,5 +1,5 @@
+import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
-import { type ReactNode } from "react";
 import { cookies } from "next/headers";
 
 import pkg from "~/package.json";
@@ -12,10 +12,10 @@ import { Topbar } from "~/src/components/Topbar";
 import { clearSessionCookie, setSessionCookie } from "~/src/lib/server/session";
 import { authorize } from "~/src/lib/server/authorization";
 import { getShortName } from "~/src/lib/shared/api";
-import { getPublicId } from "~/src/lib/shared/publicId";
 import { db } from "~/src/lib/server/prisma";
-import { getDeviceId } from "~/src/lib/server/device";
+import { getDeviceId } from "~/src/lib/server/deviceId";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
+import { getUrl } from "~/src/lib/shared/url";
 
 import { SessionMenu } from "./SessionMenu";
 import classes from "./layout.module.css";
@@ -30,9 +30,9 @@ export default async function Layout({ params, children }: Props) {
 
   const session = await authorize({ organizationId });
 
-  // Prisma doesn't support distinct on a related field.
-  // We need a list of valid sessions, that originated from this device but unique for each organization.
-  // The idea is to show a account switcher.
+  // Prisma doesn't support distinct on a related field, but we need a list of valid sessions,
+  // that originated from this device that are unique for each organization.
+  // The goal is to display an account switcher.
   const sessions = (
     await db.session.findMany({
       where: {
@@ -78,9 +78,7 @@ export default async function Layout({ params, children }: Props) {
 
     setSessionCookie(session);
 
-    redirect(
-      `/organizations/${getPublicId(session.user.organizationId)}/summary`,
-    );
+    redirect(getUrl("organizations", session.user.organizationId, "summary"));
   };
 
   const signOut = async () => {
@@ -95,7 +93,7 @@ export default async function Layout({ params, children }: Props) {
 
     clearSessionCookie();
 
-    redirect("/sign-in");
+    redirect(getUrl("sign-in"));
   };
 
   return (
@@ -157,7 +155,7 @@ export default async function Layout({ params, children }: Props) {
                 <Button shape="text">
                   {getShortName(session.user.name)} (
                   {session.user.organization.name})
-                  <Icon name="chevron-down" />
+                  <Icon variant="chevron-down" />
                 </Button>
               }
             >

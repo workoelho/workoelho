@@ -22,7 +22,7 @@ function Body({ session }: Props) {
       <h1>Recovery</h1>
 
       <p>
-        Hi! Someone requested access recovery on Workoelho to{" "}
+        Hi! Someone requested an access recovery at Workoelho to{" "}
         <code>{session.user.email}</code>.
       </p>
 

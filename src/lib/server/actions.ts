@@ -5,8 +5,16 @@ type Session = Prisma.SessionGetPayload<{
   include: { user: { include: { organization: true } } };
 }>;
 
-export type Context = {
-  query?: Record<string, unknown>;
-  payload?: Record<string, unknown>;
+type Object = Record<string, unknown>;
+
+/**
+ * Context holds information necessary to perform an action.
+ */
+export type Context<
+  Query extends Object = Object,
+  Payload extends Object = Object,
+> = {
+  query?: Query;
+  payload?: Payload;
   session?: Nullable<Session>;
 };

@@ -1,15 +1,16 @@
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 import * as superstruct from "superstruct";
 
 import * as schema from "~/src/lib/shared/schema";
 import { create } from "~/src/actions/session";
-import { getDeviceId } from "~/src/lib/server/device";
+import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { db } from "~/src/lib/server/prisma";
 import { getFormProps } from "~/src/lib/server/form";
 import { send } from "~/src/emails/recovery";
+import { getUrl } from "~/src/lib/shared/url";
 
 import { Form } from "./form";
 
@@ -38,7 +39,7 @@ export default async function Page() {
 
     await send({ session });
 
-    redirect(`/recovery/result`);
+    redirect(getUrl("recovery", "result"));
   });
 
   return <Form action={action} initialState={initialState} />;

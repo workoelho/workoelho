@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { ValidationError } from "~/src/lib/server/ValidationError";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
+import { getUrl } from "~/src/lib/shared/url";
 
 export type Props<T> = {
   action: (state: Awaited<T>, payload: FormData) => Promise<T> | never;
@@ -16,7 +17,7 @@ export type State = {
 
 export function getFormProps<S extends State>(
   action: (state: S, payload: FormData) => Promise<S>,
-  initialState: S = { message: "", payload: {} } as S
+  initialState: S = { message: "", payload: {} } as S,
 ) {
   return [
     async (state: S, payload: FormData) => {
@@ -38,7 +39,7 @@ export function getFormProps<S extends State>(
         }
 
         if (error instanceof UnauthorizedError) {
-          redirect("/sign-in");
+          redirect(getUrl("sign-in"));
         }
 
         throw error;

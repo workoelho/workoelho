@@ -25,7 +25,7 @@ export function Form<T extends { message: string }>({
   return (
     <Flex as="form" action={dispatch} direction="column" gap="3rem">
       <Flex as="fieldset" direction="column" gap="3rem">
-        <Flex direction="column" gap="1rem" style={{ textAlign: "center" }}>
+        <Flex direction="column" gap="1rem">
           <Heading as="legend" size="large">
             Sign in
           </Heading>
@@ -75,7 +75,7 @@ export function Form<T extends { message: string }>({
 
       <Flex justifyContent="end">
         <Submit>
-          Sign in <Icon name="arrow-right" />
+          Sign in <Icon variant="arrow-right" />
         </Submit>
       </Flex>
     </Flex>

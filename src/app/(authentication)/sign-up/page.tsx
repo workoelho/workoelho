@@ -1,13 +1,13 @@
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { create as createOrganization } from "~/src/actions/organization";
 import { create as createSession } from "~/src/actions/session";
-import { getPublicId } from "~/src/lib/shared/publicId";
 import { setSessionCookie } from "~/src/lib/server/session";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
-import { getDeviceId } from "~/src/lib/server/device";
+import { getDeviceId } from "~/src/lib/server/deviceId";
+import { getUrl } from "~/src/lib/shared/url";
 
 import { Form } from "./form";
 
@@ -39,9 +39,7 @@ export default async function Page() {
 
     setSessionCookie(session);
 
-    const organizationId = getPublicId(organization.id);
-
-    redirect(`/organizations/${organizationId}`);
+    redirect(getUrl("organizations", organization, "summary"));
   };
 
   return <Form action={action} initialState={{ message: "" }} />;

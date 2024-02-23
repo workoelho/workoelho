@@ -1,14 +1,17 @@
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 
-import { getPublicId } from "~/src/lib/shared/publicId";
 import { getValidSession, setSessionCookie } from "~/src/lib/server/session";
 import { update } from "~/src/actions/user";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
-import { refresh } from "~/src/actions/session";
-import { getDeviceId } from "~/src/lib/server/device";
+import { refresh } from "~/src/actions/session/refresh";
+import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
+import { getUrl } from "~/src/lib/shared/url";
+import { Flex } from "~/src/components/Flex";
+import { Heading } from "~/src/components/Heading";
+import { Link } from "~/src/components/Link";
 
 import { Form } from "./form";
 
@@ -29,10 +32,11 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
     throw new UnauthorizedError();
   }
 
+  // If the session ID came in the URL we have to refresh it.
   if (sessionId) {
     session = await refresh({
+      query: { sessionId },
       payload: {
-        sessionId,
         deviceId: getDeviceId(cookies()),
         userAgent: headers().get("user-agent"),
         remoteAddress: getRemoteAddress(),
@@ -56,12 +60,32 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
       payload: { password: form.get("password") },
     });
 
-    const organizationId = getPublicId(session.user.organizationId);
-
-    redirect(`/organizations/${organizationId}`);
+    redirect(getUrl("organizations", session.user.organizationId, "summary"));
   };
 
   return (
-    <Form action={action} initialState={{ message: "" }} session={session} />
+    <>
+      <Flex direction="column" gap="1rem">
+        <Heading as="legend" size="large">
+          Reset password
+        </Heading>
+
+        <p>
+          Changing password for <strong>{session.user.email}</strong>.
+        </p>
+
+        <p>
+          You may go back to <Link href={getUrl("profile")}>my profile</Link> or{" "}
+          <Link
+            href={getUrl("organizations", session.user.organization, "summary")}
+          >
+            my organization
+          </Link>
+          .
+        </p>
+      </Flex>
+
+      <Form action={action} initialState={{ message: "" }} />
+    </>
   );
 }

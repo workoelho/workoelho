@@ -16,7 +16,7 @@ export async function create({ payload }: Context) {
       email: schema.email,
       role: schema.role,
       organizationId: schema.id,
-    })
+    }),
   );
 
   return await db.user.create({
@@ -36,7 +36,7 @@ export async function update({ query, payload }: Context) {
 
     superstruct.object({
       id: schema.id,
-    })
+    }),
   );
 
   superstruct.assert(
@@ -46,7 +46,7 @@ export async function update({ query, payload }: Context) {
       email: superstruct.optional(schema.email),
       name: superstruct.optional(schema.name),
       password: superstruct.optional(schema.password),
-    })
+    }),
   );
 
   return await db.user.update({
@@ -69,7 +69,7 @@ export async function list({ query }: Context) {
 
     superstruct.object({
       organizationId: schema.id,
-    })
+    }),
   );
 
   return await db.user.findMany({

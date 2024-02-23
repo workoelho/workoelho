@@ -1,26 +1,35 @@
 :root {
-  --background: #0c0c0d;
+  --background: #ffffff;
 
-  --neutral: #f6f6f7;
-  --neutral-highlight: #bdc0c4;
-  --neutral-outline: #898d92;
-  --neutral-background: #1a1b1d;
+  --neutral-1: #f5f5f5;
+  --neutral-2: #b9b9b9;
+  --neutral-3: #848484;
+  --neutral-4: #565656;
+  --neutral-5: #2a2a2a;
 
-  --primary: #4a8cea;
-  --primary-highlight: #005cb1;
-  --primary-background: #0d1b32;
+  --negative-1: #fdf5f3;
+  --negative-2: #eda89a;
+  --negative-3: #de5a40;
+  --negative-4: #9e311c;
+  --negative-5: #4e190e;
 
-  --positive: #5a9e00;
-  --positive-highlight: #266b00;
-  --positive-background: #181f00;
+  --positive-1: #f0f7e9;
+  --positive-2: #97c766;
+  --positive-3: #57931a;
+  --positive-4: #396211;
+  --positive-5: #1c2f09;
 
-  --attentive: #c17e00;
-  --attentive-highlight: #864f00;
-  --attentive-background: #2b1800;
+  --attentive-1: #fff5d5;
+  --attentive-2: #eab000;
+  --attentive-3: #a87e00;
+  --attentive-4: #6e5300;
+  --attentive-5: #362800;
 
-  --negative: #f8522d;
-  --negative-highlight: #b71400;
-  --negative-background: #370e00;
+  --interactive-1: #f2f6fd;
+  --interactive-2: #9fbaee;
+  --interactive-3: #5282e1;
+  --interactive-4: #2051b4;
+  --interactive-5: #102859;
 
   --min-width: 22.5rem;
   --max-width: 64rem;
@@ -32,11 +41,11 @@
 
 html {
   background-color: var(--background);
-  color: var(--neutral);
+  color: var(--neutral-5);
 }
 
 hr {
-  border-top: 1px solid var(--neutral-outline);
+  border-top: 1px solid var(--neutral-2);
 }
 
 body {

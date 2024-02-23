@@ -25,7 +25,7 @@ export function Form<T extends { message: string }>({
   return (
     <Flex as="form" action={dispatch} direction="column" gap="3rem">
       <Flex as="fieldset" direction="column" gap="3rem">
-        <Flex direction="column" gap="1rem" style={{ textAlign: "center" }}>
+        <Flex direction="column" gap="1rem">
           <Heading as="legend" size="large">
             Recovery
           </Heading>
@@ -60,7 +60,7 @@ export function Form<T extends { message: string }>({
 
       <Flex justifyContent="end">
         <Submit>
-          Recover <Icon name="arrow-right" />
+          Recover <Icon variant="arrow-right" />
         </Submit>
       </Flex>
     </Flex>

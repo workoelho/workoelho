@@ -3,13 +3,13 @@ import { ClassList } from "~/src/lib/shared/ClassList";
 import classes from "./style.module.css";
 
 type Props = {
-  name: string;
+  variant: string;
   label?: string;
   className?: string;
   size?: string;
 };
 
-export function Icon({ name, label, size = "1em", className }: Props) {
+export function Icon({ variant, label, size = "1em", className }: Props) {
   const classList = new ClassList(classes.icon);
   classList.add(className);
 
@@ -26,7 +26,7 @@ export function Icon({ name, label, size = "1em", className }: Props) {
       aria-label={label}
       aria-hidden={label ? undefined : "true"}
     >
-      <use xlinkHref={`/icon.svg#${name}`} />
+      <use xlinkHref={`/icon.svg#${variant}`} />
     </svg>
   );
 }

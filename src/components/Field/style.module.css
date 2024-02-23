@@ -1,7 +1,7 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.125rem;
 }
 
 .field:focus-within {
@@ -11,13 +11,13 @@
 }
 
 .hint {
-  color: var(--neutral-highlight);
+  color: var(--neutral-3);
 }
 
 .invalid {
-  color: var(--negative);
+  color: var(--negative-5);
 }
 
 .valid {
-  color: var(--positive);
+  color: var(--positive-5);
 }

@@ -31,9 +31,9 @@ export function Footer({ version, className }: Props) {
         </li>
       </menu>
 
-      <p className={classes.copyright}>
-        ©️ 2023 Workoelho <span>v{version}</span>
-      </p>
+      <p>©️ 2023 Workoelho</p>
+
+      <code className={classes.version}>v{version}</code>
     </footer>
   );
 }

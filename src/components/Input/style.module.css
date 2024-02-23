@@ -1,9 +1,9 @@
 .input {
   align-items: center;
   background-color: var(--background);
-  border: 0.125rem solid var(--neutral-outline);
-  border-radius: 0.125rem;
-  color: var(--neutral);
+  border: 0.125rem solid var(--neutral-2);
+  border-radius: 0.25rem;
+  color: var(--neutral-5);
   display: flex;
   height: 2.125rem;
   padding-inline: 0.5rem;
@@ -11,8 +11,10 @@
 }
 
 .input:is(:focus, :hover) {
+  outline: 0;
+  border-color: var(--neutral-5);
 }
 
 .input::placeholder {
-  color: var(--neutral-outline);
+  color: var(--neutral-2);
 }

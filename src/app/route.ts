@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
+import { getUrl } from "~/src/lib/shared/url";
+
 export function GET() {
-  return redirect("/sign-in");
+  return redirect(getUrl("sign-in"));
 }

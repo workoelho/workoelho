@@ -39,7 +39,7 @@ export default async function Page({ params }: Props) {
             <p>
               Showing{" "}
               <Button shape="text">
-                all people <Icon name="chevron-down" />
+                all people <Icon variant="chevron-down" />
               </Button>
             </p>
           </Flex>
@@ -47,7 +47,7 @@ export default async function Page({ params }: Props) {
           <menu>
             <li>
               <Button shape="pill">
-                Add person <Icon name="plus" />
+                Add person <Icon variant="plus" />
               </Button>
             </li>
           </menu>
