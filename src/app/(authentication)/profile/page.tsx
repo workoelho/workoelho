@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import * as superstruct from "superstruct";
 
 import { getValidSession } from "~/src/lib/server/session";
-import { getFormProps } from "~/src/lib/server/form";
+import { getFormProps } from "~/src/lib/shared/form";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { update } from "~/src/actions/user";
 import { Flex } from "~/src/components/Flex";
@@ -23,7 +23,7 @@ export default async function Page() {
     throw new UnauthorizedError();
   }
 
-  const [action, initialState] = getFormProps(
+  const form = getFormProps(
     async (state, form) => {
       "use server";
 
@@ -41,7 +41,7 @@ export default async function Page() {
         superstruct.object({
           name: superstruct.string(),
           email: superstruct.string(),
-        }),
+        })
       );
 
       await update({
@@ -52,9 +52,8 @@ export default async function Page() {
       return { ...state, message: "Changes saved." };
     },
     {
-      message: "",
-      payload: { name: session.user.name, email: session.user.email },
-    },
+      values: { name: session.user.name, email: session.user.email },
+    }
   );
 
   return (
@@ -77,7 +76,7 @@ export default async function Page() {
         </p>
       </Flex>
 
-      <Form action={action} initialState={initialState} />
+      <Form {...form} />
     </>
   );
 }

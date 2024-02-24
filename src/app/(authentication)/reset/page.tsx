@@ -12,6 +12,7 @@ import { getUrl } from "~/src/lib/shared/url";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { Link } from "~/src/components/Link";
+import { getFormProps } from "~/src/lib/shared/form";
 
 import { Form } from "./form";
 
@@ -46,7 +47,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
     setSessionCookie(session);
   }
 
-  const action = async (state: { message: string }, form: FormData) => {
+  const form = getFormProps(async (state, form) => {
     "use server";
 
     const session = await getValidSession();
@@ -61,12 +62,12 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
     });
 
     redirect(getUrl("organizations", session.user.organizationId, "summary"));
-  };
+  });
 
   return (
     <>
       <Flex direction="column" gap="1rem">
-        <Heading as="legend" size="large">
+        <Heading as="h2" size="large">
           Reset password
         </Heading>
 
@@ -85,7 +86,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
         </p>
       </Flex>
 
-      <Form action={action} initialState={{ message: "" }} />
+      <Form {...form} />
     </>
   );
 }

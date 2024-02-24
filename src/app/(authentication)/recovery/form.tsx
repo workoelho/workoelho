@@ -10,20 +10,13 @@ import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Link } from "~/src/components/Link";
 import { Submit } from "~/src/components/Submit";
+import { Props, State } from "~/src/lib/shared/form";
 
-type Props<T> = {
-  action: (state: Awaited<T>, payload: FormData) => Promise<T> | never;
-  initialState: Awaited<T>;
-};
-
-export function Form<T extends { message: string }>({
-  action,
-  initialState,
-}: Props<T>) {
-  const [state, dispatch] = useFormState(action, initialState);
+export function Form(props: Props<State>) {
+  const [state, action] = useFormState(props.action, props.initialState);
 
   return (
-    <Flex as="form" action={dispatch} direction="column" gap="3rem">
+    <Flex as="form" action={action} direction="column" gap="3rem">
       <Flex as="fieldset" direction="column" gap="3rem">
         <Flex direction="column" gap="1rem">
           <Heading as="legend" size="large">

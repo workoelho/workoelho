@@ -16,7 +16,6 @@
 
 .item:is(:hover, :focus-visible) {
   background-color: var(--neutral-1);
-  color: var(--neutral-4);
 }
 
 .separator {

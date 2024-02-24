@@ -8,7 +8,7 @@ import { create } from "~/src/actions/session";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { db } from "~/src/lib/server/prisma";
-import { getFormProps } from "~/src/lib/server/form";
+import { getFormProps } from "~/src/lib/shared/form";
 import { send } from "~/src/emails/recovery";
 import { getUrl } from "~/src/lib/shared/url";
 
@@ -19,12 +19,12 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const [action, initialState] = getFormProps(async (state, payload) => {
+  const form = getFormProps(async (state, form) => {
     "use server";
 
     const user = await db.user.findUniqueOrThrow({
       where: {
-        email: superstruct.create(payload.get("email"), schema.email),
+        email: superstruct.create(form.get("email"), schema.email),
       },
     });
 
@@ -42,5 +42,5 @@ export default async function Page() {
     redirect(getUrl("recovery", "result"));
   });
 
-  return <Form action={action} initialState={initialState} />;
+  return <Form {...form} />;
 }

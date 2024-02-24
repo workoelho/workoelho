@@ -32,7 +32,7 @@
 }
 
 .button.neutral {
-  --color: var(--neutral-5);
+  --color: var(--neutral-4);
 }
 
 .button.neutral:is(:hover, :focus-visible) {
@@ -40,33 +40,33 @@
 }
 
 .button.interactive {
-  --color: var(--interactive-5);
+  --color: var(--interactive-3);
 }
 
 .button.interactive:is(:hover, :focus) {
-  --color: var(--interactive-4);
+  --color: var(--interactive-2);
 }
 
 .button.positive {
-  --color: var(--positive-5);
+  --color: var(--positive-3);
 }
 
 .button.positive:is(:hover, :focus) {
-  --color: var(--positive-4);
+  --color: var(--positive-2);
 }
 
 .button.negative {
-  --color: var(--negative-5);
+  --color: var(--negative-3);
 }
 
 .button.negative:is(:hover, :focus) {
-  --color: var(--negative-4);
+  --color: var(--negative-2);
 }
 
 .button.attentive {
-  --color: var(--attentive-5);
+  --color: var(--attentive-3);
 }
 
 .button.attentive:is(:hover, :focus) {
-  --color: var(--attentive-4);
+  --color: var(--attentive-2);
 }

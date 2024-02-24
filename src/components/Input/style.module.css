@@ -11,10 +11,10 @@
 }
 
 .input:is(:focus, :hover) {
+  border-color: var(--neutral-4);
   outline: 0;
-  border-color: var(--neutral-5);
 }
 
 .input::placeholder {
-  color: var(--neutral-2);
+  color: var(--neutral-3);
 }

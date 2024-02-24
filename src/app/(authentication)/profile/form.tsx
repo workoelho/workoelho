@@ -7,19 +7,15 @@ import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
+import { Props, State } from "~/src/lib/shared/form";
 
-type State = { message: string; payload: { email: string; name: string } };
+type Values = { values: { email: string; name: string } };
 
-type Props = {
-  action: (state: Awaited<State>, payload: FormData) => Promise<State>;
-  initialState: Awaited<State>;
-};
-
-export function Form({ action, initialState }: Props) {
-  const [state, dispatch] = useFormState(action, initialState);
+export function Form(props: Props<State & Values>) {
+  const [state, action] = useFormState(props.action, props.initialState);
 
   return (
-    <Flex as="form" action={dispatch} direction="column" gap="3rem">
+    <Flex as="form" action={action} direction="column" gap="3rem">
       {state.message ? (
         <Alert variant="neutral">
           <p>{state.message}</p>
@@ -31,7 +27,7 @@ export function Form({ action, initialState }: Props) {
           {(props) => (
             <Input
               name="name"
-              defaultValue={state.payload.name}
+              defaultValue={state.values.name}
               required
               placeholder="Jane Doe"
               minLength={1}
@@ -45,7 +41,7 @@ export function Form({ action, initialState }: Props) {
             <Input
               type="email"
               name="email"
-              defaultValue={state.payload.email}
+              defaultValue={state.values.email}
               placeholder="jane@example.com"
               required
               autoComplete="username"

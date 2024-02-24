@@ -8,6 +8,10 @@ import { setSessionCookie } from "~/src/lib/server/session";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getUrl } from "~/src/lib/shared/url";
+import { Link } from "~/src/components/Link";
+import { Flex } from "~/src/components/Flex";
+import { Heading } from "~/src/components/Heading";
+import { getFormProps } from "~/src/lib/shared/form";
 
 import { Form } from "./form";
 
@@ -16,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const action = async (state: { message: string }, payload: FormData) => {
+  const form = getFormProps(async (state, payload) => {
     "use server";
 
     const organization = await createOrganization({
@@ -40,7 +44,21 @@ export default async function Page() {
     setSessionCookie(session);
 
     redirect(getUrl("organizations", organization, "summary"));
-  };
+  });
 
-  return <Form action={action} initialState={{ message: "" }} />;
+  return (
+    <>
+      <Flex direction="column" gap="1rem">
+        <Heading as="h2" size="large">
+          Sign up
+        </Heading>
+
+        <p>
+          Already signed up? <Link href="/sign-in">Sign in, instead</Link>.
+        </p>
+      </Flex>
+
+      <Form {...form} />
+    </>
+  );
 }

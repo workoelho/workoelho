@@ -1,35 +1,35 @@
 :root {
   --background: #ffffff;
 
-  --neutral-1: #f5f5f5;
+  --attentive-1: #ffeeb9;
+  --attentive-2: #d7b44f;
+  --attentive-3: #917200;
+  --attentive-4: #4a3900;
+  --attentive-5: #171000;
+
+  --negative-1: #ffebe4;
+  --negative-2: #f1a591;
+  --negative-3: #c45138;
+  --negative-4: #64281b;
+  --negative-5: #230800;
+
+  --neutral-1: #f1f1f1;
   --neutral-2: #b9b9b9;
-  --neutral-3: #848484;
-  --neutral-4: #565656;
-  --neutral-5: #2a2a2a;
+  --neutral-3: #777;
+  --neutral-4: #3b3b3b;
+  --neutral-5: #111;
 
-  --negative-1: #fdf5f3;
-  --negative-2: #eda89a;
-  --negative-3: #de5a40;
-  --negative-4: #9e311c;
-  --negative-5: #4e190e;
+  --positive-1: #eff3d5;
+  --positive-2: #b3be7b;
+  --positive-3: #688000;
+  --positive-4: #344000;
+  --positive-5: #101200;
 
-  --positive-1: #f0f7e9;
-  --positive-2: #97c766;
-  --positive-3: #57931a;
-  --positive-4: #396211;
-  --positive-5: #1c2f09;
-
-  --attentive-1: #fff5d5;
-  --attentive-2: #eab000;
-  --attentive-3: #a87e00;
-  --attentive-4: #6e5300;
-  --attentive-5: #362800;
-
-  --interactive-1: #f2f6fd;
-  --interactive-2: #9fbaee;
-  --interactive-3: #5282e1;
-  --interactive-4: #2051b4;
-  --interactive-5: #102859;
+  --interactive-1: #edf0ff;
+  --interactive-2: #abb7ef;
+  --interactive-3: #4e75d4;
+  --interactive-4: #2a3a68;
+  --interactive-5: #0d101e;
 
   --min-width: 22.5rem;
   --max-width: 64rem;
@@ -41,7 +41,7 @@
 
 html {
   background-color: var(--background);
-  color: var(--neutral-5);
+  color: var(--neutral-4);
 }
 
 hr {

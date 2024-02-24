@@ -7,21 +7,13 @@ import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
+import { Props, State } from "~/src/lib/shared/form";
 
-type State = {
-  message: string;
-};
-
-type Props = {
-  action: (state: Awaited<State>, payload: FormData) => Promise<State> | never;
-  initialState: Awaited<State>;
-};
-
-export function Form({ action, initialState }: Props) {
-  const [state, dispatch] = useFormState(action, initialState);
+export function Form(props: Props<State>) {
+  const [state, action] = useFormState(props.action, props.initialState);
 
   return (
-    <Flex as="form" action={dispatch} direction="column" gap="3rem">
+    <Flex as="form" action={action} direction="column" gap="3rem">
       {state.message ? (
         <Alert variant="negative">
           <p>{state.message}</p>

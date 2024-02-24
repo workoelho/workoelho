@@ -8,16 +8,18 @@
 }
 
 .label {
+  font-weight: bold;
 }
 
 .hint {
   color: var(--neutral-3);
+  font-size: .75rem;
 }
 
 .invalid {
-  color: var(--negative-5);
+  color: var(--negative-4);
 }
 
 .valid {
-  color: var(--positive-5);
+  color: var(--positive-4);
 }

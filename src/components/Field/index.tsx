@@ -1,7 +1,6 @@
 import { ReactNode, useId } from "react";
 
 import { ClassList } from "~/src/lib/shared/ClassList";
-import { FieldState } from "~/src/lib/client/form";
 
 import classes from "./style.module.css";
 
@@ -11,22 +10,17 @@ type InputProps = {
 
 type FieldProps = {
   label?: ReactNode;
-  state?: FieldState;
   hint?: ReactNode;
+  state?: "valid" | "invalid";
   children: (props: InputProps) => ReactNode;
 };
 
-export function Field({ label, state, children, ...props }: FieldProps) {
+export function Field({ label, state, hint, children, ...props }: FieldProps) {
   const hintId = useId();
-  const hint = state?.error?.message ?? props.hint;
 
   const classList = new ClassList(classes.field);
-  if (state?.touched) {
-    if (state.error) {
-      classList.add(classes.invalid);
-    } else {
-      classList.add(classes.valid);
-    }
+  if (state) {
+    classList.add(classes[state]);
   }
 
   return (
@@ -37,7 +31,7 @@ export function Field({ label, state, children, ...props }: FieldProps) {
         <span
           id={hintId}
           className={classes.hint}
-          aria-live={state?.error ? "polite" : undefined}
+          aria-live={state ? "polite" : undefined}
         >
           {hint}
         </span>
