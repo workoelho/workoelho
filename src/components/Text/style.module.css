@@ -1,0 +1,34 @@
+.text {
+}
+
+.text.neutral {
+  color: var(--neutral-4);
+}
+
+.text.positive {
+  color: var(--positive-4);
+}
+
+.text.negative {
+  color: var(--negative-4);
+}
+
+.text.attentive {
+  color: var(--attentive-4);
+}
+
+.text.muted {
+  color: var(--neutral-3);
+}
+
+.text.small {
+  font-size: 0.875em;
+}
+
+.text.medium {
+  font-size: 1em;
+}
+
+.text.large {
+  font-size: 1.125em;
+}

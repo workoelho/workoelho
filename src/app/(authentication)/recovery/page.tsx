@@ -4,7 +4,7 @@ import { cookies, headers } from "next/headers";
 import * as superstruct from "superstruct";
 
 import * as schema from "~/src/lib/shared/schema";
-import { create } from "~/src/actions/session";
+import { create } from "~/src/actions/session/create";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { db } from "~/src/lib/server/prisma";
@@ -30,6 +30,7 @@ export default async function Page() {
 
     const session = await create({
       payload: {
+        organizationId: user.organizationId,
         userId: user.id,
         deviceId: getDeviceId(cookies()),
         remoteAddress: getRemoteAddress(),

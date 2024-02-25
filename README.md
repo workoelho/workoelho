@@ -1,33 +1,38 @@
 # Workoelho
 
-> Workoelho is an open-source knowledge hub for web development teams, DevOps, SREs, etc.
+> Workoelho is an open-source knowledge hub for small web development teams.
 
 ## About
 
-- It’s open-source, can be self hosted and supports data exfil.
-- It centralizes information without replacing your preferred tools.
-- New teammates can find everything they need on their own and with proper authorization.
-- Impact can be gauged in minutes, from service provider swaps to security vulnerabilities.
-- You can track changes over time, across your organization, and identify patterns and trends.
+Workoelho is a web application that helps answering questions like:
 
-It helps answering questions like:
-
-1. What service providers my company use?
-2. Who oversees what?
-3. What technologies this project depends on?
-4. Where can I find the credentials to this service?
-5. Since when we use this service?
-6. What information a newcomer needs to get started?
+1. How many web applications do our organization maintain?
+2. Where are these applications hosted or what domains they use?
+3. What providers are used for hosting, registrar, DNS, email, etc?
+4. Who are the people responsible for these applications?
+5. What information a newcomer needs to get started?
 
 ## Development
 
-It's a Next.js application. To start, run:
+It's a Next.js application. To start, install the dependencies:
 
 ```shell
-npm run develop
+npm ci
 ```
 
-It'll install the dependencies and spin up the development server.
+Create a local environment configuration file:
+
+```shell
+cp .env.example .env
+```
+
+Then launch the application:
+
+```shell
+npm start
+```
+
+If `NODE_ENV` is set to production, it'll start in production mode, otherwise it'll start in development mode.
 
 ## Legal
 

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 
 import { getValidSession, setSessionCookie } from "~/src/lib/server/session";
-import { update } from "~/src/actions/user";
+import { update } from "~/src/actions/user/update";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { refresh } from "~/src/actions/session/refresh";
 import { getDeviceId } from "~/src/lib/server/deviceId";

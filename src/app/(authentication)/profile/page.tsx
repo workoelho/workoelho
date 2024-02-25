@@ -4,7 +4,7 @@ import * as superstruct from "superstruct";
 import { getValidSession } from "~/src/lib/server/session";
 import { getFormProps } from "~/src/lib/shared/form";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
-import { update } from "~/src/actions/user";
+import { update } from "~/src/actions/user/update";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { getUrl } from "~/src/lib/shared/url";
@@ -41,7 +41,7 @@ export default async function Page() {
         superstruct.object({
           name: superstruct.string(),
           email: superstruct.string(),
-        }),
+        })
       );
 
       await update({
@@ -53,7 +53,7 @@ export default async function Page() {
     },
     {
       values: { name: session.user.name, email: session.user.email },
-    },
+    }
   );
 
   return (

@@ -1,12 +1,17 @@
-import { list } from "~/src/actions/user";
+import Link from "next/link";
+
+import { list } from "~/src/actions/user/list";
 import { Button } from "~/src/components/Button";
+import { Card } from "~/src/components/Card";
 import { Container } from "~/src/components/Container";
 import { Flex } from "~/src/components/Flex";
 import { Grid } from "~/src/components/Grid";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
+import { Text } from "~/src/components/Text";
 import { authorize } from "~/src/lib/server/authorization";
 import { getPrivateId } from "~/src/lib/shared/publicId";
+import { getUrl } from "~/src/lib/shared/url";
 
 type Props = {
   params: {
@@ -17,9 +22,9 @@ type Props = {
 export default async function Page({ params }: Props) {
   const organizationId = getPrivateId(params.organizationId);
 
-  const session = await authorize({ organizationId });
+  await authorize({ organizationId });
 
-  const users = await list({ query: { organizationId } });
+  const users = await list({ payload: { organizationId } });
 
   return (
     <Container size="large" padding="3rem">
@@ -53,11 +58,29 @@ export default async function Page({ params }: Props) {
           </menu>
         </Grid>
 
-        <ul>
+        <Grid as="ul" template="auto / 1fr 1fr">
           {users.map((user) => (
-            <li key={user.id}>{user.name}</li>
+            <li key={user.id}>
+              <Link
+                href={getUrl(
+                  "organizations",
+                  organizationId,
+                  "people",
+                  user.id
+                )}
+              >
+                <Card as="article" key={user.id}>
+                  <Text as="h1" weight={900}>
+                    {user.name}
+                  </Text>
+                  <Text as="p" variant="muted">
+                    {user.email}
+                  </Text>
+                </Card>
+              </Link>
+            </li>
           ))}
-        </ul>
+        </Grid>
       </Flex>
     </Container>
   );

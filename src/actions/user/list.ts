@@ -8,8 +8,7 @@ import * as schema from "~/src/lib/shared/schema";
 
 const payloadSchema = superstruct.object({
   organizationId: schema.id,
-  skip: superstruct.defaulted(superstruct.number(), 0),
-  take: superstruct.defaulted(superstruct.number(), 10),
+  page: superstruct.optional(superstruct.number()),
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
@@ -20,6 +19,9 @@ type Payload = superstruct.Infer<typeof payloadSchema>;
 export async function list({ payload }: Context<Payload>) {
   superstruct.assert(payload, payloadSchema);
 
+  const take = 10;
+  const skip = (payload.page ?? 0) * take;
+
   return await db.user.findMany({
     where: {
       organizationId: payload.organizationId,
@@ -27,7 +29,7 @@ export async function list({ payload }: Context<Payload>) {
     orderBy: {
       id: "asc",
     },
-    skip: payload.skip,
-    take: payload.take,
+    skip,
+    take,
   });
 }

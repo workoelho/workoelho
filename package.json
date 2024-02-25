@@ -4,13 +4,13 @@
   "version": "24.2.13+79173",
   "license": "MPL-2.0",
   "scripts": {
-    "prestart": "test -d .next || npm run build",
-    "start": "next start",
-    "predevelop": "test -d node_modules || npm ci",
-    "develop": "next dev",
+    "start": "npm run start:${NODE_ENV:-development}",
+    "start:development": "npm run dev",
+    "start:production": "next start",
     "lint": "next lint",
+    "typecheck": "tsc",
     "format": "prettier . --cache --write",
-    "prebuild": "npm run format -- --check --log-level error && npm run lint -- --quiet",
+    "prebuild": "npm run format -- --check --log-level error",
     "build": "next build",
     "release": "npm version \"$(date +'%y.%-m.%-d')+$(git rev-parse --short=5 HEAD)\""
   },
