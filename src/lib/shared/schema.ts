@@ -12,7 +12,7 @@ export const id = number();
  * E-mail schema.
  */
 export const email = define<string>("email", (value: unknown) =>
-  isEmail(value as string),
+  isEmail(value as string)
 );
 
 /**
@@ -29,11 +29,6 @@ export const session = {
  * Password schema.
  */
 export const password = size(string(), 15, Infinity);
-
-/**
- * Role schema.
- */
-export const role = defaulted(string(), "administrator");
 
 /**
  * Name schema.

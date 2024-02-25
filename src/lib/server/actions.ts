@@ -8,13 +8,23 @@ type Session = Prisma.SessionGetPayload<{
 type Object = Record<string, unknown>;
 
 /**
+ * Copies the shape of an object but disregard value types.
+ *
+ * The goal is to enforce non optional keys and support auto-completion,
+ * but leave value validation for the runtime.
+ */
+type Shape<T extends {}> = {
+  [K in keyof T]: unknown;
+};
+
+/**
  * Context holds information necessary to perform an action.
  */
 export type Context<
-  Query extends Object = Object,
   Payload extends Object = Object,
+  Options extends Object = Object,
 > = {
-  query?: Query;
-  payload?: Payload;
   session?: Nullable<Session>;
+  payload?: Shape<Payload>;
+  options?: Shape<Options>;
 };

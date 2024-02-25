@@ -18,7 +18,7 @@ export type State = {
 
 export function getFormProps<S extends State>(
   action: (state: S, payload: FormData) => Promise<S>,
-  initialState: S = {} as S
+  initialState: S = {} as S,
 ) {
   return {
     action: async (state: S, payload: FormData) => {

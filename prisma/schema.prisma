@@ -13,29 +13,32 @@ model Organization {
     updatedAt DateTime @updatedAt
     name      String   @unique
 
+    activity     Activity[]
     applications Application[]
     providers    Provider[]
-    users        User[]
+    roles        Role[]
     services     Service[]
-    activity     Activity[]
+    sessions     Session[]
+    tags         Tag[]
+    users        User[]
 
     @@map("organizations")
 }
 
 model User {
-    id             Int      @id @default(autoincrement())
-    createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
-    email          String   @unique
-    name           String
-    password       String
-    role           String   @default("administrator")
-    organizationId Int
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    email     String   @unique
+    name      String
+    password  String
 
-    organization Organization @relation(fields: [organizationId], references: [id])
+    organizationId Int
+    organization   Organization @relation(fields: [organizationId], references: [id])
 
     sessions Session[]
     activity Activity[]
+    roles    Role[]
 
     @@map("users")
 }
@@ -47,46 +50,70 @@ model Session {
     deviceId      String
     remoteAddress String
     userAgent     String
-    userId        Int
 
-    user User @relation(fields: [userId], references: [id])
+    organizationId Int
+    organization   Organization @relation(fields: [organizationId], references: [id])
+
+    userId Int
+    user   User @relation(fields: [userId], references: [id])
 
     @@map("sessions")
 }
 
 model Application {
-    id             Int      @id @default(autoincrement())
-    createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
-    name           String   @unique
-    url            String
-    organizationId Int
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    name      String   @unique
 
-    organization Organization @relation(fields: [organizationId], references: [id])
-    Service      Service[]
+    organizationId Int
+    organization   Organization @relation(fields: [organizationId], references: [id])
+
+    services Service[]
+    roles    Role[]
 
     @@map("applications")
 }
 
-model Provider {
-    id             Int      @id @default(autoincrement())
-    createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
-    name           String   @unique
-    url            String
-    organizationId Int
+model Role {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    name      String
 
-    organization Organization @relation(fields: [organizationId], references: [id])
-    services     Service[]
+    organizationId Int
+    organization   Organization @relation(fields: [organizationId], references: [id])
+
+    userId Int
+    user   User @relation(fields: [userId], references: [id])
+
+    applicationId Int
+    application   Application @relation(fields: [applicationId], references: [id])
+
+    @@map("roles")
+}
+
+model Provider {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    name      String   @unique
+    url       String
+
+    organizationId Int
+    organization   Organization @relation(fields: [organizationId], references: [id])
+
+    services Service[]
 
     @@map("providers")
 }
 
 model Service {
-    id        Int      @id @default(autoincrement())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    name      String
+    id                   Int      @id @default(autoincrement())
+    createdAt            DateTime @default(now())
+    updatedAt            DateTime @updatedAt
+    name                 String
+    estimatedMonthlyCost Float
 
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id])
@@ -100,17 +127,37 @@ model Service {
     @@map("services")
 }
 
-model Activity {
-    id             Int      @id @default(autoincrement())
-    createdAt      DateTime @default(now())
+model Tag {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    label     String
+    value     String
+
     organizationId Int
-    actorId        Int
-    subjectType    String
-    subjectId      Int
-    name           String
+    organization   Organization @relation(fields: [organizationId], references: [id])
 
-    organization Organization @relation(fields: [organizationId], references: [id])
-    actor        User         @relation(fields: [actorId], references: [id])
+    objectType String
+    objectId   Int
 
+    @@index([objectType, objectId])
+    @@map("tags")
+}
+
+model Activity {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String
+
+    organizationId Int
+    organization   Organization @relation(fields: [organizationId], references: [id])
+
+    objectType String
+    objectId   Int
+
+    subjectId Int
+    subject   User @relation(fields: [subjectId], references: [id])
+
+    @@index([objectType, objectId])
     @@map("activity")
 }

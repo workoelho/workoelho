@@ -36,8 +36,8 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
   // If the session ID came in the URL we have to refresh it.
   if (sessionId) {
     session = await refresh({
-      query: { sessionId },
       payload: {
+        sessionId,
         deviceId: getDeviceId(cookies()),
         userAgent: headers().get("user-agent"),
         remoteAddress: getRemoteAddress(),
@@ -57,8 +57,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
     }
 
     await update({
-      query: { id: session.user.id },
-      payload: { password: form.get("password") },
+      payload: { id: session.user.id, password: form.get("password") },
     });
 
     redirect(getUrl("organizations", session.user.organizationId, "summary"));

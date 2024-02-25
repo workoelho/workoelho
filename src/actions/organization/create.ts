@@ -7,17 +7,17 @@ import { db } from "~/src/lib/server/prisma";
 import * as password from "~/src/lib/server/password";
 import * as schema from "~/src/lib/shared/schema";
 
-export async function create({ payload }: Context) {
-  superstruct.assert(
-    payload,
+const payloadSchema = superstruct.object({
+  organization: schema.name,
+  name: schema.name,
+  email: schema.email,
+  password: schema.password,
+});
 
-    superstruct.object({
-      organization: schema.name,
-      name: schema.name,
-      email: schema.email,
-      password: schema.password,
-    }),
-  );
+type Payload = superstruct.Infer<typeof payloadSchema>;
+
+export async function create({ payload }: Context<Payload>) {
+  superstruct.assert(payload, payloadSchema);
 
   return await db.organization.create({
     data: {

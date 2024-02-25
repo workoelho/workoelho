@@ -9,10 +9,16 @@ import { compare, hash } from "bcrypt";
 const cost = 10;
 
 /**
+ * Get a random password.
+ */
+export function random() {
+  return crypto.randomUUID();
+}
+
+/**
  * Create password hash. If plain is undefined, a random password is generated.
  */
-export function create(plain: string | undefined) {
-  plain ??= crypto.randomUUID();
+export function create(plain: string) {
   return hash(plain, cost);
 }
 

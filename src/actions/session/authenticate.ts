@@ -4,11 +4,14 @@ import * as superstruct from "superstruct";
 
 import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
+import * as password from "~/src/lib/server/password";
+import * as schema from "~/src/lib/shared/schema";
 import { ValidationError } from "~/src/lib/server/ValidationError";
 import { create } from "~/src/actions/session/create";
 
 const payloadSchema = superstruct.object({
-  sessionId: superstruct.string(),
+  email: schema.email,
+  password: schema.password,
   deviceId: superstruct.string(),
   userAgent: superstruct.string(),
   remoteAddress: superstruct.string(),
@@ -17,34 +20,30 @@ const payloadSchema = superstruct.object({
 type Payload = superstruct.Infer<typeof payloadSchema>;
 
 /**
- * Create a new session from an existing valid session.
+ * Create new session from credentials.
  */
-export async function refresh({ payload }: Context<Payload>) {
+export async function authenticate({ payload }: Context<Payload>) {
   superstruct.assert(payload, payloadSchema);
 
-  const session = await db.session.findUnique({
-    where: { id: payload.sessionId, expiresAt: { gt: new Date() } },
+  const user = await db.user.findUnique({
+    where: { email: payload.email },
   });
 
-  if (!session) {
-    throw new ValidationError("Session not found or expired");
+  if (!user) {
+    throw new ValidationError("E-mail not found");
   }
 
-  // Invalidate the old session.
-  await db.session.update({
-    where: { id: session.id },
-    data: {
-      expiresAt: new Date(),
-    },
-  });
+  if (!(await password.validate(String(payload.password), user.password))) {
+    throw new ValidationError("Bad password");
+  }
 
   return await create({
     payload: {
-      organizationId: session.organizationId,
-      userId: session.userId,
+      organizationId: user.organizationId,
+      userId: user.id,
       deviceId: payload.deviceId,
-      remoteAddress: payload.remoteAddress,
       userAgent: payload.userAgent,
+      remoteAddress: payload.remoteAddress,
     },
   });
 }
