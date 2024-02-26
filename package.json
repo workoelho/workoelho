@@ -5,14 +5,14 @@
   "license": "MPL-2.0",
   "scripts": {
     "start": "npm run start:${NODE_ENV:-development}",
-    "start:development": "npm run dev",
+    "start:development": "next dev",
     "start:production": "next start",
     "lint": "next lint",
     "typecheck": "tsc",
     "format": "prettier . --cache --write",
     "prebuild": "npm run format -- --check --log-level error",
     "build": "next build",
-    "release": "npm version \"$(date +'%y.%-m.%-d')+$(git rev-parse --short=5 HEAD)\""
+    "release": "npm version $(date +'%y.%-m.%-d')"
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.0.8",

@@ -1,30 +1,53 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-import { list } from "~/src/actions/user/list";
+import { get } from "~/src/actions/user/get";
 import { Button } from "~/src/components/Button";
-import { Card } from "~/src/components/Card";
 import { Container } from "~/src/components/Container";
 import { Flex } from "~/src/components/Flex";
 import { Grid } from "~/src/components/Grid";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
-import { Text } from "~/src/components/Text";
 import { authorize } from "~/src/lib/server/authorization";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
+import { getFormProps } from "~/src/lib/shared/form";
+import { update } from "~/src/actions/user/update";
+import { NotFoundError } from "~/src/lib/shared/errors";
+
+import { Form } from "./form";
 
 type Props = {
   params: {
     organizationId: string;
+    userId: string;
   };
 };
 
 export default async function Page({ params }: Props) {
   const organizationId = getPrivateId(params.organizationId);
+  const userId = getPrivateId(params.userId);
 
   await authorize({ organizationId });
 
-  const users = await list({ payload: { organizationId } });
+  const user = await get({ payload: { id: userId } });
+
+  if (!user) {
+    throw new NotFoundError();
+  }
+
+  const form = getFormProps(
+    async (state, payload) => {
+      "use server";
+
+      await authorize({ organizationId });
+
+      await update({ payload: { id: userId, ...payload } });
+
+      redirect(getUrl("organizations", organizationId, "people", userId));
+    },
+    { values: { name: user.name, email: user.email } }
+  );
 
   return (
     <Container size="large" padding="3rem">
@@ -42,11 +65,7 @@ export default async function Page({ params }: Props) {
               People
             </Heading>
             <p>
-              Listing{" "}
-              <Button shape="text">
-                all people <Icon variant="chevron-down" />
-              </Button>
-              .
+              Editing profile for <strong>{user.name}</strong>.
             </p>
           </Flex>
 
@@ -54,38 +73,17 @@ export default async function Page({ params }: Props) {
             <li>
               <Button
                 as="a"
-                href={getUrl("organizations", organizationId, "people", "new")}
                 shape="pill"
+                href={getUrl("organizations", organizationId, "people")}
               >
-                Add person <Icon variant="plus" />
+                <Icon variant="arrow-left" />
+                Back to listing
               </Button>
             </li>
           </menu>
         </Grid>
 
-        <Grid as="ul" template="auto / 1fr 1fr" gap="1rem 1.5rem">
-          {users.map((user) => (
-            <li key={user.id}>
-              <Link
-                href={getUrl(
-                  "organizations",
-                  organizationId,
-                  "people",
-                  user.id
-                )}
-              >
-                <Card as="article" key={user.id}>
-                  <Text as="h1" weight={900}>
-                    {user.name}
-                  </Text>
-                  <Text as="p" variant="muted">
-                    {user.email}
-                  </Text>
-                </Card>
-              </Link>
-            </li>
-          ))}
-        </Grid>
+        <Form {...form} />
       </Flex>
     </Container>
   );

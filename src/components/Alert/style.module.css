@@ -2,29 +2,24 @@
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border-radius: var(--radius);
-  border: 1px solid;
+  border-radius: 1rem;
 }
 
 .alert.neutral {
   background-color: var(--neutral-1);
-  border-color: var(--neutral-2);
 }
 
 .alert.positive {
   background-color: var(--positive-1);
-  border-color: var(--positive-2);
   color: var(--positive-4);
 }
 
 .alert.negative {
   background-color: var(--negative-1);
-  border-color: var(--negative-2);
   color: var(--negative-4);
 }
 
 .alert.attentive {
   background-color: var(--attentive-1);
-  border-color: var(--attentive-2);
   color: var(--attentive-4);
 }
