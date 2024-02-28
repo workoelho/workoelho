@@ -15,10 +15,14 @@
 }
 
 .item:is(:hover, :focus-visible) {
-  background-color: var(--neutral-1);
+  background-color: var(--neutral-5);
 }
 
 .separator {
   padding-block: 0.25rem;
   width: 100%;
+}
+
+.separator hr {
+  border-top: var(--thickness) solid var(--neutral-4);
 }

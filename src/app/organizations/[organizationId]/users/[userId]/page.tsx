@@ -1,5 +1,4 @@
-import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { Fragment } from "react";
 
 import { get } from "~/src/actions/user/get";
 import { Button } from "~/src/components/Button";
@@ -11,11 +10,9 @@ import { Icon } from "~/src/components/Icon";
 import { authorize } from "~/src/lib/server/authorization";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
-import { getFormProps } from "~/src/lib/shared/form";
-import { update } from "~/src/actions/user/update";
 import { NotFoundError } from "~/src/lib/shared/errors";
-
-import { Form } from "./form";
+import { list } from "~/src/actions/role";
+import { Alert } from "~/src/components/Alert";
 
 type Props = {
   params: {
@@ -36,18 +33,7 @@ export default async function Page({ params }: Props) {
     throw new NotFoundError();
   }
 
-  const form = getFormProps(
-    async (state, payload) => {
-      "use server";
-
-      await authorize({ organizationId });
-
-      await update({ payload: { id: userId, ...payload } });
-
-      redirect(getUrl("organizations", organizationId, "people", userId));
-    },
-    { values: { name: user.name, email: user.email } }
-  );
+  const roles = await list({ payload: { userId, page: 1 } });
 
   return (
     <Container size="large" padding="3rem">
@@ -65,7 +51,7 @@ export default async function Page({ params }: Props) {
               People
             </Heading>
             <p>
-              Editing profile for <strong>{user.name}</strong>.
+              Viewing user <strong>{user.name}</strong>.
             </p>
           </Flex>
 
@@ -74,7 +60,7 @@ export default async function Page({ params }: Props) {
               <Button
                 as="a"
                 shape="pill"
-                href={getUrl("organizations", organizationId, "people")}
+                href={getUrl("organizations", organizationId, "users")}
               >
                 <Icon variant="arrow-left" />
                 Back to listing
@@ -83,7 +69,58 @@ export default async function Page({ params }: Props) {
           </menu>
         </Grid>
 
-        <Form {...form} />
+        <Flex direction="column" gap="1.5rem">
+          <Flex alignItems="center" gap="1.5rem">
+            <Heading as="h2" size="medium">
+              Profile
+            </Heading>
+
+            <menu>
+              <li>
+                <Button
+                  as="a"
+                  shape="pill"
+                  href={getUrl(
+                    "organizations",
+                    organizationId,
+                    "users",
+                    user.id,
+                    "edit",
+                  )}
+                >
+                  Edit
+                </Button>
+              </li>
+            </menu>
+          </Flex>
+
+          <dl>
+            <dt>Name:</dt>
+            <dd>{user.name}</dd>
+
+            <dt>E-mail:</dt>
+            <dd>{user.email}</dd>
+          </dl>
+        </Flex>
+
+        <Flex direction="column" gap="1.5rem">
+          <Heading as="h2" size="medium">
+            Roles
+          </Heading>
+
+          {roles.length === 0 ? (
+            <Alert variant="neutral">No roles.</Alert>
+          ) : (
+            <dl>
+              {roles.map((role) => (
+                <Fragment key={role.id}>
+                  <dt>{role.application.name}</dt>
+                  <dd>{role.name}</dd>
+                </Fragment>
+              ))}
+            </dl>
+          )}
+        </Flex>
       </Flex>
     </Container>
   );

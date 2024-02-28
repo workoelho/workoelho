@@ -8,12 +8,12 @@
 }
 
 .label {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .hint {
   color: var(--neutral-3);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .invalid {

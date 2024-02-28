@@ -1,25 +1,25 @@
 .alert {
+  border-radius: var(--radius);
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border-radius: 1rem;
 }
 
 .alert.neutral {
-  background-color: var(--neutral-1);
+  background-color: var(--neutral-5);
 }
 
 .alert.positive {
-  background-color: var(--positive-1);
-  color: var(--positive-4);
+  background-color: var(--positive-5);
+  color: var(--positive-3);
 }
 
 .alert.negative {
-  background-color: var(--negative-1);
-  color: var(--negative-4);
+  background-color: var(--negative-5);
+  color: var(--negative-3);
 }
 
 .alert.attentive {
-  background-color: var(--attentive-1);
-  color: var(--attentive-4);
+  background-color: var(--attentive-5);
+  color: var(--attentive-3);
 }

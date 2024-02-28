@@ -41,7 +41,7 @@ export default async function Page() {
         superstruct.object({
           name: superstruct.string(),
           email: superstruct.string(),
-        })
+        }),
       );
 
       await update({
@@ -53,7 +53,7 @@ export default async function Page() {
     },
     {
       values: { name: session.user.name, email: session.user.email },
-    }
+    },
   );
 
   return (

@@ -11,7 +11,7 @@ import classes from "./style.module.css";
 type AcceptableElementType = "a" | "button";
 
 export type Props = {
-  variant?: "primary" | "neutral" | "positive" | "negative" | "attentive";
+  variant?: "interactive" | "neutral" | "positive" | "negative" | "attentive";
   shape?: "text" | "rectangle" | "pill";
 };
 
@@ -23,7 +23,7 @@ function Button<E extends AcceptableElementType = "button">(
     shape = "rectangle",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  ref: PolymorphicRef<E>
 ) {
   const Component = as ?? ("button" as ElementType);
 

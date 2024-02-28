@@ -2,7 +2,15 @@ import "resetize";
 import "./global.css";
 
 import { type Metadata, type Viewport } from "next";
-import { Open_Sans } from "next/font/google";
+import {
+  Open_Sans,
+  Lato,
+  DM_Sans,
+  Arimo,
+  Jost,
+  Merriweather_Sans,
+  Libre_Franklin,
+} from "next/font/google";
 import { type ReactNode } from "react";
 
 export const metadata: Metadata = {
@@ -20,7 +28,21 @@ export const viewport: Viewport = {
 // export const dynamic = "force-dynamic";
 // export const revalidate = 0;
 
-const font = Open_Sans({
+// const font = Open_Sans({
+//   weight: ["400", "700", "800"],
+//   style: ["normal", "italic"],
+//   subsets: ["latin-ext"],
+//   display: "swap",
+// });
+
+// const font = Lato({
+//   weight: ["400", "700", "900"],
+//   style: ["normal", "italic"],
+//   subsets: ["latin-ext"],
+//   display: "swap",
+// });
+
+const font = Libre_Franklin({
   weight: ["400", "700"],
   style: ["normal", "italic"],
   subsets: ["latin-ext"],

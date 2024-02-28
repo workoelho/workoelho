@@ -46,8 +46,7 @@ export default async function Layout({ params, children }: Props) {
     (sessions, session) => {
       if (
         sessions.some(
-          ({ organizationId }) =>
-            organizationId === session.user.organizationId,
+          ({ organizationId }) => organizationId === session.user.organizationId
         )
       ) {
         return sessions;
@@ -61,7 +60,7 @@ export default async function Layout({ params, children }: Props) {
         },
       ];
     },
-    [] as { id: string; name: string; organizationId: number }[],
+    [] as { id: string; name: string; organizationId: number }[]
   );
 
   const signIn = async (sessionId: string) => {
@@ -99,11 +98,11 @@ export default async function Layout({ params, children }: Props) {
   return (
     <div className={classes.layout}>
       <Topbar className={classes.topbar}>
-        <Flex as="menu" gap="1.5rem" style={{ flexGrow: 1 }}>
+        <Flex as="menu" gap="1.5rem">
           <li>
             <Button
               as="a"
-              href={`/organizations/${organizationId}/summary`}
+              href={getUrl("organizations", organizationId, "summary")}
               shape="text"
             >
               Summary
@@ -112,7 +111,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as="a"
-              href={`/organizations/${organizationId}/activity`}
+              href={getUrl("organizations", organizationId, "activity")}
               shape="text"
             >
               Activity
@@ -121,7 +120,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as="a"
-              href={`/organizations/${organizationId}/applications`}
+              href={getUrl("organizations", organizationId, "applications")}
               shape="text"
             >
               Applications
@@ -130,7 +129,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as="a"
-              href={`/organizations/${organizationId}/providers`}
+              href={getUrl("organizations", organizationId, "providers")}
               shape="text"
             >
               Providers
@@ -139,7 +138,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as="a"
-              href={`/organizations/${organizationId}/people`}
+              href={getUrl("organizations", organizationId, "users")}
               shape="text"
             >
               People
@@ -147,7 +146,7 @@ export default async function Layout({ params, children }: Props) {
           </li>
         </Flex>
 
-        <Flex as="menu" gap="1.5rem">
+        <Flex as="menu" gap="1.5rem" style={{ justifySelf: "end" }}>
           <li>
             <Popover
               placement="right"

@@ -1,18 +1,17 @@
-import { redirect } from "next/navigation";
+import Link from "next/link";
 
+import { list } from "~/src/actions/user/list";
 import { Button } from "~/src/components/Button";
+import { Card } from "~/src/components/Card";
 import { Container } from "~/src/components/Container";
 import { Flex } from "~/src/components/Flex";
 import { Grid } from "~/src/components/Grid";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
+import { Text } from "~/src/components/Text";
 import { authorize } from "~/src/lib/server/authorization";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
-import { getFormProps } from "~/src/lib/shared/form";
-import { create } from "~/src/actions/user/create";
-
-import { Form } from "./form";
 
 type Props = {
   params: {
@@ -25,21 +24,7 @@ export default async function Page({ params }: Props) {
 
   await authorize({ organizationId });
 
-  const form = getFormProps(async (state, payload) => {
-    "use server";
-
-    await authorize({ organizationId });
-
-    await create({
-      payload: {
-        organizationId,
-        name: payload.get("name"),
-        email: payload.get("email"),
-      },
-    });
-
-    redirect(getUrl("organizations", organizationId, "people"));
-  });
+  const users = await list({ payload: { organizationId } });
 
   return (
     <Container size="large" padding="3rem">
@@ -56,24 +41,46 @@ export default async function Page({ params }: Props) {
             <Heading as="h1" size="large">
               People
             </Heading>
-            <p>Adding new user.</p>
+
+            <p>
+              Listing{" "}
+              <Button shape="text">
+                all people <Icon variant="chevron-down" />
+              </Button>
+              .
+            </p>
           </Flex>
 
           <menu>
             <li>
               <Button
                 as="a"
-                shape="pill"
-                href={getUrl("organizations", organizationId, "people")}
+                href={getUrl("organizations", organizationId, "users", "new")}
               >
-                <Icon variant="arrow-left" />
-                Back to listing
+                Add person <Icon variant="plus" />
               </Button>
             </li>
           </menu>
         </Grid>
 
-        <Form {...form} />
+        <Grid as="ul" template="auto / 1fr 1fr 1fr" gap=".75rem">
+          {users.map((user) => (
+            <li key={user.id}>
+              <Link
+                href={getUrl("organizations", organizationId, "users", user.id)}
+              >
+                <Card as="article" key={user.id}>
+                  <Text as="h1" weight={700}>
+                    {user.name}
+                  </Text>
+                  <Text as="p" variant="muted">
+                    {user.email}
+                  </Text>
+                </Card>
+              </Link>
+            </li>
+          ))}
+        </Grid>
       </Flex>
     </Container>
   );

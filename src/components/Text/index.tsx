@@ -35,7 +35,7 @@ function Text<E extends AcceptableElementType = "span">(
     weight,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("div" as ElementType);
 

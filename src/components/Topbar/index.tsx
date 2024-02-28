@@ -14,7 +14,7 @@ export function Topbar({ className, children }: Props) {
   const classList = new ClassList(classes.topbar, className);
 
   return (
-    <nav className={classList.toString()}>
+    <nav className={String(classList)}>
       <h1>
         <a href="/">
           <Brand size="medium" />

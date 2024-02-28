@@ -16,8 +16,8 @@
 
 .content {
   background-color: var(--background);
-  border-radius: 0.375rem;
-  border: 1px solid var(--neutral-2);
+  border-radius: var(--radius);
+  border: var(--thickness) solid var(--neutral-4);
   margin-block-start: 0.5rem;
   position: absolute;
 }

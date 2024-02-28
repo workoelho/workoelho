@@ -14,7 +14,7 @@
 
 .button.rectangle {
   background-color: var(--color);
-  border-radius: 0.375rem;
+  border-radius: var(--radius);
   color: var(--background);
   gap: 0.25rem;
   height: 2.125rem;
@@ -22,17 +22,16 @@
 }
 
 .button.pill {
-  background-color: var(--background);
+  background-color: var(--color);
   border-radius: 2.125rem;
-  border: 0.125rem solid var(--color);
-  color: var(--color);
+  color: var(--background);
   gap: 0.25rem;
   height: 2.125rem;
   padding-inline: 0.75rem;
 }
 
 .button.neutral {
-  --color: var(--neutral-4);
+  --color: var(--neutral-2);
 }
 
 .button.neutral:is(:hover, :focus-visible) {
@@ -44,7 +43,7 @@
 }
 
 .button.interactive:is(:hover, :focus) {
-  --color: var(--interactive-2);
+  --color: var(--interactive-4);
 }
 
 .button.positive {
@@ -52,7 +51,7 @@
 }
 
 .button.positive:is(:hover, :focus) {
-  --color: var(--positive-2);
+  --color: var(--positive-4);
 }
 
 .button.negative {
@@ -60,7 +59,7 @@
 }
 
 .button.negative:is(:hover, :focus) {
-  --color: var(--negative-2);
+  --color: var(--negative-4);
 }
 
 .button.attentive {
@@ -68,5 +67,5 @@
 }
 
 .button.attentive:is(:hover, :focus) {
-  --color: var(--attentive-2);
+  --color: var(--attentive-4);
 }

@@ -40,7 +40,7 @@ export async function create({ payload }: Context<Payload>) {
       userId: payload.userId,
       expiresAt: superstruct.create(
         payload.expiresAt,
-        schema.session.expiresAt
+        schema.session.expiresAt,
       ),
       deviceId: payload.deviceId,
       userAgent: payload.userAgent,
