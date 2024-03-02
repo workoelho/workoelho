@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { Button } from "~/src/components/Button";
 import { Feedback } from "~/src/components/Feedback";
@@ -15,11 +16,11 @@ export default async function Page() {
         Message sent.
       </Heading>
 
-      <p>Please check your e-mail.</p>
+      <p>Please check your email.</p>
 
       <menu>
         <li>
-          <Button as="a" href="/sign-in">
+          <Button as={Link} href="/sign-in">
             Back
           </Button>
         </li>

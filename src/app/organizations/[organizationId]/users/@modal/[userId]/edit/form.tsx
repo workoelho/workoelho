@@ -1,17 +1,23 @@
 "use client";
 
+import Link from "next/link";
 import { useFormState } from "react-dom";
 
 import { Alert } from "~/src/components/Alert";
+import { Button } from "~/src/components/Button";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
-import { Props, State } from "~/src/lib/shared/form";
+import { Props as Form, State } from "~/src/lib/shared/form";
 
 type Values = { values: { name: string; email: string } };
 
-export function Form(props: Props<State & Values>) {
+type Props = Form<State & Values> & {
+  cancelUrl: string;
+};
+
+export function Form({ cancelUrl, ...props }: Props) {
   const [state, action] = useFormState(props.action, props.initialState);
 
   return (
@@ -36,7 +42,7 @@ export function Form(props: Props<State & Values>) {
           )}
         </Field>
 
-        <Field label="E-mail" hint="Work e-mail.">
+        <Field label="Email" hint="Work email.">
           {(props) => (
             <Input
               name="email"
@@ -50,7 +56,11 @@ export function Form(props: Props<State & Values>) {
         </Field>
       </Flex>
 
-      <Flex as="footer" justifyContent="end">
+      <Flex as="footer" justifyContent="space-between">
+        <Button as={Link} href={cancelUrl}>
+          Cancel
+        </Button>
+
         <Submit>Save</Submit>
       </Flex>
     </Flex>

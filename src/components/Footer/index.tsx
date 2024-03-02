@@ -1,4 +1,7 @@
+import Link from "next/link";
+
 import { Button } from "~/src/components/Button";
+import { Text } from "~/src/components/Text";
 import { ClassList } from "~/src/lib/shared/ClassList";
 
 import classes from "./style.module.css";
@@ -15,17 +18,17 @@ export function Footer({ version, className }: Props) {
     <footer className={String(classList)}>
       <menu className={classes.menu}>
         <li>
-          <Button as="a" href="/changelog" shape="text">
+          <Button as={Link} href="/changelog" shape="text">
             What's new?
           </Button>
         </li>
         <li>
-          <Button as="a" href="/help" shape="text">
+          <Button as={Link} href="/help" shape="text">
             Help
           </Button>
         </li>
         <li>
-          <Button as="a" href="https://github.com/workoelho" shape="text">
+          <Button as={Link} href="https://github.com/workoelho" shape="text">
             GitHub
           </Button>
         </li>
@@ -33,7 +36,7 @@ export function Footer({ version, className }: Props) {
 
       <p>©️ 2023 Workoelho</p>
 
-      <code className={classes.version}>v{version}</code>
+      <Text variant="muted">v{version}</Text>
     </footer>
   );
 }

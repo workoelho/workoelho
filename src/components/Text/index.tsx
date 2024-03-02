@@ -21,7 +21,7 @@ type AcceptableElementType =
 
 type Props = {
   variant?: "neutral" | "positive" | "negative" | "attentive" | "muted";
-  size?: "small" | "medium" | "large";
+  size?: "smaller" | "inherit" | "larger";
   weight?: CSSProperties["fontWeight"];
   decoration?: CSSProperties["textDecoration"];
 };
@@ -30,8 +30,8 @@ function Text<E extends AcceptableElementType = "span">(
   {
     as,
     children,
-    variant = "neutral",
-    size = "medium",
+    variant,
+    size = "inherit",
     weight,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
@@ -43,7 +43,9 @@ function Text<E extends AcceptableElementType = "span">(
   if (props.className) {
     classList.add(props.className);
   }
-  classList.add(classes[variant]);
+  if (variant) {
+    classList.add(classes[variant]);
+  }
   classList.add(classes[size]);
   props.className = classList.toString();
 

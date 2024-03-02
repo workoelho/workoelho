@@ -1,5 +1,5 @@
 .card {
-  /* border: var(--thickness) solid var(--neutral-4); */
+  /* border: var(--thick) solid var(--neutral-4); */
   background-color: var(--neutral-5);
 }
 

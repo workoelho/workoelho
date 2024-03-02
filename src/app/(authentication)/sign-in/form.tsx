@@ -41,7 +41,7 @@ export function Form<T extends { message: string }>({
         ) : null}
 
         <Flex direction="column" gap="1rem">
-          <Field label="E-mail">
+          <Field label="Email">
             {(props) => (
               <Input
                 name="email"

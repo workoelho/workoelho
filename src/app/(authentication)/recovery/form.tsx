@@ -24,7 +24,7 @@ export function Form(props: Props<State>) {
           </Heading>
 
           <p>
-            Enter your registered e-mail. If you remember your password, you may
+            Enter your registered email. If you remember your password, you may
             go <Link href="/sign-in">back to sign in</Link>.
           </p>
         </Flex>
@@ -36,7 +36,7 @@ export function Form(props: Props<State>) {
         ) : null}
 
         <Flex direction="column" gap="1rem">
-          <Field label="E-mail">
+          <Field label="Email">
             {(props) => (
               <Input
                 name="email"

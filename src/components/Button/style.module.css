@@ -31,7 +31,7 @@
 }
 
 .button.neutral {
-  --color: var(--neutral-2);
+  --color: var(--neutral-1);
 }
 
 .button.neutral:is(:hover, :focus-visible) {

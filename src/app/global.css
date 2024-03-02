@@ -1,3 +1,5 @@
+@import "resetize";
+
 :root {
   --background: #ffffff;
 
@@ -32,7 +34,7 @@
   --neutral-5: #f6f6f6;
 
   --radius: 0.25rem;
-  --thickness: 2px;
+  --thick: 2px;
 
   --min-width: 22.5rem;
   --max-width: 64rem;
@@ -45,23 +47,11 @@
 
 html {
   background-color: var(--background);
-  color: var(--neutral-2);
+  color: var(--neutral-1);
   font-size: 14px;
   scrollbar-gutter: stable;
 }
 
 hr {
-  border-top: var(--thickness) solid var(--neutral-5);
-}
-
-@keyframes autofill {
-  to {
-    background: transparent;
-    color: inherit;
-    font: inherit;
-  }
-}
-
-input:-webkit-autofill {
-  animation: autofill 1s forwards;
+  border-top: var(--thick) solid var(--neutral-5);
 }

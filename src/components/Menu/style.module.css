@@ -24,5 +24,5 @@
 }
 
 .separator hr {
-  border-top: var(--thickness) solid var(--neutral-4);
+  border-top: var(--thick) solid var(--neutral-4);
 }

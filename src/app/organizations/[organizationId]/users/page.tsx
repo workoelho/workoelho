@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { list } from "~/src/actions/user/list";
@@ -13,18 +14,22 @@ import { authorize } from "~/src/lib/server/authorization";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
+export const metadata: Metadata = {
+  title: "People at Workoelho",
+};
+
 type Props = {
   params: {
     organizationId: string;
   };
 };
 
-export default async function Page({ params }: Props) {
-  const organizationId = getPrivateId(params.organizationId);
-
+export default async function Page({ params: { organizationId } }: Props) {
   await authorize({ organizationId });
 
-  const users = await list({ payload: { organizationId } });
+  const users = await list({
+    payload: { organizationId: getPrivateId(organizationId) },
+  });
 
   return (
     <Container size="large" padding="3rem">
@@ -54,7 +59,7 @@ export default async function Page({ params }: Props) {
           <menu>
             <li>
               <Button
-                as="a"
+                as={Link}
                 href={getUrl("organizations", organizationId, "users", "new")}
               >
                 Add person <Icon variant="plus" />

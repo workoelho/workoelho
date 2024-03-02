@@ -1,7 +1,7 @@
 .input {
   align-items: center;
   background-color: var(--background);
-  border: var(--thickness) solid var(--neutral-4);
+  border: var(--thick) solid var(--neutral-4);
   border-radius: var(--radius);
   display: flex;
   height: 2.125rem;

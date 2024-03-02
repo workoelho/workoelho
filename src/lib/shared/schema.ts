@@ -9,10 +9,10 @@ import { Time } from "~/src/lib/shared/Time";
 export const id = number();
 
 /**
- * E-mail schema.
+ * Email schema.
  */
 export const email = define<string>("email", (value: unknown) =>
-  isEmail(value as string),
+  isEmail(value as string)
 );
 
 /**

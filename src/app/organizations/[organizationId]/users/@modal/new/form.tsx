@@ -28,18 +28,20 @@ export function Form(props: Props) {
               required
               placeholder="Jane Doe"
               minLength={1}
+              autoComplete="off"
               {...props}
             />
           )}
         </Field>
 
-        <Field label="E-mail" hint="Work e-mail.">
+        <Field label="Email" hint="Work email.">
           {(props) => (
             <Input
               name="email"
               type="email"
               placeholder="jane@example.com"
               required
+              autoComplete="off"
               {...props}
             />
           )}

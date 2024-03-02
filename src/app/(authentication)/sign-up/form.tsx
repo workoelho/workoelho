@@ -46,7 +46,7 @@ export function Form(props: Props) {
           )}
         </Field>
 
-        <Field label="E-mail" hint="Your work e-mail.">
+        <Field label="Email" hint="Your work email.">
           {(props) => (
             <Input
               name="email"

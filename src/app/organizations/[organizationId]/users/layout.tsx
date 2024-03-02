@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import type { ReactNode } from "react";
-
-export const metadata: Metadata = {
-  title: "People at Workoelho",
-};
 
 type Props = {
   children: ReactNode;
+  modal: ReactNode;
 };
 
-export default function Layout({ children }: Props) {
-  return children;
+export default function Layout({ children, modal }: Props) {
+  return (
+    <>
+      {children}
+      {modal}
+    </>
+  );
 }

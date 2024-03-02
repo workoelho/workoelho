@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Brand } from "~/src/components/Brand";
 import { Button } from "~/src/components/Button";
 import { Container } from "~/src/components/Container";
@@ -39,7 +41,7 @@ export default function Error({ error, reset }: Props) {
             <Button onClick={() => reset()}>Try again</Button>
           </li>
           <li>
-            <Button as="a" href="/sign-in">
+            <Button as={Link} href="/sign-in">
               Back
             </Button>
           </li>

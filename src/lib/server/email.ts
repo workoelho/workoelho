@@ -35,7 +35,7 @@ async function dump({ from, to, subject, body }: Params) {
 }
 
 /**
- * Send an e-mail. In development, it will dump the e-mail to a file at `./tmp`.
+ * Send an email. In development, it will dump the email to a file at `./tmp`.
  */
 export async function send({
   from = defaultSender,

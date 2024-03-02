@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 import pkg from "~/package.json";
 import { Button } from "~/src/components/Button";
@@ -17,8 +18,8 @@ import { getDeviceId } from "~/src/lib/server/deviceId";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { getUrl } from "~/src/lib/shared/url";
 
-import { SessionMenu } from "./SessionMenu";
 import classes from "./layout.module.css";
+import { SessionMenu } from "./SessionMenu";
 
 type Props = {
   params: { organizationId: string };
@@ -31,7 +32,8 @@ export default async function Layout({ params, children }: Props) {
   const session = await authorize({ organizationId });
 
   // Prisma doesn't support distinct on a related field, but we need a list of valid sessions,
-  // that originated from this device that are unique for each organization.
+  // that originated from this device that are distinct for each organization.
+  //
   // The goal is to display an account switcher.
   const sessions = (
     await db.session.findMany({
@@ -46,7 +48,8 @@ export default async function Layout({ params, children }: Props) {
     (sessions, session) => {
       if (
         sessions.some(
-          ({ organizationId }) => organizationId === session.user.organizationId
+          ({ organizationId }) =>
+            organizationId === session.user.organizationId,
         )
       ) {
         return sessions;
@@ -60,7 +63,7 @@ export default async function Layout({ params, children }: Props) {
         },
       ];
     },
-    [] as { id: string; name: string; organizationId: number }[]
+    [] as { id: string; name: string; organizationId: number }[],
   );
 
   const signIn = async (sessionId: string) => {
@@ -101,7 +104,7 @@ export default async function Layout({ params, children }: Props) {
         <Flex as="menu" gap="1.5rem">
           <li>
             <Button
-              as="a"
+              as={Link}
               href={getUrl("organizations", organizationId, "summary")}
               shape="text"
             >
@@ -110,7 +113,7 @@ export default async function Layout({ params, children }: Props) {
           </li>
           <li>
             <Button
-              as="a"
+              as={Link}
               href={getUrl("organizations", organizationId, "activity")}
               shape="text"
             >
@@ -119,7 +122,7 @@ export default async function Layout({ params, children }: Props) {
           </li>
           <li>
             <Button
-              as="a"
+              as={Link}
               href={getUrl("organizations", organizationId, "applications")}
               shape="text"
             >
@@ -128,7 +131,7 @@ export default async function Layout({ params, children }: Props) {
           </li>
           <li>
             <Button
-              as="a"
+              as={Link}
               href={getUrl("organizations", organizationId, "providers")}
               shape="text"
             >
@@ -137,7 +140,7 @@ export default async function Layout({ params, children }: Props) {
           </li>
           <li>
             <Button
-              as="a"
+              as={Link}
               href={getUrl("organizations", organizationId, "users")}
               shape="text"
             >

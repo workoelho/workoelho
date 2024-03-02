@@ -36,7 +36,7 @@ export function Form(props: Props<State & Values>) {
           )}
         </Field>
 
-        <Field label="E-mail">
+        <Field label="Email">
           {(props) => (
             <Input
               type="email"

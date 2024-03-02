@@ -1,4 +1,5 @@
 import { ElementType, forwardRef } from "react";
+import type Link from "next/link";
 
 import { ClassList } from "~/src/lib/shared/ClassList";
 import {
@@ -8,7 +9,7 @@ import {
 
 import classes from "./style.module.css";
 
-type AcceptableElementType = "a" | "button";
+type AcceptableElementType = "a" | "button" | typeof Link;
 
 export type Props = {
   variant?: "interactive" | "neutral" | "positive" | "negative" | "attentive";
@@ -23,7 +24,7 @@ function Button<E extends AcceptableElementType = "button">(
     shape = "rectangle",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("button" as ElementType);
 

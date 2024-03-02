@@ -30,7 +30,7 @@ export async function authenticate({ payload }: Context<Payload>) {
   });
 
   if (!user) {
-    throw new ValidationError("E-mail not found");
+    throw new ValidationError("Email not found");
   }
 
   if (!(await password.validate(String(payload.password), user.password))) {

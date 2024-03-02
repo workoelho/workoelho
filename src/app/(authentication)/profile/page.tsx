@@ -9,6 +9,7 @@ import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { getUrl } from "~/src/lib/shared/url";
 import { Link } from "~/src/components/Link";
+import * as schema from "~/src/lib/shared/schema";
 
 import { Form } from "./form";
 
@@ -35,17 +36,18 @@ export default async function Page() {
 
       const payload = superstruct.create(
         {
+          id: session.user.id,
           name: form.get("name"),
           email: form.get("email"),
         },
         superstruct.object({
+          id: schema.id,
           name: superstruct.string(),
           email: superstruct.string(),
         }),
       );
 
       await update({
-        query: { id: session.user.id },
         payload,
       });
 
