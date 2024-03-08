@@ -12,8 +12,9 @@ import classes from "./style.module.css";
 type AcceptableElementType = "a" | "button" | typeof Link;
 
 export type Props = {
-  variant?: "interactive" | "neutral" | "positive" | "negative" | "attentive";
+  variant?: "neutral" | "interactive" | "positive" | "negative" | "attentive";
   shape?: "text" | "rectangle" | "pill";
+  fill?: "solid" | "outline";
 };
 
 function Button<E extends AcceptableElementType = "button">(
@@ -22,15 +23,19 @@ function Button<E extends AcceptableElementType = "button">(
     children,
     variant = "neutral",
     shape = "rectangle",
+    fill = "solid",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  ref: PolymorphicRef<E>
 ) {
   const Component = as ?? ("button" as ElementType);
 
   const classList = new ClassList(classes.button);
   classList.add(classes[variant]);
   classList.add(classes[shape]);
+  if (shape !== "text") {
+    classList.add(classes[fill]);
+  }
   classList.add(props.className);
   props.className = classList.toString();
 

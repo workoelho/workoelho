@@ -1,3 +1,6 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
 type Props = {
@@ -6,10 +9,13 @@ type Props = {
 };
 
 export default function Layout({ children, modal }: Props) {
+  const pathname = usePathname();
+  const isModalSlotActive = !pathname.endsWith("/users");
+
   return (
     <>
       {children}
-      {modal}
+      {isModalSlotActive ? modal : null}
     </>
   );
 }

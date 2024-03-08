@@ -55,3 +55,7 @@ html {
 hr {
   border-top: var(--thick) solid var(--neutral-5);
 }
+
+dialog:-internal-dialog-in-top-layer {
+  user-select: auto;
+}

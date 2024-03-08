@@ -13,21 +13,27 @@
 }
 
 .button.rectangle {
-  background-color: var(--color);
   border-radius: var(--radius);
-  color: var(--background);
   gap: 0.25rem;
   height: 2.125rem;
   padding-inline: 0.75rem;
 }
 
 .button.pill {
-  background-color: var(--color);
   border-radius: 2.125rem;
-  color: var(--background);
   gap: 0.25rem;
   height: 2.125rem;
   padding-inline: 0.75rem;
+}
+
+.button.solid {
+  background-color: var(--color);
+  color: var(--background);
+}
+
+.button.outline {
+  border: var(--thick) solid currentColor;
+  color: var(--color);
 }
 
 .button.neutral {

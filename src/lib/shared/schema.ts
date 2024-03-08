@@ -4,12 +4,12 @@ import { date, defaulted, define, number, size, string } from "superstruct";
 import { Time } from "~/src/lib/shared/Time";
 
 /**
- * Public ID schema.
+ * Private database ID.
  */
 export const id = number();
 
 /**
- * Email schema.
+ * Email.
  */
 export const email = define<string>("email", (value: unknown) =>
   isEmail(value as string)
@@ -31,6 +31,6 @@ export const session = {
 export const password = size(string(), 15, Infinity);
 
 /**
- * Name schema.
+ * A simple schema for general names.
  */
 export const name = size(string(), 1, Infinity);

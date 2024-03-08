@@ -11,8 +11,12 @@ import { getFormProps } from "~/src/lib/shared/form";
 import { update } from "~/src/actions/user/update";
 import { NotFoundError } from "~/src/lib/shared/errors";
 import { Modal } from "~/src/components/Modal";
+import { Button } from "~/src/components/Button";
+import { Icon } from "~/src/components/Icon";
+import { Grid } from "~/src/components/Grid";
 
 import { Form } from "./form";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Edit person at Workoelho",
@@ -36,7 +40,8 @@ export default async function Page({
     throw new NotFoundError();
   }
 
-  const userUrl = getUrl("organizations", organizationId, "users", userId);
+  const listingUrl = getUrl("organizations", organizationId, "users");
+  const userUrl = getUrl(listingUrl, userId);
 
   const form = getFormProps(
     async (state, payload) => {
@@ -58,11 +63,28 @@ export default async function Page({
   );
 
   return (
-    <Modal closeUrl={getUrl("organizations", organizationId, "users")}>
+    <Modal closeUrl={listingUrl}>
       <Flex direction="column" gap="3rem">
-        <Heading as="h1" size="large">
-          Editing person
-        </Heading>
+        <Grid
+          as="header"
+          template="auto / 1fr auto 1fr"
+          gap="3rem"
+          alignItems="center"
+        >
+          <div />
+
+          <Heading as="h1" size="medium">
+            Editing person
+          </Heading>
+
+          <Flex as="menu" alignItems="center" style={{ justifySelf: "end" }}>
+            <li>
+              <Button as={Link} href={listingUrl} shape="text">
+                <Icon variant="x" />
+              </Button>
+            </li>
+          </Flex>
+        </Grid>
 
         <Form {...form} cancelUrl={userUrl} />
       </Flex>

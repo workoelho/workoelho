@@ -13,6 +13,8 @@ import { NotFoundError } from "~/src/lib/shared/errors";
 import { list } from "~/src/actions/role";
 import { Alert } from "~/src/components/Alert";
 import { Modal } from "~/src/components/Modal";
+import { Icon } from "~/src/components/Icon";
+import { Grid } from "~/src/components/Grid";
 
 export const metadata: Metadata = {
   title: "Person at Workoelho",
@@ -36,49 +38,50 @@ export default async function Page({
     throw new NotFoundError();
   }
 
+  const listingUrl = getUrl("organizations", organizationId, "users");
+  const editUrl = getUrl(listingUrl, userId, "edit");
+
   const roles = await list({
     payload: { userId: getPrivateId(userId), page: 1 },
   });
 
   return (
-    <Modal closeUrl={getUrl("organizations", organizationId, "users")}>
+    <Modal closeUrl={listingUrl}>
       <Flex direction="column" gap="3rem">
-        <Heading as="h1" size="large">
-          Person
-        </Heading>
+        <Grid template="auto / 1fr auto 1fr" alignItems="center" gap="3rem">
+          <div />
 
-        <Flex direction="column" gap="1.5rem">
-          <Flex alignItems="center" gap="1.5rem">
-            <Heading as="h2" size="medium">
+          <Flex direction="column" alignItems="center" gap="0.5rem">
+            <Heading as="h1" size="large">
               Profile
             </Heading>
-
-            <menu>
-              <li>
-                <Button
-                  as={Link}
-                  href={getUrl(
-                    "organizations",
-                    organizationId,
-                    "users",
-                    user.id,
-                    "edit"
-                  )}
-                >
-                  Edit
-                </Button>
-              </li>
-            </menu>
+            <p>
+              Last updated on {new Intl.DateTimeFormat().format(user.updatedAt)}
+              .
+            </p>
           </Flex>
 
-          <dl>
-            <dt>Name:</dt>
-            <dd>{user.name}</dd>
+          <Flex as="menu" gap="0.5rem">
+            <li>
+              <Button as={Link} href={editUrl}>
+                Edit
+              </Button>
+            </li>
+            <li>
+              <Button as={Link} href={listingUrl}>
+                Cancel
+              </Button>
+            </li>
+          </Flex>
+        </Grid>
 
-            <dt>Email:</dt>
-            <dd>{user.email}</dd>
-          </dl>
-        </Flex>
+        <dl>
+          <dt>Name:</dt>
+          <dd>{user.name}</dd>
+
+          <dt>Email:</dt>
+          <dd>{user.email}</dd>
+        </dl>
 
         <Flex direction="column" gap="1.5rem">
           <Heading as="h2" size="medium">

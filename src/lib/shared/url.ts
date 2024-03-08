@@ -19,6 +19,10 @@ function getUrlSegment(segment: unknown) {
   }
 }
 
+/**
+ * Build a relative URL from given segments.
+ */
 export function getUrl(...segments: unknown[]) {
-  return "/" + segments.map(getUrlSegment).join("/");
+  const url = segments.map(getUrlSegment).join("/");
+  return url[0] === "/" ? url : `/${url}`;
 }

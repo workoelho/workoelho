@@ -25,10 +25,11 @@ type Props = {
 };
 
 export default async function Page({ params: { organizationId } }: Props) {
-  await authorize({ organizationId });
+  const session = await authorize({ organizationId });
 
   const users = await list({
     payload: { organizationId: getPrivateId(organizationId) },
+    session,
   });
 
   return (
@@ -42,7 +43,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         >
           <div />
 
-          <Flex direction="column" alignItems="center" gap=".75rem">
+          <Flex direction="column" alignItems="center" gap="0.5rem">
             <Heading as="h1" size="large">
               People
             </Heading>
@@ -61,6 +62,7 @@ export default async function Page({ params: { organizationId } }: Props) {
               <Button
                 as={Link}
                 href={getUrl("organizations", organizationId, "users", "new")}
+                variant="interactive"
               >
                 Add person <Icon variant="plus" />
               </Button>
