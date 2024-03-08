@@ -1,5 +1,5 @@
 /**
- * Set of classes with serialization. Repeated or falsey items are ignored.
+ * Set of classes. Duplicate or falsey items are ignored.
  */
 export class ClassList extends Set {
   constructor(...classes: unknown[]) {

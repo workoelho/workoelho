@@ -1,7 +1,8 @@
 .topbar {
   align-items: center;
   background-color: var(--background);
-  padding: 1.5rem;
+  height: 5rem;
+  padding-inline: 1.5rem;
   position: sticky;
   top: 0;
 }

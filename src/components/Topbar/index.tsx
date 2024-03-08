@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { Brand } from "~/src/components/Brand";
 import { ClassList } from "~/src/lib/shared/ClassList";
@@ -11,14 +12,17 @@ type Props = {
 };
 
 export function Topbar({ className, children }: Props) {
-  const classList = new ClassList(classes.topbar, className);
+  const classList = new ClassList(classes.topbar);
+  if (className) {
+    classList.add(className);
+  }
 
   return (
     <nav className={String(classList)}>
       <h1>
-        <a href="/">
+        <Link href="/">
           <Brand size="medium" />
-        </a>
+        </Link>
       </h1>
 
       {children}

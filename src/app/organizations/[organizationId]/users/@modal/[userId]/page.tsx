@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
-import { Fragment } from "react";
 import Link from "next/link";
+import { Fragment } from "react";
 
+import { list } from "~/src/actions/role";
 import { get } from "~/src/actions/user/get";
+import { Alert } from "~/src/components/Alert";
 import { Button } from "~/src/components/Button";
+import { Data } from "~/src/components/Data";
 import { Flex } from "~/src/components/Flex";
+import { Grid } from "~/src/components/Grid";
 import { Heading } from "~/src/components/Heading";
+import { Icon } from "~/src/components/Icon";
+import { Modal } from "~/src/components/Modal";
 import { authorize } from "~/src/lib/server/authorization";
+import { NotFoundError } from "~/src/lib/shared/errors";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
-import { NotFoundError } from "~/src/lib/shared/errors";
-import { list } from "~/src/actions/role";
-import { Alert } from "~/src/components/Alert";
-import { Modal } from "~/src/components/Modal";
-import { Icon } from "~/src/components/Icon";
-import { Grid } from "~/src/components/Grid";
 
 export const metadata: Metadata = {
   title: "Person at Workoelho",
@@ -51,37 +52,23 @@ export default async function Page({
         <Grid template="auto / 1fr auto 1fr" alignItems="center" gap="3rem">
           <div />
 
-          <Flex direction="column" alignItems="center" gap="0.5rem">
-            <Heading as="h1" size="large">
-              Profile
-            </Heading>
-            <p>
-              Last updated on {new Intl.DateTimeFormat().format(user.updatedAt)}
-              .
-            </p>
-          </Flex>
+          <Heading as="h1" size="medium">
+            Inspecting profile
+          </Heading>
 
-          <Flex as="menu" gap="0.5rem">
+          <Flex as="menu" gap="0.5rem" style={{ justifySelf: "end" }}>
             <li>
-              <Button as={Link} href={editUrl}>
-                Edit
-              </Button>
-            </li>
-            <li>
-              <Button as={Link} href={listingUrl}>
-                Cancel
+              <Button as={Link} href={listingUrl} shape="text">
+                <Icon variant="x" />
               </Button>
             </li>
           </Flex>
         </Grid>
 
-        <dl>
-          <dt>Name:</dt>
-          <dd>{user.name}</dd>
-
-          <dt>Email:</dt>
-          <dd>{user.email}</dd>
-        </dl>
+        <Data>
+          <Data.Entry label="Name">{user.name}</Data.Entry>
+          <Data.Entry label="Email">{user.email}</Data.Entry>
+        </Data>
 
         <Flex direction="column" gap="1.5rem">
           <Heading as="h2" size="medium">
