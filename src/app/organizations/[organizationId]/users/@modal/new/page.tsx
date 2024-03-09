@@ -7,13 +7,13 @@ import { authorize } from "~/src/lib/server/authorization";
 import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
 import { create } from "~/src/actions/user/create";
-import { Modal } from "~/src/components/Modal";
+import { Modal, Close } from "~/src/components/Modal";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 
 import { Form } from "./form";
 
 export const metadata: Metadata = {
-  title: "New person at Workoelho",
+  title: "Adding profile at Workoelho",
 };
 
 type Props = {
@@ -44,9 +44,20 @@ export default async function Page({ params: { organizationId } }: Props) {
   return (
     <Modal closeUrl={getUrl("organizations", organizationId, "users")}>
       <Flex direction="column" gap="3rem">
-        <Heading as="h1" size="large">
-          New person
-        </Heading>
+        <Flex
+          as="header"
+          alignItems="center"
+          justifyContent="space-between"
+          style={{ height: "1.5rem" }}
+        >
+          <Flex gap="1.5rem">
+            <Heading as="h1" size="medium">
+              Adding profile
+            </Heading>
+          </Flex>
+
+          <Close />
+        </Flex>
 
         <Form {...form} />
       </Flex>

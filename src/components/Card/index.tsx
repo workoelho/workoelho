@@ -9,7 +9,6 @@ import type {
 import classes from "./style.module.css";
 
 type AcceptableElementType =
-  | "span"
   | "div"
   | "nav"
   | "li"
@@ -34,7 +33,7 @@ function Card<E extends AcceptableElementType = "div">(
     size = "medium",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  ref: PolymorphicRef<E>
 ) {
   const Component = as ?? ("div" as ElementType);
 

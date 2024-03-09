@@ -36,10 +36,8 @@
   --radius: 0.25rem;
   --thick: 2px;
 
-  --min-width: 22.5rem;
-  --max-width: 64rem;
-
-  --breakpoint: 48rem;
+  --min-width: 25.75rem;
+  --max-width: 73.25rem;
 }
 
 /* @custom-media --small-viewport (width < 48rem); */
@@ -57,5 +55,5 @@ hr {
 }
 
 dialog:-internal-dialog-in-top-layer {
-  user-select: auto;
+  user-select: text;
 }

@@ -1,12 +1,8 @@
 "use client";
 
-import type { ElementRef, ReactNode } from "react";
+import type { ElementRef, MouseEvent, ReactNode } from "react";
 import { useEffect, useRef } from "react";
-import {
-  usePathname,
-  useRouter,
-  useSelectedLayoutSegments,
-} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { Icon } from "~/src/components/Icon";
 
@@ -39,3 +35,21 @@ export function Modal({ children, closeUrl }: Props) {
     </dialog>
   );
 }
+
+export function Close() {
+  const onClick = (event: MouseEvent<HTMLButtonElement>) => {
+    const dialog = event.currentTarget.closest("dialog");
+    if (!dialog) {
+      throw new Error("Could not find dialog to close");
+    }
+    dialog.close();
+  };
+
+  return (
+    <button onClick={onClick}>
+      <Icon variant="x" size="1.5rem" />
+    </button>
+  );
+}
+
+Modal.Close = Close;

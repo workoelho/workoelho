@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 import { get } from "~/src/actions/user/get";
 import { Flex } from "~/src/components/Flex";
@@ -10,16 +11,14 @@ import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
 import { update } from "~/src/actions/user/update";
 import { NotFoundError } from "~/src/lib/shared/errors";
-import { Modal } from "~/src/components/Modal";
+import { Close, Modal } from "~/src/components/Modal";
 import { Button } from "~/src/components/Button";
 import { Icon } from "~/src/components/Icon";
-import { Grid } from "~/src/components/Grid";
 
 import { Form } from "./form";
-import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Edit person at Workoelho",
+  title: "Editing profile at Workoelho",
 };
 
 type Props = {
@@ -65,26 +64,18 @@ export default async function Page({
   return (
     <Modal closeUrl={listingUrl}>
       <Flex direction="column" gap="3rem">
-        <Grid
+        <Flex
           as="header"
-          template="auto / 1fr auto 1fr"
-          gap="3rem"
           alignItems="center"
+          justifyContent="space-between"
+          style={{ height: "1.5rem" }}
         >
-          <div />
-
           <Heading as="h1" size="medium">
-            Editing person
+            Editing profile
           </Heading>
 
-          <Flex as="menu" alignItems="center" style={{ justifySelf: "end" }}>
-            <li>
-              <Button as={Link} href={listingUrl} shape="text">
-                <Icon variant="x" />
-              </Button>
-            </li>
-          </Flex>
-        </Grid>
+          <Close />
+        </Flex>
 
         <Form {...form} cancelUrl={userUrl} />
       </Flex>

@@ -8,17 +8,17 @@ import { Alert } from "~/src/components/Alert";
 import { Button } from "~/src/components/Button";
 import { Data } from "~/src/components/Data";
 import { Flex } from "~/src/components/Flex";
-import { Grid } from "~/src/components/Grid";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
-import { Modal } from "~/src/components/Modal";
+import { Close, Modal } from "~/src/components/Modal";
 import { authorize } from "~/src/lib/server/authorization";
 import { NotFoundError } from "~/src/lib/shared/errors";
+import { format } from "~/src/lib/shared/formatting";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
-  title: "Person at Workoelho",
+  title: "Inspecting profile at Workoelho",
 };
 
 type Props = {
@@ -49,23 +49,42 @@ export default async function Page({
   return (
     <Modal closeUrl={listingUrl}>
       <Flex direction="column" gap="3rem">
-        <Grid template="auto / 1fr auto 1fr" alignItems="center" gap="3rem">
-          <div />
+        <Flex
+          as="header"
+          alignItems="center"
+          justifyContent="space-between"
+          style={{ height: "1.5rem" }}
+        >
+          <Flex gap="1.5rem">
+            <Heading as="h1" size="medium">
+              Inspecting profile
+            </Heading>
 
-          <Heading as="h1" size="medium">
-            Inspecting profile
-          </Heading>
-
-          <Flex as="menu" gap="0.5rem" style={{ justifySelf: "end" }}>
-            <li>
-              <Button as={Link} href={listingUrl} shape="text">
-                <Icon variant="x" />
-              </Button>
-            </li>
+            <Flex as="menu" gap="0.5rem" alignItems="center">
+              <li>
+                <Button as={Link} href={editUrl}>
+                  Edit <Icon variant="pencil" />
+                </Button>
+              </li>
+            </Flex>
           </Flex>
-        </Grid>
+
+          <Close />
+        </Flex>
 
         <Data>
+          <Data.Entry label="Created on">
+            {format(user.createdAt, undefined, {
+              dateStyle: "long",
+              timeStyle: "short",
+            })}
+          </Data.Entry>
+          <Data.Entry label="Updated on">
+            {format(user.updatedAt, undefined, {
+              dateStyle: "long",
+              timeStyle: "short",
+            })}
+          </Data.Entry>
           <Data.Entry label="Name">{user.name}</Data.Entry>
           <Data.Entry label="Email">{user.email}</Data.Entry>
         </Data>

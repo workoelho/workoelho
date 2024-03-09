@@ -48,8 +48,7 @@ export default async function Layout({ params, children }: Props) {
     (sessions, session) => {
       if (
         sessions.some(
-          ({ organizationId }) =>
-            organizationId === session.user.organizationId,
+          ({ organizationId }) => organizationId === session.user.organizationId
         )
       ) {
         return sessions;
@@ -63,7 +62,7 @@ export default async function Layout({ params, children }: Props) {
         },
       ];
     },
-    [] as { id: string; name: string; organizationId: number }[],
+    [] as { id: string; name: string; organizationId: number }[]
   );
 
   const signIn = async (sessionId: string) => {
@@ -132,10 +131,10 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl("organizations", organizationId, "providers")}
+              href={getUrl("organizations", organizationId, "services")}
               shape="text"
             >
-              Providers
+              Services
             </Button>
           </li>
           <li>
@@ -145,6 +144,24 @@ export default async function Layout({ params, children }: Props) {
               shape="text"
             >
               People
+            </Button>
+          </li>
+          <li>
+            <Button
+              as={Link}
+              href={getUrl("organizations", organizationId, "providers")}
+              shape="text"
+            >
+              Providers
+            </Button>
+          </li>
+          <li>
+            <Button
+              as={Link}
+              href={getUrl("organizations", organizationId, "tags")}
+              shape="text"
+            >
+              Tags
             </Button>
           </li>
         </Flex>
