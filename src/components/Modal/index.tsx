@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Icon } from "~/src/components/Icon";
 
 import classes from "./style.module.css";
+import { Button } from "~/src/components/Button";
 
 type Props = {
   closeUrl?: string;
@@ -46,9 +47,9 @@ export function Close() {
   };
 
   return (
-    <button onClick={onClick}>
+    <Button onClick={onClick} shape="text">
       <Icon variant="x" size="1.5rem" />
-    </button>
+    </Button>
   );
 }
 

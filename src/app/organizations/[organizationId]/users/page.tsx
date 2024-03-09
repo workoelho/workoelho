@@ -7,6 +7,7 @@ import { Card } from "~/src/components/Card";
 import { Container } from "~/src/components/Container";
 import { Flex } from "~/src/components/Flex";
 import { Grid } from "~/src/components/Grid";
+import { Header } from "~/src/components/Header";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Text } from "~/src/components/Text";
@@ -35,15 +36,10 @@ export default async function Page({ params: { organizationId } }: Props) {
   return (
     <Container size="large" padding="3rem">
       <Flex direction="column" gap="3rem">
-        <Grid
-          as="header"
-          template="auto / 1fr auto 1fr"
-          gap="3rem"
-          alignItems="center"
-        >
+        <Header>
           <div />
 
-          <Flex direction="column" alignItems="center" gap="0.5rem">
+          <Flex direction="column" alignItems="center" gap="0.75rem">
             <Heading as="h1" size="large">
               People
             </Heading>
@@ -62,13 +58,12 @@ export default async function Page({ params: { organizationId } }: Props) {
               <Button
                 as={Link}
                 href={getUrl("organizations", organizationId, "users", "new")}
-                variant="interactive"
               >
                 Add person <Icon variant="plus" />
               </Button>
             </li>
           </menu>
-        </Grid>
+        </Header>
 
         <Grid as="ul" template="auto / 1fr 1fr 1fr" gap=".75rem">
           {users.map((user) => (
@@ -77,7 +72,7 @@ export default async function Page({ params: { organizationId } }: Props) {
                 href={getUrl("organizations", organizationId, "users", user.id)}
               >
                 <Card as="article" key={user.id}>
-                  <Text as="h1" weight={700}>
+                  <Text as="h1" weight="bolder">
                     {user.name}
                   </Text>
                   <Text as="p" variant="muted">

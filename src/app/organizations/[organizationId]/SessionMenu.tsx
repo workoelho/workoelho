@@ -1,6 +1,8 @@
 "use client";
 
-import { Menu } from "~/src/components/Menu";
+import Link from "next/link";
+
+import { Menu, Option, Separator } from "~/src/components/Menu";
 
 type Props = {
   signIn: (sessionId: string) => void;
@@ -12,16 +14,20 @@ export function SessionMenu({ signIn, signOut, sessions }: Props) {
   return (
     <Menu>
       {sessions.map((session) => (
-        <Menu.Item key={session.id} onClick={() => signIn(session.id)}>
+        <Option key={session.id} onClick={() => signIn(session.id)}>
           {session.name}
-        </Menu.Item>
+        </Option>
       ))}
-      <Menu.Item href="/sign-in">Sign in</Menu.Item>
+      <Option as={Link} href="/sign-in">
+        Sign in
+      </Option>
 
-      <Menu.Separator />
+      <Separator />
 
-      <Menu.Item href="/profile">My profile</Menu.Item>
-      <Menu.Item onClick={() => signOut()}>Sign out</Menu.Item>
+      <Option as={Link} href="/profile">
+        My profile
+      </Option>
+      <Option onClick={() => signOut()}>Sign out</Option>
     </Menu>
   );
 }

@@ -1,5 +1,11 @@
-import { ComponentProps, ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
+import { forwardRef } from "react";
+import Link from "next/link";
 
+import type {
+  PolymorphicPropsWithRef,
+  PolymorphicRef,
+} from "~/src/lib/shared/react";
 import { ClassList } from "~/src/lib/shared/ClassList";
 
 import classes from "./style.module.css";
@@ -12,39 +18,33 @@ export function Menu({ children }: MenuProps) {
   return <menu className={classes.menu}>{children}</menu>;
 }
 
-type ItemProps = ComponentProps<"a"> | ComponentProps<"button">;
+type AcceptableElementType = "a" | "button" | typeof Link;
 
-function isAnchor(props: ItemProps): props is ComponentProps<"a"> {
-  return "href" in props;
-}
+function Option<E extends AcceptableElementType = "button">(
+  { as, ...props }: PolymorphicPropsWithRef<E, {}>,
+  ref: PolymorphicRef<E>
+) {
+  const Component = as ?? ("button" as ElementType);
 
-function Item({ ...props }: ItemProps) {
   const classList = new ClassList(classes.item);
-  classList.add(props.className);
-  props.className = String(classList);
-
-  if (isAnchor(props)) {
-    return (
-      <li>
-        <a {...props} className={classes.item} />
-      </li>
-    );
+  if (props.className) {
+    classList.add(props.className);
   }
+  props.className = String(classList);
 
   return (
     <li>
-      <button {...props} className={classes.item} />
+      <Component ref={ref} {...props} />
     </li>
   );
 }
+const forwardRefOption = forwardRef(Option) as typeof Option;
+export { forwardRefOption as Option };
 
-function Separator() {
+export function Separator() {
   return (
     <li className={classes.separator}>
       <hr />
     </li>
   );
 }
-
-Menu.Item = Item;
-Menu.Separator = Separator;

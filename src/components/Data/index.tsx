@@ -23,5 +23,3 @@ export function Entry({ label, children }: EntryProps) {
     </li>
   );
 }
-
-Data.Entry = Entry;

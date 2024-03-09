@@ -6,7 +6,7 @@ import { list } from "~/src/actions/role";
 import { get } from "~/src/actions/user/get";
 import { Alert } from "~/src/components/Alert";
 import { Button } from "~/src/components/Button";
-import { Data } from "~/src/components/Data";
+import { Data, Entry } from "~/src/components/Data";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
@@ -73,20 +73,22 @@ export default async function Page({
         </Flex>
 
         <Data>
-          <Data.Entry label="Created on">
+          <Entry label="Created on">
             {format(user.createdAt, undefined, {
               dateStyle: "long",
               timeStyle: "short",
             })}
-          </Data.Entry>
-          <Data.Entry label="Updated on">
+          </Entry>
+          <Entry label="Updated on">
             {format(user.updatedAt, undefined, {
               dateStyle: "long",
               timeStyle: "short",
             })}
-          </Data.Entry>
-          <Data.Entry label="Name">{user.name}</Data.Entry>
-          <Data.Entry label="Email">{user.email}</Data.Entry>
+          </Entry>
+          <Entry label="Name">{user.name}</Entry>
+          <Entry label="Email" copiable>
+            {user.email}
+          </Entry>
         </Data>
 
         <Flex direction="column" gap="1.5rem">
