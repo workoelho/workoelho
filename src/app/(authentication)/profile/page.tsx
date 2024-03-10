@@ -44,7 +44,7 @@ export default async function Page() {
           id: schema.id,
           name: superstruct.string(),
           email: superstruct.string(),
-        }),
+        })
       );
 
       await update({
@@ -55,7 +55,7 @@ export default async function Page() {
     },
     {
       values: { name: session.user.name, email: session.user.email },
-    },
+    }
   );
 
   return (
@@ -69,9 +69,7 @@ export default async function Page() {
 
         <p>
           Go <Link href="/reset">change your password</Link>, or back to{" "}
-          <Link
-            href={getUrl("organizations", session.user.organization, "summary")}
-          >
+          <Link href={getUrl(session.user.organization, "summary")}>
             my organization
           </Link>
           .

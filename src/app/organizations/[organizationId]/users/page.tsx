@@ -57,7 +57,7 @@ export default async function Page({ params: { organizationId } }: Props) {
             <li>
               <Button
                 as={Link}
-                href={getUrl("organizations", organizationId, "users", "new")}
+                href={getUrl(session.user.organization, "users", "new")}
               >
                 Add person <Icon variant="plus" />
               </Button>
@@ -68,9 +68,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         <Grid as="ul" template="auto / 1fr 1fr 1fr" gap=".75rem">
           {users.map((user) => (
             <li key={user.id}>
-              <Link
-                href={getUrl("organizations", organizationId, "users", user.id)}
-              >
+              <Link href={getUrl(session.user.organization, user)}>
                 <Card as="article" key={user.id}>
                   <Text as="h1" weight="bolder">
                     {user.name}

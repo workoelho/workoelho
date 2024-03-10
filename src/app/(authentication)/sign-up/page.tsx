@@ -44,7 +44,7 @@ export default async function Page() {
 
     setSessionCookie(session);
 
-    redirect(getUrl("organizations", organization, "summary"));
+    redirect(getUrl(organization, "summary"));
   });
 
   return (

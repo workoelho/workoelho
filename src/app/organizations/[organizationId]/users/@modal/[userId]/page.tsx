@@ -86,9 +86,7 @@ export default async function Page({
             })}
           </Entry>
           <Entry label="Name">{user.name}</Entry>
-          <Entry label="Email" copiable>
-            {user.email}
-          </Entry>
+          <Entry label="Email">{user.email}</Entry>
         </Data>
 
         <Flex direction="column" gap="1.5rem">
@@ -99,14 +97,13 @@ export default async function Page({
           {roles.length === 0 ? (
             <Alert variant="neutral">No roles.</Alert>
           ) : (
-            <dl>
+            <Data>
               {roles.map((role) => (
-                <Fragment key={role.id}>
-                  <dt>{role.application.name}</dt>
-                  <dd>{role.name}</dd>
-                </Fragment>
+                <Entry key={role.id} label={role.application.name}>
+                  {role.name}
+                </Entry>
               ))}
-            </dl>
+            </Data>
           )}
         </Flex>
       </Flex>

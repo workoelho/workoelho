@@ -60,7 +60,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
       payload: { id: session.user.id, password: form.get("password") },
     });
 
-    redirect(getUrl("organizations", session.user.organizationId, "summary"));
+    redirect(getUrl(session.user.organization, "summary"));
   });
 
   return (
@@ -76,9 +76,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
 
         <p>
           You may go back to <Link href={getUrl("profile")}>my profile</Link> or{" "}
-          <Link
-            href={getUrl("organizations", session.user.organization, "summary")}
-          >
+          <Link href={getUrl(session.user.organization, "summary")}>
             my organization
           </Link>
           .

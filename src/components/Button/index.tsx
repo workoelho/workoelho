@@ -1,3 +1,5 @@
+"use client";
+
 import { ElementType, forwardRef } from "react";
 import type Link from "next/link";
 
@@ -12,6 +14,7 @@ import classes from "./style.module.css";
 type AcceptableElementType = "a" | "button" | typeof Link;
 
 export type Props = {
+  action?: () => Promise<unknown>;
   variant?: "neutral" | "interactive" | "positive" | "negative" | "attentive";
   shape?: "text" | "rectangle" | "pill";
   fill?: "solid" | "outline";
@@ -20,6 +23,7 @@ export type Props = {
 function Button<E extends AcceptableElementType = "button">(
   {
     as,
+    action,
     children,
     variant = "neutral",
     shape = "rectangle",
@@ -37,7 +41,11 @@ function Button<E extends AcceptableElementType = "button">(
     classList.add(classes[fill]);
   }
   classList.add(props.className);
-  props.className = classList.toString();
+  props.className = String(classList);
+
+  if (action) {
+    props.onClick = () => action();
+  }
 
   return (
     <Component ref={ref} {...props}>

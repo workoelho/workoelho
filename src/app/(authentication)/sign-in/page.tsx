@@ -30,7 +30,7 @@ export default async function Page() {
 
     setSessionCookie(session);
 
-    redirect(getUrl("organizations", session.user.organization, "summary"));
+    redirect(getUrl(session.user.organization, "summary"));
   };
 
   return <Form action={action} initialState={{ message: "" }} />;

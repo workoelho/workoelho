@@ -17,9 +17,10 @@ import { db } from "~/src/lib/server/prisma";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { getUrl } from "~/src/lib/shared/url";
+import { Menu, Option, Separator } from "~/src/components/Menu";
+import { Text } from "~/src/components/Text";
 
 import classes from "./layout.module.css";
-import { SessionMenu } from "./SessionMenu";
 
 type Props = {
   params: { organizationId: string };
@@ -31,46 +32,23 @@ export default async function Layout({ params, children }: Props) {
 
   const session = await authorize({ organizationId });
 
-  // Prisma doesn't support distinct on a related field, but we need a list of valid sessions,
-  // that originated from this device that are distinct for each organization.
-  //
-  // The goal is to display an account switcher.
-  const sessions = (
-    await db.session.findMany({
-      where: {
-        deviceId: getDeviceId(cookies()),
-        expiresAt: { gt: new Date() },
-      },
-      include: { user: { include: { organization: true } } },
-      orderBy: { createdAt: "desc" },
-    })
-  ).reduce(
-    (sessions, session) => {
-      if (
-        sessions.some(
-          ({ organizationId }) => organizationId === session.user.organizationId
-        )
-      ) {
-        return sessions;
-      }
-      return [
-        ...sessions,
-        {
-          organizationId: session.user.organizationId,
-          name: `${getShortName(session.user.name)} (${session.user.organization.name})`,
-          id: session.id,
-        },
-      ];
+  const sessions = await db.session.findMany({
+    where: {
+      deviceId: getDeviceId(cookies()),
+      expiresAt: { gt: new Date() },
+      organizationId: { not: session.user.organizationId },
     },
-    [] as { id: string; name: string; organizationId: number }[]
-  );
+    include: { user: { include: { organization: true } } },
+    orderBy: { createdAt: "desc" },
+    distinct: ["organizationId"],
+  });
 
   const signIn = async (sessionId: string) => {
     "use server";
 
     const session = await db.session.findUnique({
       where: { id: sessionId, expiresAt: { gt: new Date() } },
-      include: { user: true },
+      include: { user: { include: { organization: true } } },
     });
 
     if (!session) {
@@ -79,17 +57,17 @@ export default async function Layout({ params, children }: Props) {
 
     setSessionCookie(session);
 
-    redirect(getUrl("organizations", session.user.organizationId, "summary"));
+    redirect(getUrl(session.user.organization, "summary"));
   };
 
-  const signOut = async () => {
+  const signOut = async (sessionId: string) => {
     "use server";
 
     await db.session.update({
       data: {
         expiresAt: new Date(),
       },
-      where: { id: session.id },
+      where: { id: sessionId },
     });
 
     clearSessionCookie();
@@ -104,7 +82,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl("organizations", organizationId, "summary")}
+              href={getUrl(session.user.organization, "summary")}
               shape="text"
             >
               Summary
@@ -113,7 +91,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl("organizations", organizationId, "activity")}
+              href={getUrl(session.user.organization, "activity")}
               shape="text"
             >
               Activity
@@ -122,7 +100,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl("organizations", organizationId, "applications")}
+              href={getUrl(session.user.organization, "applications")}
               shape="text"
             >
               Applications
@@ -131,7 +109,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl("organizations", organizationId, "services")}
+              href={getUrl(session.user.organization, "services")}
               shape="text"
             >
               Services
@@ -140,7 +118,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl("organizations", organizationId, "users")}
+              href={getUrl(session.user.organization, "users")}
               shape="text"
             >
               People
@@ -149,7 +127,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl("organizations", organizationId, "providers")}
+              href={getUrl(session.user.organization, "providers")}
               shape="text"
             >
               Providers
@@ -158,7 +136,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl("organizations", organizationId, "tags")}
+              href={getUrl(session.user.organization, "tags")}
               shape="text"
             >
               Tags
@@ -178,11 +156,33 @@ export default async function Layout({ params, children }: Props) {
                 </Button>
               }
             >
-              <SessionMenu
-                signIn={signIn}
-                signOut={signOut}
-                sessions={sessions}
-              />
+              <Menu>
+                <Option as={Link} href="/profile">
+                  My profile
+                </Option>
+                <Option action={signOut.bind(null, session.id)}>
+                  Sign out
+                </Option>
+
+                <Separator />
+
+                {sessions.map((session) => (
+                  <Option
+                    key={session.id}
+                    action={signIn.bind(null, session.id)}
+                  >
+                    <Flex direction="column">
+                      {session.user.organization.name}
+                      <Text variant="muted" size="smaller">
+                        {session.user.email}
+                      </Text>
+                    </Flex>
+                  </Option>
+                ))}
+                <Option as={Link} href="/sign-in">
+                  Sign in
+                </Option>
+              </Menu>
             </Popover>
           </li>
         </Flex>
