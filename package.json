@@ -19,12 +19,12 @@
     "@prisma/client": "^5.10.2",
     "@tsconfig/next": "^2.0.1",
     "@types/bcrypt": "^5.0.2",
-    "@types/node": "20.11.24",
-    "@types/react": "18.2.61",
-    "@types/react-dom": "18.2.19",
+    "@types/node": "20.11.25",
+    "@types/react": "18.2.64",
+    "@types/react-dom": "18.2.21",
     "bcrypt": "^5.1.1",
     "eslint": "8.57.0",
-    "eslint-config-next": "14.1.1",
+    "eslint-config-next": "14.1.3",
     "is-email": "^1.0.2",
     "next": "^14.2.0-canary.10",
     "prettier": "^3.2.5",
@@ -35,6 +35,6 @@
     "resetize": "^31.2.0",
     "sqids": "^0.3.0",
     "superstruct": "^1.0.3",
-    "typescript": "5.3.3"
+    "typescript": "5.4.2"
   }
 }
