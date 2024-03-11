@@ -26,21 +26,8 @@ export function Form(props: Props) {
             <Input
               name="name"
               required
-              placeholder="Jane Doe"
+              placeholder="Web application"
               minLength={1}
-              autoComplete="off"
-              {...props}
-            />
-          )}
-        </Field>
-
-        <Field label="Email" hint="Work email.">
-          {(props) => (
-            <Input
-              name="email"
-              type="email"
-              placeholder="jane@example.com"
-              required
               autoComplete="off"
               {...props}
             />

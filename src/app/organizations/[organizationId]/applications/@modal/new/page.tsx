@@ -6,14 +6,13 @@ import { Heading } from "~/src/components/Heading";
 import { authorize } from "~/src/lib/server/authorization";
 import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
-import { create } from "~/src/actions/user/create";
+import { create } from "~/src/actions/application/create";
 import { Modal, Close } from "~/src/components/Modal";
-import { getPrivateId } from "~/src/lib/shared/publicId";
 
 import { Form } from "./form";
 
 export const metadata: Metadata = {
-  title: "Adding profile at Workoelho",
+  title: "New application at Workoelho",
 };
 
 type Props = {
@@ -28,21 +27,20 @@ export default async function Page({ params: { organizationId } }: Props) {
   const form = getFormProps(async (state, payload) => {
     "use server";
 
-    await authorize({ organizationId });
+    const session = await authorize({ organizationId });
 
     await create({
       payload: {
-        organizationId: getPrivateId(organizationId),
         name: payload.get("name"),
-        email: payload.get("email"),
       },
+      session,
     });
 
-    redirect(getUrl("organizations", organizationId, "users"));
+    redirect(getUrl("organizations", organizationId, "applications"));
   });
 
   return (
-    <Modal closeUrl={getUrl("organizations", organizationId, "users")}>
+    <Modal closeUrl={getUrl("organizations", organizationId, "applications")}>
       <Flex direction="column" gap="3rem">
         <Flex
           as="header"
@@ -52,7 +50,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         >
           <Flex gap="1.5rem">
             <Heading as="h1" size="medium">
-              Adding profile
+              New application
             </Heading>
           </Flex>
 

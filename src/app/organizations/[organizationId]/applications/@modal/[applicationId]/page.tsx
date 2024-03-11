@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Fragment } from "react";
 
 import { list } from "~/src/actions/role";
-import { get } from "~/src/actions/user/get";
+import { get } from "~/src/actions/application/get";
 import { Alert } from "~/src/components/Alert";
 import { Button } from "~/src/components/Button";
 import { Data, Entry } from "~/src/components/Data";
@@ -12,38 +11,36 @@ import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Close, Modal } from "~/src/components/Modal";
 import { authorize } from "~/src/lib/server/authorization";
-import { NotFoundError } from "~/src/lib/shared/errors";
-import { format } from "~/src/lib/shared/formatting";
+import { formatDateTime, formatText } from "~/src/lib/shared/formatting";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
-  title: "Inspecting profile at Workoelho",
+  title: "Inspecting application at Workoelho",
 };
 
 type Props = {
   params: {
     organizationId: string;
-    userId: string;
+    applicationId: string;
   };
 };
 
 export default async function Page({
-  params: { organizationId, userId },
+  params: { organizationId, applicationId },
 }: Props) {
-  await authorize({ organizationId });
+  const session = await authorize({ organizationId });
+  const application = await get({
+    payload: { id: getPrivateId(applicationId) },
+    session,
+  });
 
-  const user = await get({ payload: { id: getPrivateId(userId) } });
-
-  if (!user) {
-    throw new NotFoundError();
-  }
-
-  const listingUrl = getUrl("organizations", organizationId, "users");
-  const editUrl = getUrl(listingUrl, userId, "edit");
+  const listingUrl = getUrl(session.organization, "applications");
+  const editUrl = getUrl(listingUrl, applicationId, "edit");
 
   const roles = await list({
-    payload: { userId: getPrivateId(userId), page: 1 },
+    payload: { applicationId: getPrivateId(applicationId), page: 1 },
+    session,
   });
 
   return (
@@ -57,7 +54,7 @@ export default async function Page({
         >
           <Flex gap="1.5rem">
             <Heading as="h1" size="medium">
-              Inspecting profile
+              Inspecting application
             </Heading>
 
             <Flex as="menu" gap="0.5rem" alignItems="center">
@@ -74,19 +71,18 @@ export default async function Page({
 
         <Data>
           <Entry label="Created on">
-            {format(user.createdAt, undefined, {
+            {formatDateTime(application.createdAt, {
               dateStyle: "long",
               timeStyle: "short",
             })}
           </Entry>
           <Entry label="Updated on">
-            {format(user.updatedAt, undefined, {
+            {formatDateTime(application.updatedAt, {
               dateStyle: "long",
               timeStyle: "short",
             })}
           </Entry>
-          <Entry label="Name">{user.name}</Entry>
-          <Entry label="Email">{user.email}</Entry>
+          <Entry label="Name">{application.name}</Entry>
         </Data>
 
         <Flex direction="column" gap="1.5rem">
@@ -99,8 +95,8 @@ export default async function Page({
           ) : (
             <Data>
               {roles.map((role) => (
-                <Entry key={role.id} label={role.application.name}>
-                  {role.name}
+                <Entry key={role.id} label={role.name}>
+                  {role.user.name}
                 </Entry>
               ))}
             </Data>

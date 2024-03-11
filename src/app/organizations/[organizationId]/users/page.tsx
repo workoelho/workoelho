@@ -41,22 +41,7 @@ export default async function Page({ params: { organizationId } }: Props) {
               People
             </Heading>
 
-            <div>
-              {"Listing "}
-              <Popover
-                trigger={
-                  <Button shape="text">
-                    all levels <Icon variant="chevron-down" />
-                  </Button>
-                }
-              >
-                <Menu>
-                  <Option>regulars</Option>
-                  <Option>administrators</Option>
-                </Menu>
-              </Popover>
-              .
-            </div>
+            <p>List all profiles.</p>
           </Flex>
 
           <menu>
@@ -65,7 +50,7 @@ export default async function Page({ params: { organizationId } }: Props) {
                 as={Link}
                 href={getUrl(session.organization, "users", "new")}
               >
-                Add person <Icon variant="plus" />
+                Add profile <Icon variant="plus" />
               </Button>
             </li>
           </menu>

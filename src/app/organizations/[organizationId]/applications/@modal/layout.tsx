@@ -9,7 +9,7 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   const pathname = usePathname();
-  const isSlotActive = !pathname.endsWith("/users");
+  const isSlotActive = !pathname.endsWith("/applications");
 
   return <>{isSlotActive ? children : null}</>;
 }

@@ -11,7 +11,7 @@ import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
 import { Props as Form, State } from "~/src/lib/shared/form";
 
-type Values = { values: { name: string; email: string } };
+type Values = { values: { name: string } };
 
 type Props = Form<State & Values> & {
   cancelUrl: string;
@@ -37,19 +37,6 @@ export function Form({ cancelUrl, ...props }: Props) {
               placeholder="Jane Doe"
               minLength={1}
               defaultValue={state.values.name}
-              {...props}
-            />
-          )}
-        </Field>
-
-        <Field label="Email" hint="Work email.">
-          {(props) => (
-            <Input
-              name="email"
-              type="email"
-              placeholder="jane@example.com"
-              required
-              defaultValue={state.values.email}
               {...props}
             />
           )}

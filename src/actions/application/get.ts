@@ -8,32 +8,23 @@ import { validate } from "~/src/lib/server/session";
 import * as schema from "~/src/lib/shared/schema";
 
 const payloadSchema = superstruct.object({
-  userId: superstruct.optional(schema.id),
-  applicationId: superstruct.optional(schema.id),
-  page: superstruct.defaulted(superstruct.number(), 1),
+  id: schema.id,
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
 
 /**
- * List roles of a user.
+ * Get one application.
  */
-export async function list(context: Context<Payload>) {
+export async function get(context: Context<Payload>) {
   const payload = superstruct.create(context.payload, payloadSchema);
 
   validate(context.session);
 
-  const take = 10;
-  const skip = (payload.page - 1) * take;
-
-  return await db.role.findMany({
+  return await db.application.findUniqueOrThrow({
     where: {
-      userId: payload.userId,
-      applicationId: payload.applicationId,
+      id: payload.id,
       organizationId: context.session.organizationId,
     },
-    include: { user: true, application: true },
-    take,
-    skip,
   });
 }
