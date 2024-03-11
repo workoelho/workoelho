@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import * as superstruct from "superstruct";
 
-import { getValidSession } from "~/src/lib/server/session";
+import { getRequestSession, validate } from "~/src/lib/server/session";
 import { getFormProps } from "~/src/lib/shared/form";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { update } from "~/src/actions/user/update";
@@ -9,7 +8,6 @@ import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { getUrl } from "~/src/lib/shared/url";
 import { Link } from "~/src/components/Link";
-import * as schema from "~/src/lib/shared/schema";
 
 import { Form } from "./form";
 
@@ -18,44 +16,30 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const session = await getValidSession();
-
-  if (!session) {
-    throw new UnauthorizedError();
-  }
+  const session = await getRequestSession();
+  validate(session);
 
   const form = getFormProps(
     async (state, form) => {
       "use server";
 
-      const session = await getValidSession();
+      const session = await getRequestSession();
+      validate(session);
 
-      if (!session) {
-        throw new UnauthorizedError();
-      }
-
-      const payload = superstruct.create(
-        {
+      await update({
+        payload: {
           id: session.user.id,
           name: form.get("name"),
           email: form.get("email"),
         },
-        superstruct.object({
-          id: schema.id,
-          name: superstruct.string(),
-          email: superstruct.string(),
-        })
-      );
-
-      await update({
-        payload,
+        session,
       });
 
       return { ...state, message: "Changes saved." };
     },
     {
       values: { name: session.user.name, email: session.user.email },
-    }
+    },
   );
 
   return (
@@ -69,7 +53,7 @@ export default async function Page() {
 
         <p>
           Go <Link href="/reset">change your password</Link>, or back to{" "}
-          <Link href={getUrl(session.user.organization, "summary")}>
+          <Link href={getUrl(session.organization, "summary")}>
             my organization
           </Link>
           .

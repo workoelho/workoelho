@@ -4,13 +4,13 @@ import { ClassList } from "~/src/lib/shared/ClassList";
 
 import classes from "./style.module.css";
 
-type Props = ComponentProps<"input">;
+type Props = ComponentProps<"select">;
 
-export function Input(props: Props) {
-  const classList = new ClassList(classes.input);
+export function Select(props: Props) {
+  const classList = new ClassList(classes.select);
   if (props.className) {
     classList.add(props.className);
   }
 
-  return <input {...props} className={String(classList)} />;
+  return <select {...props} className={String(classList)} />;
 }

@@ -10,9 +10,10 @@ import { Grid } from "~/src/components/Grid";
 import { Header } from "~/src/components/Header";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
+import { Menu, Option } from "~/src/components/Menu";
+import { Popover } from "~/src/components/Popover";
 import { Text } from "~/src/components/Text";
 import { authorize } from "~/src/lib/server/authorization";
-import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
@@ -27,11 +28,7 @@ type Props = {
 
 export default async function Page({ params: { organizationId } }: Props) {
   const session = await authorize({ organizationId });
-
-  const users = await list({
-    payload: { organizationId: getPrivateId(organizationId) },
-    session,
-  });
+  const users = await list({ payload: { page: 1 }, session });
 
   return (
     <Container size="large" padding="3rem">
@@ -44,20 +41,29 @@ export default async function Page({ params: { organizationId } }: Props) {
               People
             </Heading>
 
-            <p>
-              Listing{" "}
-              <Button shape="text">
-                all people <Icon variant="chevron-down" />
-              </Button>
+            <div>
+              {"Listing "}
+              <Popover
+                trigger={
+                  <Button shape="text">
+                    all levels <Icon variant="chevron-down" />
+                  </Button>
+                }
+              >
+                <Menu>
+                  <Option>regulars</Option>
+                  <Option>administrators</Option>
+                </Menu>
+              </Popover>
               .
-            </p>
+            </div>
           </Flex>
 
           <menu>
             <li>
               <Button
                 as={Link}
-                href={getUrl(session.user.organization, "users", "new")}
+                href={getUrl(session.organization, "users", "new")}
               >
                 Add person <Icon variant="plus" />
               </Button>
@@ -68,7 +74,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         <Grid as="ul" template="auto / 1fr 1fr 1fr" gap=".75rem">
           {users.map((user) => (
             <li key={user.id}>
-              <Link href={getUrl(session.user.organization, user)}>
+              <Link href={getUrl(session.organization, user)}>
                 <Card as="article" key={user.id}>
                   <Text as="h1" weight="bolder">
                     {user.name}

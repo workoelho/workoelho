@@ -16,8 +16,8 @@ const payloadSchema = superstruct.object({
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
 
-export async function create({ payload }: Context<Payload>) {
-  superstruct.assert(payload, payloadSchema);
+export async function create(context: Context<Payload>) {
+  const payload = superstruct.create(context.payload, payloadSchema);
 
   return await db.organization.create({
     data: {
@@ -28,6 +28,7 @@ export async function create({ payload }: Context<Payload>) {
             email: payload.email,
             password: await password.create(payload.password),
             name: payload.name,
+            level: superstruct.create("administrator", schema.user.level),
           },
         ],
       },

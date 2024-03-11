@@ -20,8 +20,8 @@ type Payload = superstruct.Infer<typeof payloadSchema>;
 /**
  * Create new session.
  */
-export async function create({ payload }: Context<Payload>) {
-  superstruct.assert(payload, payloadSchema);
+export async function create(context: Context<Payload>) {
+  const payload = superstruct.create(context.payload, payloadSchema);
 
   // Reduce impact of leakage by expiring all other sessions from the same device.
   // await db.session.updateMany({

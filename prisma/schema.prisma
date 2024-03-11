@@ -32,6 +32,7 @@ model User {
     email     String   @unique
     name      String
     password  String
+    level     String
 
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id])

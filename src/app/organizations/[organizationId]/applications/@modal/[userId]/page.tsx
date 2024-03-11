@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Fragment } from "react";
 
 import { list } from "~/src/actions/role";
 import { get } from "~/src/actions/user/get";
@@ -11,7 +12,8 @@ import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Close, Modal } from "~/src/components/Modal";
 import { authorize } from "~/src/lib/server/authorization";
-import { formatDateTime, formatText } from "~/src/lib/shared/formatting";
+import { NotFoundError } from "~/src/lib/shared/errors";
+import { format } from "~/src/lib/shared/formatting";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
@@ -29,15 +31,19 @@ type Props = {
 export default async function Page({
   params: { organizationId, userId },
 }: Props) {
-  const session = await authorize({ organizationId });
-  const user = await get({ payload: { id: getPrivateId(userId) }, session });
+  await authorize({ organizationId });
 
-  const listingUrl = getUrl(session.organization, "users");
+  const user = await get({ payload: { id: getPrivateId(userId) } });
+
+  if (!user) {
+    throw new NotFoundError();
+  }
+
+  const listingUrl = getUrl("organizations", organizationId, "users");
   const editUrl = getUrl(listingUrl, userId, "edit");
 
   const roles = await list({
     payload: { userId: getPrivateId(userId), page: 1 },
-    session,
   });
 
   return (
@@ -68,22 +74,19 @@ export default async function Page({
 
         <Data>
           <Entry label="Created on">
-            {formatDateTime(user.createdAt, {
+            {format(user.createdAt, undefined, {
               dateStyle: "long",
               timeStyle: "short",
             })}
           </Entry>
           <Entry label="Updated on">
-            {formatDateTime(user.updatedAt, {
+            {format(user.updatedAt, undefined, {
               dateStyle: "long",
               timeStyle: "short",
             })}
           </Entry>
           <Entry label="Name">{user.name}</Entry>
           <Entry label="Email">{user.email}</Entry>
-          <Entry label="Level">
-            {formatText(user.level, { titleCase: true })}
-          </Entry>
         </Data>
 
         <Flex direction="column" gap="1.5rem">

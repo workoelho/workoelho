@@ -8,11 +8,12 @@ import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
 import { create } from "~/src/actions/user/create";
 import { Modal, Close } from "~/src/components/Modal";
+import { getPrivateId } from "~/src/lib/shared/publicId";
 
 import { Form } from "./form";
 
 export const metadata: Metadata = {
-  title: "New profile at Workoelho",
+  title: "Adding profile at Workoelho",
 };
 
 type Props = {
@@ -27,15 +28,14 @@ export default async function Page({ params: { organizationId } }: Props) {
   const form = getFormProps(async (state, payload) => {
     "use server";
 
-    const session = await authorize({ organizationId });
+    await authorize({ organizationId });
 
     await create({
       payload: {
+        organizationId: getPrivateId(organizationId),
         name: payload.get("name"),
         email: payload.get("email"),
-        level: payload.get("level"),
       },
-      session,
     });
 
     redirect(getUrl("organizations", organizationId, "users"));
@@ -52,7 +52,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         >
           <Flex gap="1.5rem">
             <Heading as="h1" size="medium">
-              New profile
+              Adding profile
             </Heading>
           </Flex>
 

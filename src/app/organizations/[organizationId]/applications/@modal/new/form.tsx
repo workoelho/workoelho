@@ -1,24 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { useFormState } from "react-dom";
 
 import { Alert } from "~/src/components/Alert";
-import { Button } from "~/src/components/Button";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
-import { Select } from "~/src/components/Select";
 import { Submit } from "~/src/components/Submit";
-import { Props as Form, State } from "~/src/lib/shared/form";
+import { Props } from "~/src/lib/shared/form";
 
-type Values = { values: { name: string; email: string; level: string } };
-
-type Props = Form<State & Values> & {
-  cancelUrl: string;
-};
-
-export function Form({ cancelUrl, ...props }: Props) {
+export function Form(props: Props) {
   const [state, action] = useFormState(props.action, props.initialState);
 
   return (
@@ -37,49 +28,28 @@ export function Form({ cancelUrl, ...props }: Props) {
               required
               placeholder="Jane Doe"
               minLength={1}
-              defaultValue={state.values.name}
+              autoComplete="off"
               {...props}
             />
           )}
         </Field>
 
-        <Field label="Email">
+        <Field label="Email" hint="Work email.">
           {(props) => (
             <Input
               name="email"
               type="email"
               placeholder="jane@example.com"
               required
-              defaultValue={state.values.email}
+              autoComplete="off"
               {...props}
             />
           )}
         </Field>
-
-        <Field
-          label="Level"
-          hint="Regular level allow reading but not writing."
-        >
-          {(props) => (
-            <Select
-              name="level"
-              required
-              {...props}
-              defaultValue={state.values.level}
-            >
-              <option value="regular">Regular</option>
-              <option value="administrator">Administrator</option>
-            </Select>
-          )}
-        </Field>
       </Flex>
 
-      <Flex as="footer" justifyContent="space-between">
-        <Button as={Link} href={cancelUrl}>
-          Cancel
-        </Button>
-
-        <Submit>Save</Submit>
+      <Flex as="footer" justifyContent="end">
+        <Submit>Add</Submit>
       </Flex>
     </Flex>
   );

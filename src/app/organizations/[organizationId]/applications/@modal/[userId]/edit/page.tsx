@@ -31,32 +31,34 @@ type Props = {
 export default async function Page({
   params: { organizationId, userId },
 }: Props) {
-  const session = await authorize({ organizationId });
+  await authorize({ organizationId });
 
-  const user = await get({ payload: { id: getPrivateId(userId) }, session });
+  const user = await get({ payload: { id: getPrivateId(userId) } });
 
-  const listingUrl = getUrl(session.organization, "users");
+  if (!user) {
+    throw new NotFoundError();
+  }
+
+  const listingUrl = getUrl("organizations", organizationId, "users");
   const userUrl = getUrl(listingUrl, userId);
 
   const form = getFormProps(
     async (state, payload) => {
       "use server";
 
-      const session = await authorize({ organizationId });
+      await authorize({ organizationId });
 
       await update({
         payload: {
           id: getPrivateId(userId),
           name: payload.get("name"),
           email: payload.get("email"),
-          level: payload.get("level"),
         },
-        session,
       });
 
       redirect(userUrl);
     },
-    { values: { name: user.name, email: user.email, level: user.level } }
+    { values: { name: user.name, email: user.email } },
   );
 
   return (

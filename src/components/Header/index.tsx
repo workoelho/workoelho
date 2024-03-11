@@ -16,7 +16,7 @@ type Props = {
 
 function Header<E extends AcceptableElementType = "header">(
   { as, ...props }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("div" as ElementType);
 

@@ -28,7 +28,7 @@ export function Popover({ placement = "left", trigger, children }: Props) {
   };
 
   return (
-    <div className={classList.toString()} ref={ref} onClick={onClick}>
+    <div className={String(classList)} ref={ref} onClick={onClick}>
       {trigger}
 
       <div className={classes.content}>{children}</div>

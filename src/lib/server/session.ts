@@ -1,25 +1,43 @@
 import { cookies } from "next/headers";
 
 import { db, Session } from "~/src/lib/server/prisma";
+import { UnauthorizedError } from "~/src/lib/shared/errors";
+import { Nullable } from "~/src/lib/shared/nullable";
 
 export const sessionCookieId = "session";
 
 /**
- * Get valid session by ID. If no ID is provided, read it from the session cookie.
+ * Get session from request cookies.
  */
-export async function getValidSession(id?: string) {
-  id ??= cookies().get(sessionCookieId)?.value;
+export async function getRequestSession() {
+  const id = cookies().get(sessionCookieId)?.value;
 
   if (!id) {
-    return;
+    throw new UnauthorizedError("Session cookie is missing");
   }
 
   return await db.session.findUnique({
     where: { id, expiresAt: { gt: new Date() } },
     include: {
-      user: { include: { organization: true } },
+      user: true,
+      organization: true,
     },
   });
+}
+
+/**
+ * Validate session.
+ */
+export function validate<T extends Session>(
+  session: Nullable<T>,
+): asserts session is NonNullable<T> {
+  if (!session) {
+    throw new UnauthorizedError("Session is missing");
+  }
+
+  if (session.expiresAt < new Date()) {
+    throw new UnauthorizedError("Session expired");
+  }
 }
 
 /**

@@ -1,31 +1,57 @@
-type Formatable = number | Date;
-
-type Options = Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
-
-export function format(
+/**
+ * Format numbers.
+ */
+export function formatNumber(
   value: number,
-  locale?: string,
-  options?: Intl.NumberFormatOptions
-): string;
-export function format(
+  { locale, ...options }: Intl.NumberFormatOptions & { locale?: string } = {}
+) {
+  return new Intl.NumberFormat(locale, options).format(value);
+}
+
+/**
+ * Format dates and times.
+ */
+export function formatDateTime(
   value: Date,
-  locale?: string,
-  options?: Intl.DateTimeFormatOptions
-): string;
-export function format(value: Formatable, locale?: string, options?: Options) {
-  if (typeof value === "number") {
-    return new Intl.NumberFormat(
-      locale,
-      options as Intl.NumberFormatOptions
-    ).format(value);
-  }
+  { locale, ...options }: Intl.DateTimeFormatOptions & { locale?: string } = {}
+) {
+  return new Intl.DateTimeFormat(locale, options).format(value);
+}
 
-  if (value instanceof Date) {
-    return new Intl.DateTimeFormat(
-      locale,
-      options as Intl.DateTimeFormatOptions
-    ).format(value);
-  }
+/**
+ * Format lists.
+ */
+export function formatList(
+  values: string[],
+  { locale, ...options }: Intl.ListFormatOptions & { locale?: string } = {}
+) {
+  return new Intl.ListFormat(locale, options).format(values);
+}
 
-  throw new Error("Value is not formatable");
+type TextFormatOptions =
+  | { shortName: boolean }
+  | { titleCase: boolean }
+  | { lowerCase: boolean }
+  | { upperCase: boolean };
+
+/**
+ * Common text manipulations.
+ */
+export function formatText(value: string, options: TextFormatOptions) {
+  if ("titleCase" in options && options.titleCase) {
+    return value.replaceAll(/(\b\w)/g, (letter) => letter.toLocaleUpperCase());
+  }
+  if ("lowerCase" in options && options.lowerCase) {
+    return value.toLocaleLowerCase();
+  }
+  if ("upperCase" in options && options.upperCase) {
+    return value.toLocaleUpperCase();
+  }
+  if ("shortName" in options && options.shortName) {
+    const parts = value.split(/\s/);
+    if (parts.length === 1) {
+      return value;
+    }
+    return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+  }
 }

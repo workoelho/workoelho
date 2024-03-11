@@ -30,7 +30,7 @@ function Button<E extends AcceptableElementType = "button">(
     fill = "solid",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("button" as ElementType);
 

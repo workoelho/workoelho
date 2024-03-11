@@ -19,8 +19,8 @@ type Payload = superstruct.Infer<typeof payloadSchema>;
 /**
  * Create a new session from an existing valid session.
  */
-export async function refresh({ payload }: Context<Payload>) {
-  superstruct.assert(payload, payloadSchema);
+export async function refresh(context: Context<Payload>) {
+  const payload = superstruct.create(context.payload, payloadSchema);
 
   const session = await db.session.findUnique({
     where: { id: payload.sessionId, expiresAt: { gt: new Date() } },

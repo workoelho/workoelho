@@ -20,7 +20,7 @@ type Props = {
 
 function Option<E extends AcceptableElementType = "button">(
   { as, action, ...props }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("button" as ElementType);
 

@@ -22,8 +22,8 @@ type Payload = superstruct.Infer<typeof payloadSchema>;
 /**
  * Create new session from credentials.
  */
-export async function authenticate({ payload }: Context<Payload>) {
-  superstruct.assert(payload, payloadSchema);
+export async function authenticate(context: Context<Payload>) {
+  const payload = superstruct.create(context.payload, payloadSchema);
 
   const user = await db.user.findUnique({
     where: { email: payload.email },
@@ -33,7 +33,7 @@ export async function authenticate({ payload }: Context<Payload>) {
     throw new ValidationError("Email not found");
   }
 
-  if (!(await password.validate(String(payload.password), user.password))) {
+  if (!(await password.validate(payload.password, user.password))) {
     throw new ValidationError("Bad password");
   }
 

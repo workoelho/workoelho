@@ -1,4 +1,4 @@
-import { getValidSession } from "~/src/lib/server/session";
+import { getRequestSession, validate } from "~/src/lib/server/session";
 import { ForbiddenError, UnauthorizedError } from "~/src/lib/shared/errors";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 
@@ -14,17 +14,11 @@ export async function authorize({ organizationId }: Context) {
     organizationId = getPrivateId(organizationId);
   }
 
-  const session = await getValidSession();
+  const session = await getRequestSession();
 
-  if (!session) {
-    throw new UnauthorizedError("Session not found");
-  }
+  validate(session);
 
-  if (session.expiresAt <= new Date()) {
-    throw new UnauthorizedError("Session expired");
-  }
-
-  if (session.user.organizationId !== organizationId) {
+  if (session.organizationId !== organizationId) {
     throw new ForbiddenError("Organization mismatch");
   }
 

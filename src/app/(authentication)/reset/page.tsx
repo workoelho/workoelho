@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 
-import { getValidSession, setSessionCookie } from "~/src/lib/server/session";
+import { getRequestSession, setSessionCookie } from "~/src/lib/server/session";
 import { update } from "~/src/actions/user/update";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { refresh } from "~/src/actions/session/refresh";
@@ -27,7 +27,7 @@ type Props = {
 };
 
 export default async function Page({ searchParams: { sessionId } }: Props) {
-  let session = await getValidSession(sessionId);
+  let session = await getRequestSession(sessionId);
 
   if (!session) {
     throw new UnauthorizedError();
@@ -50,7 +50,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
   const form = getFormProps(async (state, form) => {
     "use server";
 
-    const session = await getValidSession();
+    const session = await getRequestSession();
 
     if (!session) {
       throw new UnauthorizedError();
@@ -60,7 +60,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
       payload: { id: session.user.id, password: form.get("password") },
     });
 
-    redirect(getUrl(session.user.organization, "summary"));
+    redirect(getUrl(session.organization, "summary"));
   });
 
   return (
@@ -76,7 +76,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
 
         <p>
           You may go back to <Link href={getUrl("profile")}>my profile</Link> or{" "}
-          <Link href={getUrl(session.user.organization, "summary")}>
+          <Link href={getUrl(session.organization, "summary")}>
             my organization
           </Link>
           .

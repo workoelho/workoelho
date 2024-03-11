@@ -57,7 +57,7 @@ export default async function Layout({ params, children }: Props) {
 
     setSessionCookie(session);
 
-    redirect(getUrl(session.user.organization, "summary"));
+    redirect(getUrl(session.organization, "summary"));
   };
 
   const signOut = async (sessionId: string) => {
@@ -82,7 +82,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl(session.user.organization, "summary")}
+              href={getUrl(session.organization, "summary")}
               shape="text"
             >
               Summary
@@ -91,7 +91,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl(session.user.organization, "activity")}
+              href={getUrl(session.organization, "activity")}
               shape="text"
             >
               Activity
@@ -100,7 +100,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl(session.user.organization, "applications")}
+              href={getUrl(session.organization, "applications")}
               shape="text"
             >
               Applications
@@ -109,7 +109,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl(session.user.organization, "services")}
+              href={getUrl(session.organization, "services")}
               shape="text"
             >
               Services
@@ -118,7 +118,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl(session.user.organization, "users")}
+              href={getUrl(session.organization, "users")}
               shape="text"
             >
               People
@@ -127,7 +127,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl(session.user.organization, "providers")}
+              href={getUrl(session.organization, "providers")}
               shape="text"
             >
               Providers
@@ -136,7 +136,7 @@ export default async function Layout({ params, children }: Props) {
           <li>
             <Button
               as={Link}
-              href={getUrl(session.user.organization, "tags")}
+              href={getUrl(session.organization, "tags")}
               shape="text"
             >
               Tags
@@ -150,8 +150,8 @@ export default async function Layout({ params, children }: Props) {
               placement="right"
               trigger={
                 <Button shape="text">
-                  {getShortName(session.user.name)} (
-                  {session.user.organization.name})
+                  {getShortName(session.user.name)} ({session.organization.name}
+                  )
                   <Icon variant="chevron-down" />
                 </Button>
               }
@@ -172,7 +172,7 @@ export default async function Layout({ params, children }: Props) {
                     action={signIn.bind(null, session.id)}
                   >
                     <Flex direction="column">
-                      {session.user.organization.name}
+                      {session.organization.name}
                       <Text variant="muted" size="smaller">
                         {session.user.email}
                       </Text>

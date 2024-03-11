@@ -5,9 +5,9 @@ import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 import { Icon } from "~/src/components/Icon";
+import { Button } from "~/src/components/Button";
 
 import classes from "./style.module.css";
-import { Button } from "~/src/components/Button";
 
 type Props = {
   closeUrl?: string;

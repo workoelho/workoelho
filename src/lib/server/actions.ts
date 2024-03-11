@@ -1,14 +1,13 @@
 import { Prisma } from "~/src/lib/server/prisma";
-import { Nullable } from "~/src/lib/shared/nullable";
 
 type Session = Prisma.SessionGetPayload<{
-  include: { user: { include: { organization: true } } };
+  include: { user: true; organization: true };
 }>;
 
 type Object = Record<string, unknown>;
 
 /**
- * Copies the shape of an object but disregard value types.
+ * Copies the shape of an object but discard value types.
  *
  * The goal is to enforce non optional keys and support auto-completion,
  * but leave value validation for the runtime.
@@ -18,13 +17,9 @@ type Shape<T extends {}> = {
 };
 
 /**
- * Context holds information necessary to perform an action.
+ * Context to perform an action.
  */
-export type Context<
-  Payload extends Object = Object,
-  Options extends Object = Object,
-> = {
-  session?: Nullable<Session>;
+export type Context<Payload extends Object = Object> = {
+  session?: Session;
   payload?: Shape<Payload>;
-  options?: Shape<Options>;
 };

@@ -8,11 +8,10 @@ import { Button } from "~/src/components/Button";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
-import { Select } from "~/src/components/Select";
 import { Submit } from "~/src/components/Submit";
 import { Props as Form, State } from "~/src/lib/shared/form";
 
-type Values = { values: { name: string; email: string; level: string } };
+type Values = { values: { name: string; email: string } };
 
 type Props = Form<State & Values> & {
   cancelUrl: string;
@@ -43,7 +42,7 @@ export function Form({ cancelUrl, ...props }: Props) {
           )}
         </Field>
 
-        <Field label="Email">
+        <Field label="Email" hint="Work email.">
           {(props) => (
             <Input
               name="email"
@@ -53,23 +52,6 @@ export function Form({ cancelUrl, ...props }: Props) {
               defaultValue={state.values.email}
               {...props}
             />
-          )}
-        </Field>
-
-        <Field
-          label="Level"
-          hint="Regular level allow reading but not writing."
-        >
-          {(props) => (
-            <Select
-              name="level"
-              required
-              {...props}
-              defaultValue={state.values.level}
-            >
-              <option value="regular">Regular</option>
-              <option value="administrator">Administrator</option>
-            </Select>
           )}
         </Field>
       </Flex>

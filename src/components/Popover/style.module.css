@@ -1,4 +1,5 @@
 .popover {
+  display: inline-block;
   position: relative;
 }
 

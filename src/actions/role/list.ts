@@ -4,6 +4,7 @@ import * as superstruct from "superstruct";
 
 import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
+import { validate } from "~/src/lib/server/session";
 import * as schema from "~/src/lib/shared/schema";
 
 const payloadSchema = superstruct.object({
@@ -19,11 +20,16 @@ type Payload = superstruct.Infer<typeof payloadSchema>;
 export async function list(context: Context<Payload>) {
   const payload = superstruct.create(context.payload, payloadSchema);
 
+  validate(context.session);
+
   const take = 10;
   const skip = (payload.page - 1) * take;
 
   return await db.role.findMany({
-    where: { userId: payload.userId },
+    where: {
+      userId: payload.userId,
+      organizationId: context.session.organizationId,
+    },
     include: { application: true },
     take,
     skip,

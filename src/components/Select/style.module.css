@@ -1,0 +1,24 @@
+.select {
+  align-items: center;
+  background-color: var(--background);
+  border: var(--thick) solid var(--neutral-4);
+  border-radius: var(--radius);
+  display: flex;
+  height: 2.125rem;
+  line-height: 1.23; /* Fix alignment issue in Chrome. */
+  padding-inline: 0.5rem;
+  width: 100%;
+}
+
+.select:is(:focus, :hover) {
+  border-color: var(--neutral-2);
+  outline: 0;
+}
+
+.select:invalid {
+  color: var(--neutral-3);
+}
+
+.select option {
+  color: var(--neutral-2);
+}

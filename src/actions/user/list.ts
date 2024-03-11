@@ -4,27 +4,28 @@ import * as superstruct from "superstruct";
 
 import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
-import * as schema from "~/src/lib/shared/schema";
+import { validate } from "~/src/lib/server/session";
 
 const payloadSchema = superstruct.object({
-  organizationId: schema.id,
-  page: superstruct.optional(superstruct.number()),
+  page: superstruct.defaulted(superstruct.number(), 1),
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
 
 /**
- * List users in an organization.
+ * List users.
  */
-export async function list({ payload }: Context<Payload>) {
-  superstruct.assert(payload, payloadSchema);
+export async function list(context: Context<Payload>) {
+  const payload = superstruct.create(context.payload, payloadSchema);
+
+  validate(context.session);
 
   const take = 10;
-  const skip = (payload.page ?? 0) * take;
+  const skip = (payload.page - 1) * take;
 
   return await db.user.findMany({
     where: {
-      organizationId: payload.organizationId,
+      organizationId: context.session.organizationId,
     },
     orderBy: {
       id: "asc",

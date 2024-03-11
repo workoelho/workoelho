@@ -6,6 +6,7 @@ import { Alert } from "~/src/components/Alert";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
+import { Select } from "~/src/components/Select";
 import { Submit } from "~/src/components/Submit";
 import { Props } from "~/src/lib/shared/form";
 
@@ -34,7 +35,7 @@ export function Form(props: Props) {
           )}
         </Field>
 
-        <Field label="Email" hint="Work email.">
+        <Field label="Email">
           {(props) => (
             <Input
               name="email"
@@ -44,6 +45,21 @@ export function Form(props: Props) {
               autoComplete="off"
               {...props}
             />
+          )}
+        </Field>
+
+        <Field
+          label="Level"
+          hint="Regular level allow reading but not writing."
+        >
+          {(props) => (
+            <Select name="level" required {...props}>
+              <option value="" hidden>
+                Regular
+              </option>
+              <option value="regular">Regular</option>
+              <option value="administrator">Administrator</option>
+            </Select>
           )}
         </Field>
       </Flex>
