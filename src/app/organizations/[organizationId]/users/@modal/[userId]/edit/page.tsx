@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-import { get } from "~/src/actions/user/get";
+import * as Users from "~/src/actions/user";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { authorize } from "~/src/lib/server/authorization";
@@ -18,7 +18,7 @@ import { Icon } from "~/src/components/Icon";
 import { Form } from "./form";
 
 export const metadata: Metadata = {
-  title: "Editing profile at Workoelho",
+  title: "Editing person at Workoelho",
 };
 
 type Props = {
@@ -33,7 +33,10 @@ export default async function Page({
 }: Props) {
   const session = await authorize({ organizationId });
 
-  const user = await get({ payload: { id: getPrivateId(userId) }, session });
+  const user = await Users.get({
+    payload: { id: getPrivateId(userId) },
+    session,
+  });
 
   const listingUrl = getUrl(session.organization, "users");
   const userUrl = getUrl(listingUrl, userId);
@@ -56,8 +59,18 @@ export default async function Page({
 
       redirect(userUrl);
     },
-    { values: { name: user.name, email: user.email, level: user.level } }
+    { values: { name: user.name, email: user.email, level: user.level } },
   );
+
+  const destroy = async () => {
+    "use server";
+
+    const session = await authorize({ organizationId });
+
+    await Users.destroy({ payload: { id: getPrivateId(userId) }, session });
+
+    redirect(listingUrl);
+  };
 
   return (
     <Modal closeUrl={listingUrl}>
@@ -69,13 +82,13 @@ export default async function Page({
           style={{ height: "1.5rem" }}
         >
           <Heading as="h1" size="medium">
-            Editing profile
+            Editing person
           </Heading>
 
           <Close />
         </Flex>
 
-        <Form {...form} cancelUrl={userUrl} />
+        <Form {...form} destroy={destroy} cancelUrl={userUrl} />
       </Flex>
     </Modal>
   );

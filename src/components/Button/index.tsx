@@ -47,6 +47,10 @@ function Button<E extends AcceptableElementType = "button">(
     props.onClick = () => action();
   }
 
+  if (Component === "button" && !props.type) {
+    props.type = "button";
+  }
+
   return (
     <Component ref={ref} {...props}>
       {children}

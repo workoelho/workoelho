@@ -1,4 +1,5 @@
-.text {
+.text.inherit {
+  font-size: 1em;
 }
 
 .text.neutral {
@@ -19,6 +20,11 @@
 
 .text.muted {
   color: var(--neutral-3);
+}
+
+.text.striked {
+  color: var(--neutral-3);
+  text-decoration: line-through;
 }
 
 .text.smaller {

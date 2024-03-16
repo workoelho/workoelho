@@ -8,23 +8,31 @@ import * as schema from "~/src/lib/shared/schema";
 import { validate } from "~/src/lib/server/session";
 
 const payloadSchema = superstruct.object({
-  name: schema.name,
+  id: schema.id,
+  name: superstruct.optional(schema.name),
+  userId: superstruct.optional(schema.id),
+  applicationId: superstruct.optional(schema.id),
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
 
 /**
- * Create an application.
+ * Update a role.
  */
-export async function create({ session, ...context }: Context<Payload>) {
+export async function update({ session, ...context }: Context<Payload>) {
   const payload = superstruct.create(context.payload, payloadSchema);
 
   validate(session);
 
-  return await db.application.create({
-    data: {
+  return await db.role.update({
+    where: {
+      id: payload.id,
       organizationId: session.organizationId,
+    },
+    data: {
       name: payload.name,
+      userId: payload.userId,
+      applicationId: payload.applicationId,
     },
   });
 }

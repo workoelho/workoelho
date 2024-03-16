@@ -20,23 +20,24 @@ export function Form(props: Props) {
         </Alert>
       ) : null}
 
-      <Flex as="fieldset" direction="column" gap="1rem">
-        <Field label="Name">
-          {(props) => (
-            <Input
-              name="name"
-              required
-              placeholder="Web application"
-              minLength={1}
-              autoComplete="off"
-              {...props}
-            />
-          )}
-        </Field>
-      </Flex>
+      <Field
+        label="Name"
+        hint="Could be a website, a mobile application, a front-end, a microservice, etc."
+      >
+        {(props) => (
+          <Input
+            name="name"
+            required
+            placeholder="Web application"
+            minLength={1}
+            autoComplete="off"
+            {...props}
+          />
+        )}
+      </Field>
 
       <Flex as="footer" justifyContent="end">
-        <Submit>Add</Submit>
+        <Submit>Create application</Submit>
       </Flex>
     </Flex>
   );

@@ -61,7 +61,7 @@ export default async function Page({
       values: {
         name: application.name,
       },
-    }
+    },
   );
 
   return (

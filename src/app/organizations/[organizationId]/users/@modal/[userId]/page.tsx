@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { list } from "~/src/actions/role";
-import { get } from "~/src/actions/user/get";
+import { get } from "~/src/actions/user";
 import { Alert } from "~/src/components/Alert";
 import { Button } from "~/src/components/Button";
 import { Data, Entry } from "~/src/components/Data";
@@ -16,7 +16,7 @@ import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
-  title: "Inspecting profile at Workoelho",
+  title: "Inspecting person at Workoelho",
 };
 
 type Props = {
@@ -33,7 +33,8 @@ export default async function Page({
   const user = await get({ payload: { id: getPrivateId(userId) }, session });
 
   const listingUrl = getUrl(session.organization, "users");
-  const editUrl = getUrl(listingUrl, userId, "edit");
+  const userUrl = getUrl(listingUrl, userId);
+  const editUrl = getUrl(userUrl, "edit");
 
   const roles = await list({
     payload: { userId: getPrivateId(userId), page: 1 },
@@ -43,21 +44,16 @@ export default async function Page({
   return (
     <Modal closeUrl={listingUrl}>
       <Flex direction="column" gap="3rem">
-        <Flex
-          as="header"
-          alignItems="center"
-          justifyContent="space-between"
-          style={{ height: "1.5rem" }}
-        >
+        <Flex as="header" alignItems="center" justifyContent="space-between">
           <Flex gap="1.5rem">
             <Heading as="h1" size="medium">
-              Inspecting profile
+              Inspecting person
             </Heading>
 
             <Flex as="menu" gap="0.5rem" alignItems="center">
               <li>
                 <Button as={Link} href={editUrl}>
-                  Edit <Icon variant="pencil" />
+                  Edit person <Icon variant="pencil" />
                 </Button>
               </li>
             </Flex>
@@ -87,9 +83,19 @@ export default async function Page({
         </Data>
 
         <Flex direction="column" gap="1.5rem">
-          <Heading as="h2" size="medium">
-            Roles
-          </Heading>
+          <Flex gap="1.5rem">
+            <Heading as="h2" size="medium">
+              Roles
+            </Heading>
+
+            <Flex as="menu" gap="0.5rem" alignItems="center">
+              <li>
+                <Button as={Link} href={getUrl(userUrl, "roles", "new")}>
+                  Add role <Icon variant="plus" />
+                </Button>
+              </li>
+            </Flex>
+          </Flex>
 
           {roles.length === 0 ? (
             <Alert variant="neutral">No roles.</Alert>

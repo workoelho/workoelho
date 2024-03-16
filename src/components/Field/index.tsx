@@ -5,37 +5,39 @@ import { ClassList } from "~/src/lib/shared/ClassList";
 import classes from "./style.module.css";
 
 type InputProps = {
+  id: string;
   "aria-describedby"?: string;
 };
 
 type FieldProps = {
   label?: ReactNode;
   hint?: ReactNode;
-  state?: "valid" | "invalid";
+  status?: "valid" | "invalid";
   children: (props: InputProps) => ReactNode;
 };
 
-export function Field({ label, state, hint, children, ...props }: FieldProps) {
+export function Field({ label, status, hint, children }: FieldProps) {
+  const fieldId = useId();
   const hintId = useId();
 
   const classList = new ClassList(classes.field);
-  if (state) {
-    classList.add(classes[state]);
+  if (status) {
+    classList.add(classes[status]);
   }
 
   return (
-    <label className={classList.toString()}>
-      {label ? <span className={classes.label}>{label}</span> : null}
-      {children({ "aria-describedby": hintId })}
+    <div className={classList.toString()}>
+      {label ? (
+        <label htmlFor={fieldId} className={classes.label}>
+          {label}
+        </label>
+      ) : null}
       {hint ? (
-        <span
-          id={hintId}
-          className={classes.hint}
-          aria-live={state ? "polite" : undefined}
-        >
+        <span id={hintId} className={classes.hint}>
           {hint}
         </span>
       ) : null}
-    </label>
+      {children({ "aria-describedby": hint ? hintId : undefined, id: fieldId })}
+    </div>
   );
 }

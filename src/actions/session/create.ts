@@ -47,11 +47,8 @@ export async function create(context: Context<Payload>) {
       remoteAddress: payload.remoteAddress,
     },
     include: {
-      user: {
-        include: {
-          organization: true,
-        },
-      },
+      user: true,
+      organization: true,
     },
   });
 }

@@ -10,15 +10,16 @@ import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
 import { Select } from "~/src/components/Select";
 import { Submit } from "~/src/components/Submit";
-import { Props as Form, State } from "~/src/lib/shared/form";
+import { Props as FormProps, State } from "~/src/lib/shared/form";
 
 type Values = { values: { name: string; email: string; level: string } };
 
-type Props = Form<State & Values> & {
+type Props = FormProps<State & Values> & {
+  destroy: () => Promise<void>;
   cancelUrl: string;
 };
 
-export function Form({ cancelUrl, ...props }: Props) {
+export function Form({ cancelUrl, destroy, ...props }: Props) {
   const [state, action] = useFormState(props.action, props.initialState);
 
   return (
@@ -79,7 +80,12 @@ export function Form({ cancelUrl, ...props }: Props) {
           Cancel
         </Button>
 
-        <Submit>Save</Submit>
+        <Flex gap="0.5rem">
+          <Button action={destroy} variant="negative">
+            Delete
+          </Button>
+          <Submit>Save</Submit>
+        </Flex>
       </Flex>
     </Flex>
   );

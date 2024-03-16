@@ -11,7 +11,7 @@ import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Close, Modal } from "~/src/components/Modal";
 import { authorize } from "~/src/lib/server/authorization";
-import { formatDateTime, formatText } from "~/src/lib/shared/formatting";
+import { formatDateTime } from "~/src/lib/shared/formatting";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
@@ -36,7 +36,8 @@ export default async function Page({
   });
 
   const listingUrl = getUrl(session.organization, "applications");
-  const editUrl = getUrl(listingUrl, applicationId, "edit");
+  const applicationUrl = getUrl(listingUrl, applicationId);
+  const editUrl = getUrl(applicationUrl, "edit");
 
   const roles = await list({
     payload: { applicationId: getPrivateId(applicationId), page: 1 },
@@ -60,7 +61,7 @@ export default async function Page({
             <Flex as="menu" gap="0.5rem" alignItems="center">
               <li>
                 <Button as={Link} href={editUrl}>
-                  Edit <Icon variant="pencil" />
+                  Edit application <Icon variant="pencil" />
                 </Button>
               </li>
             </Flex>
@@ -86,9 +87,19 @@ export default async function Page({
         </Data>
 
         <Flex direction="column" gap="1.5rem">
-          <Heading as="h2" size="medium">
-            Roles
-          </Heading>
+          <Flex gap="1.5rem">
+            <Heading as="h2" size="medium">
+              Roles
+            </Heading>
+
+            <Flex as="menu" gap="0.5rem" alignItems="center">
+              <li>
+                <Button as={Link} href={getUrl(applicationUrl, "roles", "new")}>
+                  Add role <Icon variant="plus" />
+                </Button>
+              </li>
+            </Flex>
+          </Flex>
 
           {roles.length === 0 ? (
             <Alert variant="neutral">No roles.</Alert>

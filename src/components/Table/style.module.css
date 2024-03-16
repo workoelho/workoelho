@@ -1,0 +1,13 @@
+.table {
+  background-color: var(--neutral-5);
+  border-collapse: separate;
+  border-radius: var(--radius);
+  border-spacing: 0.25rem;
+  table-layout: fixed;
+}
+
+.table :is(td, th) {
+  background-color: var(--background);
+  vertical-align: middle;
+  padding: 0.25rem 0.5rem;
+}

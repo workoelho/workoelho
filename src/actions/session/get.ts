@@ -22,5 +22,9 @@ export async function get(context: Context<Payload>) {
     where: {
       id: payload.id,
     },
+    include: {
+      user: true,
+      organization: true,
+    },
   });
 }

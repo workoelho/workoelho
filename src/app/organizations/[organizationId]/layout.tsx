@@ -38,7 +38,7 @@ export default async function Layout({ params, children }: Props) {
       expiresAt: { gt: new Date() },
       organizationId: { not: session.user.organizationId },
     },
-    include: { user: { include: { organization: true } } },
+    include: { user: true, organization: true },
     orderBy: { createdAt: "desc" },
     distinct: ["organizationId"],
   });
@@ -48,7 +48,7 @@ export default async function Layout({ params, children }: Props) {
 
     const session = await db.session.findUnique({
       where: { id: sessionId, expiresAt: { gt: new Date() } },
-      include: { user: { include: { organization: true } } },
+      include: { user: true, organization: true },
     });
 
     if (!session) {

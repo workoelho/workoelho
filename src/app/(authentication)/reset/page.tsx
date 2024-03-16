@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 
 import { getRequestSession, setSessionCookie } from "~/src/lib/server/session";
-import { update } from "~/src/actions/user/update";
+import * as Users from "~/src/actions/user";
+import * as Sessions from "~/src/actions/session";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { refresh } from "~/src/actions/session/refresh";
 import { getDeviceId } from "~/src/lib/server/deviceId";
@@ -27,7 +28,15 @@ type Props = {
 };
 
 export default async function Page({ searchParams: { sessionId } }: Props) {
-  let session = await getRequestSession(sessionId);
+  let session = await getRequestSession();
+
+  if (!session) {
+    session = await Sessions.get({
+      payload: {
+        id: sessionId,
+      },
+    });
+  }
 
   if (!session) {
     throw new UnauthorizedError();
@@ -56,7 +65,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
       throw new UnauthorizedError();
     }
 
-    await update({
+    await Users.update({
       payload: { id: session.user.id, password: form.get("password") },
     });
 

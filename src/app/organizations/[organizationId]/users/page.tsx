@@ -41,19 +41,19 @@ export default async function Page({ params: { organizationId } }: Props) {
               People
             </Heading>
 
-            <p>List all profiles.</p>
+            <p>Listing all people.</p>
           </Flex>
 
-          <menu>
+          <Flex as="menu">
             <li>
               <Button
                 as={Link}
                 href={getUrl(session.organization, "users", "new")}
               >
-                Add profile <Icon variant="plus" />
+                Add person <Icon variant="plus" />
               </Button>
             </li>
-          </menu>
+          </Flex>
         </Header>
 
         <Grid as="ul" template="auto / 1fr 1fr 1fr" gap=".75rem">
@@ -61,9 +61,9 @@ export default async function Page({ params: { organizationId } }: Props) {
             <li key={user.id}>
               <Link href={getUrl(session.organization, user)}>
                 <Card as="article" key={user.id}>
-                  <Text as="h1" weight="bolder">
+                  <Heading as="h1" size="small">
                     {user.name}
-                  </Text>
+                  </Heading>
                   <Text as="p" variant="muted">
                     {user.email}
                   </Text>

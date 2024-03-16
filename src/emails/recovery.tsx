@@ -2,7 +2,7 @@ import { Organization, Session, User } from "~/src/lib/server/prisma";
 import * as email from "~/src/lib/server/email";
 
 type Props = {
-  session: Session & { user: User & { organization: Organization } };
+  session: Session & { user: User; organization: Organization };
 };
 
 export async function send({ session }: Props) {

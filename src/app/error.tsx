@@ -27,24 +27,24 @@ export default function Error({ error, reset }: Props) {
         </h1>
 
         <Heading as="h2" size="massive">
-          Unexpected error.
+          Unexpected error
         </Heading>
 
-        <p style={{ maxWidth: "80ch", marginInline: "auto" }}>
-          There was an error on our end and the request has failed. We're
-          terribly sorry but would you mind trying again? In any case we've
-          collected information about the error and will look into it soon.
+        <p style={{ maxWidth: "64ch", marginInline: "auto" }}>
+          There was an error on our end and the request has failed. There's a
+          chance it'll work if you try again, but in any case we've collected
+          information about the error and will look into it soon.
         </p>
 
         <Flex as="menu" gap="0.5rem" justifyContent="center">
           <li>
             <Button onClick={() => reset()}>Try again</Button>
           </li>
-          <li>
+          {/* <li>
             <Button as={Link} href="/sign-in">
               Back
             </Button>
-          </li>
+          </li> */}
         </Flex>
       </Feedback>
     </Container>

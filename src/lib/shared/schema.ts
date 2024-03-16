@@ -7,14 +7,27 @@ import {
   size,
   string,
   enums,
+  coerce,
+  unknown,
 } from "superstruct";
 
 import { Time } from "~/src/lib/shared/Time";
 
 /**
- * Private database ID.
+ * Database ID.
  */
 export const id = number();
+
+/**
+ * Parse database ID.
+ */
+export const parseId = coerce(number(), unknown(), (value) => {
+  const int = parseInt(String(value), 10);
+  if (isNaN(int)) {
+    throw new Error(`Can't coerce ID ${JSON.stringify(value)}`);
+  }
+  return int;
+});
 
 /**
  * Email.

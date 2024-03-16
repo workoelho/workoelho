@@ -4,27 +4,27 @@ import * as superstruct from "superstruct";
 
 import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
-import * as schema from "~/src/lib/shared/schema";
 import { validate } from "~/src/lib/server/session";
+import * as schema from "~/src/lib/shared/schema";
 
 const payloadSchema = superstruct.object({
-  name: schema.name,
+  id: schema.id,
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
 
 /**
- * Create an application.
+ * Get one application.
  */
-export async function create({ session, ...context }: Context<Payload>) {
+export async function get(context: Context<Payload>) {
   const payload = superstruct.create(context.payload, payloadSchema);
 
-  validate(session);
+  validate(context.session);
 
-  return await db.application.create({
-    data: {
-      organizationId: session.organizationId,
-      name: payload.name,
+  return await db.application.findUniqueOrThrow({
+    where: {
+      id: payload.id,
+      organizationId: context.session.organizationId,
     },
   });
 }

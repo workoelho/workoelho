@@ -9,11 +9,9 @@ import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
-import { Props as FormProps, State } from "~/src/lib/shared/form";
+import { Props as FormProps } from "~/src/lib/shared/form";
 
-type Values = { values: { name: string } };
-
-type Props = FormProps<State & Values> & {
+type Props = FormProps & {
   cancelUrl: string;
 };
 
@@ -29,14 +27,25 @@ export function Form({ cancelUrl, ...props }: Props) {
       ) : null}
 
       <Flex as="fieldset" direction="column" gap="1rem">
+        <Field label="Person">
+          {(props) => (
+            <Input
+              name="userId"
+              placeholder="Jane Doe"
+              required
+              minLength={1}
+              {...props}
+            />
+          )}
+        </Field>
+
         <Field label="Name">
           {(props) => (
             <Input
               name="name"
+              placeholder="Lead developer"
               required
-              placeholder="Jane Doe"
               minLength={1}
-              defaultValue={state.values.name}
               {...props}
             />
           )}
@@ -48,7 +57,7 @@ export function Form({ cancelUrl, ...props }: Props) {
           Cancel
         </Button>
 
-        <Submit>Save</Submit>
+        <Submit>Create role</Submit>
       </Flex>
     </Flex>
   );

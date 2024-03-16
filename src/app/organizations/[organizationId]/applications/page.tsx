@@ -43,7 +43,7 @@ export default async function Page({ params: { organizationId } }: Props) {
             <p>Listing all applications.</p>
           </Flex>
 
-          <menu>
+          <Flex as="menu">
             <li>
               <Button
                 as={Link}
@@ -52,7 +52,7 @@ export default async function Page({ params: { organizationId } }: Props) {
                 Add application <Icon variant="plus" />
               </Button>
             </li>
-          </menu>
+          </Flex>
         </Header>
 
         <Grid as="ul" template="auto / 1fr 1fr 1fr" gap=".75rem">
@@ -60,9 +60,9 @@ export default async function Page({ params: { organizationId } }: Props) {
             <li key={application.id}>
               <Link href={getUrl(session.organization, application)}>
                 <Card as="article" key={application.id}>
-                  <Text as="h1" weight="bolder">
+                  <Heading as="h1" size="small">
                     {application.name}
-                  </Text>
+                  </Heading>
                   <Text as="p" variant="muted">
                     {"Last updated at "}
                     {formatDateTime(application.updatedAt, {

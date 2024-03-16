@@ -1,15 +1,11 @@
 .button {
   align-items: center;
-  display: flex inline;
+  display: flex;
   font-weight: 700;
 }
 
 .button:active:not(:disabled) {
   translate: 0 0.125rem;
-}
-
-.button.text {
-  color: var(--color);
 }
 
 .button.rectangle {
@@ -26,52 +22,53 @@
   padding-inline: 0.75rem;
 }
 
+.button.text {
+  color: var(--default-color);
+}
+
+.button.text:is(:hover, :focus-visible) {
+  color: var(--active-color);
+}
+
 .button.solid {
-  background-color: var(--color);
+  background-color: var(--default-color);
   color: var(--background);
+}
+
+.button.solid:is(:hover, :focus-visible) {
+  background-color: var(--active-color);
 }
 
 .button.outline {
   border: var(--thick) solid currentColor;
-  color: var(--color);
+  color: var(--default-color);
+}
+
+.button.outline:is(:hover, :focus-visible) {
+  color: var(--active-color);
 }
 
 .button.neutral {
-  --color: var(--neutral-1);
-}
-
-.button.neutral:is(:hover, :focus-visible) {
-  --color: var(--neutral-3);
+  --default-color: var(--neutral-1);
+  --active-color: var(--neutral-3);
 }
 
 .button.interactive {
-  --color: var(--interactive-3);
-}
-
-.button.interactive:is(:hover, :focus) {
-  --color: var(--interactive-4);
+  --default-color: var(--interactive-3);
+  --active-color: var(--interactive-4);
 }
 
 .button.positive {
-  --color: var(--positive-3);
-}
-
-.button.positive:is(:hover, :focus) {
-  --color: var(--positive-4);
+  --default-color: var(--positive-3);
+  --active-color: var(--positive-4);
 }
 
 .button.negative {
-  --color: var(--negative-3);
-}
-
-.button.negative:is(:hover, :focus) {
-  --color: var(--negative-4);
+  --default-color: var(--negative-3);
+  --active-color: var(--negative-4);
 }
 
 .button.attentive {
-  --color: var(--attentive-3);
-}
-
-.button.attentive:is(:hover, :focus) {
-  --color: var(--attentive-4);
+  --default-color: var(--attentive-3);
+  --active-color: var(--attentive-4);
 }

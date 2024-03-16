@@ -17,27 +17,25 @@ type AcceptableElementType =
   | "h4"
   | "h5"
   | "h6"
-  | "li";
+  | "li"
+  | "td";
 
 type Props = {
-  variant?: "neutral" | "positive" | "negative" | "attentive" | "muted";
-  size?: "smaller" | "inherit" | "larger";
-  weight?: CSSProperties["fontWeight"];
-  decoration?: CSSProperties["textDecoration"];
+  variant?:
+    | "neutral"
+    | "positive"
+    | "negative"
+    | "attentive"
+    | "muted"
+    | "striked";
+  size?: "smaller" | "larger";
 };
 
 function Text<E extends AcceptableElementType = "span">(
-  {
-    as,
-    children,
-    variant,
-    size = "inherit",
-    weight,
-    ...props
-  }: PolymorphicPropsWithRef<E, Props>,
+  { as, children, variant, size, ...props }: PolymorphicPropsWithRef<E, Props>,
   ref: PolymorphicRef<E>,
 ) {
-  const Component = as ?? ("div" as ElementType);
+  const Component = as ?? ("span" as ElementType);
 
   const classList = new ClassList(classes.text);
   if (props.className) {
@@ -46,14 +44,10 @@ function Text<E extends AcceptableElementType = "span">(
   if (variant) {
     classList.add(classes[variant]);
   }
-  classList.add(classes[size]);
-  props.className = classList.toString();
-
-  props.style = {
-    ...props.style,
-    textDecoration: props.decoration,
-    fontWeight: weight,
-  };
+  if (size) {
+    classList.add(classes[size]);
+  }
+  props.className = String(classList);
 
   return (
     <Component ref={ref} {...props}>
