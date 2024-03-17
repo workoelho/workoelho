@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { create as createOrganization } from "~/src/actions/organization/create";
-import { create as createSession } from "~/src/actions/session/create";
+import * as Organizations from "~/src/feats/organizations/api";
+import * as Sessions from "~/src/feats/sessions/api";
 import { setSessionCookie } from "~/src/lib/server/session";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { getDeviceId } from "~/src/lib/server/deviceId";
@@ -23,7 +23,7 @@ export default async function Page() {
   const form = getFormProps(async (state, payload) => {
     "use server";
 
-    const organization = await createOrganization({
+    const organization = await Organizations.create({
       payload: {
         name: payload.get("name"),
         organization: payload.get("organization"),
@@ -32,7 +32,7 @@ export default async function Page() {
       },
     });
 
-    const session = await createSession({
+    const session = await Sessions.create({
       payload: {
         organizationId: organization.id,
         userId: organization.users[0].id,

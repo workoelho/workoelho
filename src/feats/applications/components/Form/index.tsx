@@ -7,17 +7,17 @@ import { Alert } from "~/src/components/Alert";
 import { Button } from "~/src/components/Button";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
+import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
-import { Props as FormProps, State } from "~/src/lib/shared/form";
+import { Props as FormProps } from "~/src/lib/shared/form";
 
-type Values = { values: { name: string } };
-
-type Props = FormProps<State & Values> & {
-  cancelUrl: string;
+type Props = FormProps & {
+  destroy?: () => Promise<void>;
+  cancelUrl?: string;
 };
 
-export function Form({ cancelUrl, ...props }: Props) {
+export function Form({ cancelUrl, destroy, ...props }: Props) {
   const [state, action] = useFormState(props.action, props.initialState);
 
   return (
@@ -29,14 +29,17 @@ export function Form({ cancelUrl, ...props }: Props) {
       ) : null}
 
       <Flex as="fieldset" direction="column" gap="1rem">
-        <Field label="Name">
+        <Field
+          label="Name"
+          hint="Could be a website, a mobile application, a front-end, a microservice, etc."
+        >
           {(props) => (
             <Input
               name="name"
+              placeholder="Web application"
               required
-              placeholder="Jane Doe"
               minLength={1}
-              defaultValue={state.values.name}
+              defaultValue={state.values?.name}
               {...props}
             />
           )}
@@ -44,11 +47,21 @@ export function Form({ cancelUrl, ...props }: Props) {
       </Flex>
 
       <Flex as="footer" justifyContent="space-between">
-        <Button as={Link} href={cancelUrl}>
-          Cancel
-        </Button>
+        {cancelUrl ? (
+          <Button as={Link} href={cancelUrl}>
+            Cancel
+          </Button>
+        ) : null}
 
-        <Submit>Save</Submit>
+        <Flex gap="0.5rem" style={{ marginInlineStart: "auto" }}>
+          {destroy ? (
+            <Button action={destroy} variant="negative">
+              Delete <Icon variant="trash" />
+            </Button>
+          ) : null}
+
+          <Submit>Save</Submit>
+        </Flex>
       </Flex>
     </Flex>
   );

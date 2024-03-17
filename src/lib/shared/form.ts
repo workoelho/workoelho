@@ -1,27 +1,27 @@
-import { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 
+import { Prisma } from "~/src/lib/server/prisma";
 import { ValidationError } from "~/src/lib/server/ValidationError";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { getUrl } from "~/src/lib/shared/url";
 
-export type Props<T extends State = State> = {
-  action: (state: Awaited<T>, payload: FormData) => Promise<T> | never;
-  initialState: Awaited<T>;
-};
-
 export type State = {
+  values?: Record<string, string | undefined>;
   status?: "positive" | "negative";
-  values?: Record<string, string | string[]>;
   message?: string;
 };
 
-export function getFormProps<S extends State>(
-  action: (state: S, payload: FormData) => Promise<S>,
-  initialState: S = {} as S,
+export type Props = {
+  action: (state: Awaited<State>, payload: FormData) => Promise<State> | never;
+  initialState: Awaited<State>;
+};
+
+export function getFormProps(
+  action: (state: State, payload: FormData) => Promise<State>,
+  initialState: State = {} as State,
 ) {
   return {
-    action: async (state: S, payload: FormData) => {
+    action: async (state: State, payload: FormData): Promise<State> => {
       "use server";
 
       try {

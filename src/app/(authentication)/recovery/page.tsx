@@ -4,10 +4,10 @@ import { cookies, headers } from "next/headers";
 import * as superstruct from "superstruct";
 
 import * as schema from "~/src/lib/shared/schema";
-import { create } from "~/src/actions/session/create";
+import * as Sessions from "~/src/feats/sessions/api";
+import * as Users from "~/src/feats/users/api";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
-import { db } from "~/src/lib/server/prisma";
 import { getFormProps } from "~/src/lib/shared/form";
 import { send } from "~/src/emails/recovery";
 import { getUrl } from "~/src/lib/shared/url";
@@ -22,13 +22,13 @@ export default async function Page() {
   const form = getFormProps(async (state, form) => {
     "use server";
 
-    const user = await db.user.findUniqueOrThrow({
-      where: {
+    const user = await Users.getByEmail({
+      payload: {
         email: superstruct.create(form.get("email"), schema.email),
       },
     });
 
-    const session = await create({
+    const session = await Sessions.create({
       payload: {
         organizationId: user.organizationId,
         userId: user.id,

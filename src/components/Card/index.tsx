@@ -37,9 +37,7 @@ function Card<E extends AcceptableElementType = "div">(
 ) {
   const Component = as ?? ("div" as ElementType);
 
-  const classList = new ClassList();
-  classList.add(classes.card);
-  classList.add(classes[size]);
+  const classList = new ClassList(classes.card, classes[size]);
   if (props.className) {
     classList.add(props.className);
   }

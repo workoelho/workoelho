@@ -1,5 +1,4 @@
 .card {
-  /* border: var(--thick) solid var(--neutral-4); */
   background-color: var(--neutral-5);
 }
 
@@ -8,6 +7,11 @@
   padding: 0.75rem 0.75rem;
 }
 
+.card.large {
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
 a:is(:hover, :focus) .card {
-  border-color: var(--neutral-2);
+  background-color: var(--interactive-5);
 }

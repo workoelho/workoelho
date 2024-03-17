@@ -6,10 +6,9 @@ import { Heading } from "~/src/components/Heading";
 import { authorize } from "~/src/lib/server/authorization";
 import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
-import { create } from "~/src/actions/user/create";
+import * as Users from "~/src/feats/users/api";
 import { Modal, Close } from "~/src/components/Modal";
-
-import { Form } from "./form";
+import { Form } from "~/src/feats/users/components/Form";
 
 export const metadata: Metadata = {
   title: "New person at Workoelho",
@@ -29,7 +28,7 @@ export default async function Page({ params: { organizationId } }: Props) {
 
     const session = await authorize({ organizationId });
 
-    await create({
+    await Users.create({
       payload: {
         name: payload.get("name"),
         email: payload.get("email"),

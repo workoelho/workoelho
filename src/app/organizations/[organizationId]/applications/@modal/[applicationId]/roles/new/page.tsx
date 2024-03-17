@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { get } from "~/src/actions/application";
+import { get } from "~/src/feats/applications/api";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { authorize } from "~/src/lib/server/authorization";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
-import { create } from "~/src/actions/role";
+import { create } from "~/src/feats/roles/api";
 import { Close, Modal } from "~/src/components/Modal";
 
 import { Form } from "./form";

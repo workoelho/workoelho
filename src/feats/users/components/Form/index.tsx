@@ -1,16 +1,24 @@
 "use client";
 
+import Link from "next/link";
 import { useFormState } from "react-dom";
 
 import { Alert } from "~/src/components/Alert";
+import { Button } from "~/src/components/Button";
 import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
+import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Select } from "~/src/components/Select";
 import { Submit } from "~/src/components/Submit";
-import { Props } from "~/src/lib/shared/form";
+import { Props as FormProps } from "~/src/lib/shared/form";
 
-export function Form(props: Props) {
+type Props = FormProps & {
+  destroy?: () => Promise<void>;
+  cancelUrl?: string;
+};
+
+export function Form({ cancelUrl, destroy, ...props }: Props) {
   const [state, action] = useFormState(props.action, props.initialState);
 
   return (
@@ -22,41 +30,43 @@ export function Form(props: Props) {
       ) : null}
 
       <Flex as="fieldset" direction="column" gap="1rem">
-        <Field label="Name">
+        <Field label="Name" hint="Full or display name, no title.">
           {(props) => (
             <Input
               name="name"
               required
               placeholder="Jane Doe"
               minLength={1}
-              autoComplete="off"
+              defaultValue={state.values?.name}
               {...props}
             />
           )}
         </Field>
 
-        <Field label="Email">
+        <Field label="Email" hint="Prefer work email.">
           {(props) => (
             <Input
               name="email"
               type="email"
               placeholder="jane@example.com"
               required
-              autoComplete="off"
+              defaultValue={state.values?.email}
               {...props}
             />
           )}
         </Field>
 
         <Field
-          label="Level"
-          hint="Regular level allow reading but not writing."
+          label="Access level"
+          hint="Regular access level allow reading but not writing."
         >
           {(props) => (
-            <Select name="level" required {...props}>
-              <option value="" hidden>
-                Regular
-              </option>
+            <Select
+              name="level"
+              required
+              {...props}
+              defaultValue={state.values?.level}
+            >
               <option value="regular">Regular</option>
               <option value="administrator">Administrator</option>
             </Select>
@@ -64,8 +74,22 @@ export function Form(props: Props) {
         </Field>
       </Flex>
 
-      <Flex as="footer" justifyContent="end">
-        <Submit>Add</Submit>
+      <Flex as="footer" justifyContent="space-between">
+        {cancelUrl ? (
+          <Button as={Link} href={cancelUrl}>
+            Cancel
+          </Button>
+        ) : null}
+
+        <Flex gap="0.5rem" style={{ marginInlineStart: "auto" }}>
+          {destroy ? (
+            <Button action={destroy} variant="negative">
+              Delete <Icon variant="trash" />
+            </Button>
+          ) : null}
+
+          <Submit>Save</Submit>
+        </Flex>
       </Flex>
     </Flex>
   );

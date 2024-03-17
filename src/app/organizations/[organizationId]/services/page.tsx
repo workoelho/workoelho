@@ -28,10 +28,10 @@ export default async function Page({ params: { organizationId } }: Props) {
 
           <Flex direction="column" alignItems="center" gap="0.5rem">
             <Heading as="h1" size="large">
-              Tags
+              Services
             </Heading>
 
-            <p>Listing all tags.</p>
+            <p>Listing all services.</p>
           </Flex>
         </Header>
 

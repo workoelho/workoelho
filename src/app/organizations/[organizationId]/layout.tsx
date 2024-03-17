@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 
 import pkg from "~/package.json";
+import * as Sessions from "~/src/feats/sessions/api";
 import { Button } from "~/src/components/Button";
 import { Flex } from "~/src/components/Flex";
 import { Footer } from "~/src/components/Footer";
@@ -13,7 +14,6 @@ import { Topbar } from "~/src/components/Topbar";
 import { clearSessionCookie, setSessionCookie } from "~/src/lib/server/session";
 import { authorize } from "~/src/lib/server/authorization";
 import { getShortName } from "~/src/lib/shared/api";
-import { db } from "~/src/lib/server/prisma";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { getUrl } from "~/src/lib/shared/url";
@@ -32,24 +32,17 @@ export default async function Layout({ params, children }: Props) {
 
   const session = await authorize({ organizationId });
 
-  const sessions = await db.session.findMany({
-    where: {
+  const sessions = await Sessions.listByDevice({
+    payload: {
       deviceId: getDeviceId(cookies()),
-      expiresAt: { gt: new Date() },
-      organizationId: { not: session.user.organizationId },
     },
-    include: { user: true, organization: true },
-    orderBy: { createdAt: "desc" },
-    distinct: ["organizationId"],
+    session,
   });
 
-  const signIn = async (sessionId: string) => {
+  const switchSession = async (sessionId: string) => {
     "use server";
 
-    const session = await db.session.findUnique({
-      where: { id: sessionId, expiresAt: { gt: new Date() } },
-      include: { user: true, organization: true },
-    });
+    const session = await Sessions.get({ payload: { id: sessionId } });
 
     if (!session) {
       throw new UnauthorizedError();
@@ -63,11 +56,8 @@ export default async function Layout({ params, children }: Props) {
   const signOut = async (sessionId: string) => {
     "use server";
 
-    await db.session.update({
-      data: {
-        expiresAt: new Date(),
-      },
-      where: { id: sessionId },
+    await Sessions.invalidate({
+      payload: { sessionId },
     });
 
     clearSessionCookie();
@@ -169,7 +159,7 @@ export default async function Layout({ params, children }: Props) {
                 {sessions.map((session) => (
                   <Option
                     key={session.id}
-                    action={signIn.bind(null, session.id)}
+                    action={switchSession.bind(null, session.id)}
                   >
                     <Flex direction="column">
                       {session.organization.name}

@@ -1,4 +1,5 @@
 import isEmail from "is-email";
+import { v4 as isUuid } from "is-uuid";
 import {
   date,
   defaulted,
@@ -24,16 +25,28 @@ export const id = number();
 export const parseId = coerce(number(), unknown(), (value) => {
   const int = parseInt(String(value), 10);
   if (isNaN(int)) {
-    throw new Error(`Can't coerce ID ${JSON.stringify(value)}`);
+    throw new Error(`Can't parse ID ${JSON.stringify(value)}`);
   }
   return int;
 });
 
 /**
+ * UUID.
+ */
+export const uuid = define<string>("uuid", (value: unknown) =>
+  isUuid(String(value)),
+);
+
+/**
+ * Device ID.
+ */
+export const deviceId = uuid;
+
+/**
  * Email.
  */
 export const email = define<string>("email", (value: unknown) =>
-  isEmail(value as string),
+  isEmail(String(value)),
 );
 
 /**

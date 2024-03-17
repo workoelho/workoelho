@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 
-import * as Users from "~/src/actions/user";
+import * as Users from "~/src/feats/users/api";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { authorize } from "~/src/lib/server/authorization";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
-import { update } from "~/src/actions/user/update";
-import { NotFoundError } from "~/src/lib/shared/errors";
 import { Close, Modal } from "~/src/components/Modal";
-import { Button } from "~/src/components/Button";
-import { Icon } from "~/src/components/Icon";
-
-import { Form } from "./form";
+import { Form } from "~/src/feats/users/components/form";
 
 export const metadata: Metadata = {
   title: "Editing person at Workoelho",
@@ -47,7 +41,7 @@ export default async function Page({
 
       const session = await authorize({ organizationId });
 
-      await update({
+      await Users.update({
         payload: {
           id: getPrivateId(userId),
           name: payload.get("name"),
@@ -75,12 +69,7 @@ export default async function Page({
   return (
     <Modal closeUrl={listingUrl}>
       <Flex direction="column" gap="3rem">
-        <Flex
-          as="header"
-          alignItems="center"
-          justifyContent="space-between"
-          style={{ height: "1.5rem" }}
-        >
+        <Flex as="header" alignItems="center" justifyContent="space-between">
           <Heading as="h1" size="medium">
             Editing person
           </Heading>

@@ -7,7 +7,7 @@ import { db } from "~/src/lib/server/prisma";
 import * as password from "~/src/lib/server/password";
 import * as schema from "~/src/lib/shared/schema";
 import { ValidationError } from "~/src/lib/server/ValidationError";
-import { create } from "~/src/actions/session/create";
+import * as Sessions from "~/src/feats/sessions/api";
 
 const payloadSchema = superstruct.object({
   email: schema.email,
@@ -37,7 +37,7 @@ export async function authenticate(context: Context<Payload>) {
     throw new ValidationError("Bad password");
   }
 
-  return await create({
+  return await Sessions.create({
     payload: {
       organizationId: user.organizationId,
       userId: user.id,

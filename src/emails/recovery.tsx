@@ -1,4 +1,4 @@
-import { Organization, Session, User } from "~/src/lib/server/prisma";
+import type { Organization, Session, User } from "~/src/lib/server/prisma";
 import * as email from "~/src/lib/server/email";
 
 type Props = {
@@ -27,10 +27,10 @@ function Body({ session }: Props) {
       </p>
 
       <p>
-        To proceed, you may <a href={resetUrl}>reset your password</a>.
+        To proceed, you can <a href={resetUrl}>reset your password</a>.
       </p>
 
-      <p>Otherwise you may simply ignore this message.</p>
+      <p>Otherwise you can safely ignore this message.</p>
 
       <hr />
 

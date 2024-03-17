@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 
-import { authenticate } from "~/src/actions/session/authenticate";
+import * as Sessions from "~/src/feats/sessions/api";
 import { setSessionCookie } from "~/src/lib/server/session";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
@@ -18,7 +18,7 @@ export default async function Page() {
   const action = async (state: { message: string }, payload: FormData) => {
     "use server";
 
-    const session = await authenticate({
+    const session = await Sessions.authenticate({
       payload: {
         email: payload.get("email"),
         password: payload.get("password"),

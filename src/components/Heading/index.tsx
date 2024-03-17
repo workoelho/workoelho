@@ -20,20 +20,23 @@ type AcceptableElementType =
 
 type Props = {
   size: "massive" | "large" | "medium" | "small";
+  variant?: "neutral" | "positive" | "negative" | "attentive" | "muted";
 };
 
 function Heading<E extends AcceptableElementType>(
-  { as, size, children, ...props }: PolymorphicPropsWithRef<E, Props>,
+  { as, size, variant, children, ...props }: PolymorphicPropsWithRef<E, Props>,
   ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("span" as ElementType);
 
-  const classList = new ClassList(
-    classes.heading,
-    classes[size],
-    props.className,
-  );
-  props.className = classList.toString();
+  const classList = new ClassList(classes.heading, classes[size]);
+  if (variant) {
+    classList.add(classes[variant]);
+  }
+  if (props.className) {
+    classList.add(props.className);
+  }
+  props.className = String(classList);
 
   return (
     <Component ref={ref} {...props}>

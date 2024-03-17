@@ -6,10 +6,9 @@ import { Heading } from "~/src/components/Heading";
 import { authorize } from "~/src/lib/server/authorization";
 import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
-import { create } from "~/src/actions/application/create";
+import { create } from "~/src/feats/applications/api/create";
 import { Modal, Close } from "~/src/components/Modal";
-
-import { Form } from "./form";
+import { Form } from "~/src/feats/applications/components/Form";
 
 export const metadata: Metadata = {
   title: "New application at Workoelho",

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { list } from "~/src/actions/role";
-import { get } from "~/src/actions/user";
+import * as Roles from "~/src/feats/roles/api";
+import * as Users from "~/src/feats/users/api";
 import { Alert } from "~/src/components/Alert";
 import { Button } from "~/src/components/Button";
 import { Data, Entry } from "~/src/components/Data";
@@ -30,13 +30,16 @@ export default async function Page({
   params: { organizationId, userId },
 }: Props) {
   const session = await authorize({ organizationId });
-  const user = await get({ payload: { id: getPrivateId(userId) }, session });
+  const user = await Users.get({
+    payload: { id: getPrivateId(userId) },
+    session,
+  });
 
   const listingUrl = getUrl(session.organization, "users");
   const userUrl = getUrl(listingUrl, userId);
   const editUrl = getUrl(userUrl, "edit");
 
-  const roles = await list({
+  const roles = await Roles.list({
     payload: { userId: getPrivateId(userId), page: 1 },
     session,
   });

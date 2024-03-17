@@ -3,10 +3,9 @@ import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 
 import { getRequestSession, setSessionCookie } from "~/src/lib/server/session";
-import * as Users from "~/src/actions/user";
-import * as Sessions from "~/src/actions/session";
+import * as Users from "~/src/feats/users/api";
+import * as Sessions from "~/src/feats/sessions/api";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
-import { refresh } from "~/src/actions/session/refresh";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { getUrl } from "~/src/lib/shared/url";
@@ -44,7 +43,7 @@ export default async function Page({ searchParams: { sessionId } }: Props) {
 
   // If the session ID came in the URL we have to refresh it.
   if (sessionId) {
-    session = await refresh({
+    session = await Sessions.refresh({
       payload: {
         sessionId,
         deviceId: getDeviceId(cookies()),

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { getRequestSession, validate } from "~/src/lib/server/session";
 import { getFormProps } from "~/src/lib/shared/form";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
-import { update } from "~/src/actions/user/update";
+import { update } from "~/src/feats/users/api/update";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { getUrl } from "~/src/lib/shared/url";

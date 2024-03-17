@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { list } from "~/src/actions/role";
-import { get } from "~/src/actions/application/get";
+import { list } from "~/src/feats/roles/api";
+import { get } from "~/src/feats/applications/api/get";
 import { Alert } from "~/src/components/Alert";
 import { Button } from "~/src/components/Button";
 import { Data, Entry } from "~/src/components/Data";

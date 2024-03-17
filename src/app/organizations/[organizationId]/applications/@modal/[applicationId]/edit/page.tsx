@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 
-import { get } from "~/src/actions/application/get";
+import * as Applications from "~/src/feats/applications/api";
+import { Form } from "~/src/feats/applications/components/Form";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { authorize } from "~/src/lib/server/authorization";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
-import { update } from "~/src/actions/application/update";
-import { NotFoundError } from "~/src/lib/shared/errors";
 import { Close, Modal } from "~/src/components/Modal";
-import { Button } from "~/src/components/Button";
-import { Icon } from "~/src/components/Icon";
-
-import { Form } from "./form";
 
 export const metadata: Metadata = {
   title: "Editing application at Workoelho",
@@ -33,7 +27,7 @@ export default async function Page({
 }: Props) {
   const session = await authorize({ organizationId });
 
-  const application = await get({
+  const application = await Applications.get({
     payload: { id: getPrivateId(applicationId) },
     session,
   });
@@ -47,7 +41,7 @@ export default async function Page({
 
       const session = await authorize({ organizationId });
 
-      await update({
+      await Applications.update({
         payload: {
           id: getPrivateId(applicationId),
           name: payload.get("name"),
@@ -63,6 +57,19 @@ export default async function Page({
       },
     },
   );
+
+  const destroy = async () => {
+    "use server";
+
+    const session = await authorize({ organizationId });
+
+    await Applications.destroy({
+      payload: { id: getPrivateId(applicationId) },
+      session,
+    });
+
+    redirect(listingUrl);
+  };
 
   return (
     <Modal closeUrl={listingUrl}>
@@ -80,7 +87,7 @@ export default async function Page({
           <Close />
         </Flex>
 
-        <Form {...form} cancelUrl={applicationUrl} />
+        <Form {...form} destroy={destroy} cancelUrl={applicationUrl} />
       </Flex>
     </Modal>
   );

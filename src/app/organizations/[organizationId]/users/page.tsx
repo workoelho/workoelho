@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { list } from "~/src/actions/user/list";
+import { list } from "~/src/feats/users/api/list";
 import { Button } from "~/src/components/Button";
 import { Card } from "~/src/components/Card";
 import { Container } from "~/src/components/Container";
@@ -36,7 +36,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         <Header>
           <div />
 
-          <Flex direction="column" alignItems="center" gap="0.75rem">
+          <Flex direction="column" alignItems="center" gap="0.5rem">
             <Heading as="h1" size="large">
               People
             </Heading>
