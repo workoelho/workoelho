@@ -10,8 +10,7 @@ import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
 import { create } from "~/src/feats/roles/api";
 import { Close, Modal } from "~/src/components/Modal";
-
-import { Form } from "./form";
+import { Form } from "~/src/feats/roles/components/Form";
 
 export const metadata: Metadata = {
   title: "New role at Workoelho",

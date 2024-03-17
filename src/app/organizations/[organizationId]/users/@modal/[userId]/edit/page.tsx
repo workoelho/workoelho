@@ -9,7 +9,7 @@ import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
 import { Close, Modal } from "~/src/components/Modal";
-import { Form } from "~/src/feats/users/components/form";
+import { Form } from "~/src/feats/users/components/Form";
 
 export const metadata: Metadata = {
   title: "Editing person at Workoelho",
@@ -53,7 +53,7 @@ export default async function Page({
 
       redirect(userUrl);
     },
-    { values: { name: user.name, email: user.email, level: user.level } },
+    { values: { name: user.name, email: user.email, level: user.level } }
   );
 
   const destroy = async () => {
