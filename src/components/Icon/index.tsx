@@ -9,16 +9,18 @@ type Props = {
   label?: string;
   className?: string;
   size?: CSSProperties["fontSize"];
+  style?: CSSProperties;
 };
 
-export function Icon({ variant, label, size = "1em", className }: Props) {
+export function Icon({ variant, label, size = "1em", ...props }: Props) {
   const classList = new ClassList(classes.icon);
-  if (className) {
-    classList.add(className);
+  if (props.className) {
+    classList.add(props.className);
   }
 
   const style = {
     fontSize: size,
+    ...props.style,
   };
 
   return (

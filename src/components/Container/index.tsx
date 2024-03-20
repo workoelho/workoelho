@@ -20,7 +20,7 @@ type AcceptableElementType =
   | "form";
 
 type Props = {
-  size?: "small" | "large";
+  size?: "small" | "medium" | "large";
   padding?: CSSProperties["padding"];
   paddingBlock?: CSSProperties["paddingBlock"];
   paddingInline?: CSSProperties["paddingInline"];
@@ -36,14 +36,15 @@ function Container<E extends AcceptableElementType = "div">(
     children,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  ref: PolymorphicRef<E>
 ) {
   const Component = as ?? ("div" as ElementType);
 
-  const classList = new ClassList(classes.container);
-  classList.add(props.className);
-  classList.add(classes[size]);
-  props.className = classList.toString();
+  const classList = new ClassList(classes.container, classes[size]);
+  if (props.className) {
+    classList.add(props.className);
+  }
+  props.className = String(classList);
 
   props.style = {
     padding,

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { Card } from "~/src/components/Card";
 import { Container } from "~/src/components/Container";
+import { Empty } from "~/src/components/Empty";
 import { Flex } from "~/src/components/Flex";
 import { Header } from "~/src/components/Header";
 import { Heading } from "~/src/components/Heading";
@@ -36,11 +36,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         </Header>
 
         <Flex justifyContent="center">
-          <Card size="large">
-            <Heading as="p" size="massive" variant="muted">
-              Not implemented.
-            </Heading>
-          </Card>
+          <Empty size="large" title="Not implemented" />
         </Flex>
       </Flex>
     </Container>

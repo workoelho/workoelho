@@ -14,6 +14,8 @@ import { authorize } from "~/src/lib/server/authorization";
 import { formatDateTime, formatText } from "~/src/lib/shared/formatting";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
+import { Empty } from "~/src/components/Empty";
+import { Header } from "~/src/components/Header";
 
 export const metadata: Metadata = {
   title: "Inspecting person at Workoelho",
@@ -47,19 +49,15 @@ export default async function Page({
   return (
     <Modal closeUrl={listingUrl}>
       <Flex direction="column" gap="3rem">
-        <Flex as="header" alignItems="center" justifyContent="space-between">
-          <Flex gap="1.5rem">
+        <Flex alignItems="center" justifyContent="space-between">
+          <Flex alignItems="center" gap="3rem">
             <Heading as="h1" size="medium">
               Inspecting person
             </Heading>
 
-            <Flex as="menu" gap="0.5rem" alignItems="center">
-              <li>
-                <Button as={Link} href={editUrl}>
-                  Edit person <Icon variant="pencil" />
-                </Button>
-              </li>
-            </Flex>
+            <Button as={Link} href={editUrl}>
+              Edit person <Icon variant="pencil" />
+            </Button>
           </Flex>
 
           <Close />
@@ -86,22 +84,18 @@ export default async function Page({
         </Data>
 
         <Flex direction="column" gap="1.5rem">
-          <Flex gap="1.5rem">
-            <Heading as="h2" size="medium">
+          <Flex alignItems="center" gap="3rem">
+            <Heading as="h1" size="medium">
               Roles
             </Heading>
 
-            <Flex as="menu" gap="0.5rem" alignItems="center">
-              <li>
-                <Button as={Link} href={getUrl(userUrl, "roles", "new")}>
-                  Add role <Icon variant="plus" />
-                </Button>
-              </li>
-            </Flex>
+            <Button as={Link} href={getUrl(userUrl, "roles", "new")}>
+              Add role <Icon variant="plus" />
+            </Button>
           </Flex>
 
           {roles.length === 0 ? (
-            <Alert variant="neutral">No roles.</Alert>
+            <Empty title="No roles found." />
           ) : (
             <Data>
               {roles.map((role) => (

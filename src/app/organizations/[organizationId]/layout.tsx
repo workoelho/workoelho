@@ -25,9 +25,10 @@ import classes from "./layout.module.css";
 type Props = {
   params: { organizationId: string };
   children: ReactNode;
+  modal: ReactNode;
 };
 
-export default async function Layout({ params, children }: Props) {
+export default async function Layout({ params, children, modal }: Props) {
   const { organizationId } = params;
 
   const session = await authorize({ organizationId });
@@ -147,7 +148,10 @@ export default async function Layout({ params, children }: Props) {
               }
             >
               <Menu>
-                <Option as={Link} href="/profile">
+                <Option
+                  as={Link}
+                  href={getUrl(session.organization, "profile")}
+                >
                   My profile
                 </Option>
                 <Option action={signOut.bind(null, session.id)}>
@@ -169,7 +173,7 @@ export default async function Layout({ params, children }: Props) {
                     </Flex>
                   </Option>
                 ))}
-                <Option as={Link} href="/sign-in">
+                <Option as={Link} href={getUrl("sign-in")}>
                   Sign in
                 </Option>
               </Menu>
@@ -178,7 +182,10 @@ export default async function Layout({ params, children }: Props) {
         </Flex>
       </Topbar>
 
-      <main className={classes.main}>{children}</main>
+      <main className={classes.main}>
+        {children}
+        {modal}
+      </main>
 
       <Footer className={classes.footer} version={pkg.version} />
     </div>

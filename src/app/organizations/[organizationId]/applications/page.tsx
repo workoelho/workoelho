@@ -14,6 +14,7 @@ import { Text } from "~/src/components/Text";
 import { authorize } from "~/src/lib/server/authorization";
 import { formatDateTime } from "~/src/lib/shared/formatting";
 import { getUrl } from "~/src/lib/shared/url";
+import { Empty } from "~/src/components/Empty";
 
 export const metadata: Metadata = {
   title: "Applications at Workoelho",
@@ -55,25 +56,36 @@ export default async function Page({ params: { organizationId } }: Props) {
           </Flex>
         </Header>
 
-        <Grid as="ul" template="auto / 1fr 1fr 1fr" gap=".75rem">
-          {applications.map((application) => (
-            <li key={application.id}>
-              <Link href={getUrl(session.organization, application)}>
-                <Card as="article" key={application.id}>
-                  <Heading as="h1" size="small">
-                    {application.name}
-                  </Heading>
-                  <Text as="p" variant="muted">
-                    {"Last updated at "}
-                    {formatDateTime(application.updatedAt, {
-                      dateStyle: "medium",
-                    })}
-                    .
-                  </Text>
-                </Card>
-              </Link>
-            </li>
-          ))}
+        <Grid
+          as="ul"
+          template="auto / repeat(auto-fit, minmax(30%, 1fr))"
+          gap=".75rem"
+          justifyContent="center"
+        >
+          {applications.length > 0 ? (
+            applications.map((application) => (
+              <li key={application.id}>
+                <Link href={getUrl(session.organization, application)}>
+                  <Card as="article" key={application.id}>
+                    <Heading as="h1" size="small">
+                      {application.name}
+                    </Heading>
+                    <Text as="p" variant="muted">
+                      {"Last updated at "}
+                      {formatDateTime(application.updatedAt, {
+                        dateStyle: "medium",
+                      })}
+                      .
+                    </Text>
+                  </Card>
+                </Link>
+              </li>
+            ))
+          ) : (
+            <Flex justifyContent="center">
+              <Empty size="large" title="No applications found." />
+            </Flex>
+          )}
         </Grid>
       </Flex>
     </Container>

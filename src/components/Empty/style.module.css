@@ -23,7 +23,6 @@
 }
 
 .button.text {
-  display: flex inline;
   color: var(--default-color);
 }
 

@@ -15,6 +15,7 @@ import { Popover } from "~/src/components/Popover";
 import { Text } from "~/src/components/Text";
 import { authorize } from "~/src/lib/server/authorization";
 import { getUrl } from "~/src/lib/shared/url";
+import { Empty } from "~/src/components/Empty";
 
 export const metadata: Metadata = {
   title: "People at Workoelho",
@@ -56,21 +57,31 @@ export default async function Page({ params: { organizationId } }: Props) {
           </Flex>
         </Header>
 
-        <Grid as="ul" template="auto / 1fr 1fr 1fr" gap=".75rem">
-          {users.map((user) => (
-            <li key={user.id}>
-              <Link href={getUrl(session.organization, user)}>
-                <Card as="article" key={user.id}>
-                  <Heading as="h1" size="small">
-                    {user.name}
-                  </Heading>
-                  <Text as="p" variant="muted">
-                    {user.email}
-                  </Text>
-                </Card>
-              </Link>
-            </li>
-          ))}
+        <Grid
+          as="ul"
+          template="auto / repeat(auto-fit, minmax(30%, 1fr))"
+          gap=".75rem"
+        >
+          {users.length > 0 ? (
+            users.map((user) => (
+              <li key={user.id}>
+                <Link href={getUrl(session.organization, user)}>
+                  <Card as="article" key={user.id}>
+                    <Heading as="h1" size="small">
+                      {user.name}
+                    </Heading>
+                    <Text as="p" variant="muted">
+                      {user.email}
+                    </Text>
+                  </Card>
+                </Link>
+              </li>
+            ))
+          ) : (
+            <Flex justifyContent="center">
+              <Empty size="large" title="No people found." />
+            </Flex>
+          )}
         </Grid>
       </Flex>
     </Container>

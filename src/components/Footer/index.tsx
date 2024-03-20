@@ -36,7 +36,7 @@ export function Footer({ version, className }: Props) {
 
       <p>©️ 2023 Workoelho</p>
 
-      <Text variant="muted">v{version}</Text>
+      <p>Version {version}</p>
     </footer>
   );
 }

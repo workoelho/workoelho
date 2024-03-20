@@ -14,6 +14,7 @@ import { authorize } from "~/src/lib/server/authorization";
 import { formatDateTime } from "~/src/lib/shared/formatting";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
+import { Empty } from "~/src/components/Empty";
 
 export const metadata: Metadata = {
   title: "Inspecting application at Workoelho",
@@ -55,12 +56,12 @@ export default async function Page({
         >
           <Flex gap="1.5rem">
             <Heading as="h1" size="medium">
-              Inspecting application
+              Application
             </Heading>
 
             <Flex as="menu" gap="0.5rem" alignItems="center">
               <li>
-                <Button as={Link} href={editUrl}>
+                <Button as={Link} href={editUrl} shape="pill" fill="outline">
                   Edit application <Icon variant="pencil" />
                 </Button>
               </li>
@@ -86,33 +87,36 @@ export default async function Page({
           <Entry label="Name">{application.name}</Entry>
         </Data>
 
-        <Flex direction="column" gap="1.5rem">
-          <Flex gap="1.5rem">
-            <Heading as="h2" size="medium">
-              Roles
-            </Heading>
+        <Flex gap="1.5rem">
+          <Heading as="h2" size="medium">
+            People
+          </Heading>
 
-            <Flex as="menu" gap="0.5rem" alignItems="center">
-              <li>
-                <Button as={Link} href={getUrl(applicationUrl, "roles", "new")}>
-                  Add role <Icon variant="plus" />
-                </Button>
-              </li>
-            </Flex>
+          <Flex as="menu" gap="0.5rem" alignItems="center">
+            <li>
+              <Button
+                as={Link}
+                href={getUrl(applicationUrl, "roles", "new")}
+                shape="pill"
+                fill="outline"
+              >
+                Add role <Icon variant="plus" />
+              </Button>
+            </li>
           </Flex>
-
-          {roles.length === 0 ? (
-            <Alert variant="neutral">No roles.</Alert>
-          ) : (
-            <Data>
-              {roles.map((role) => (
-                <Entry key={role.id} label={role.name}>
-                  {role.user.name}
-                </Entry>
-              ))}
-            </Data>
-          )}
         </Flex>
+
+        {roles.length === 0 ? (
+          <Empty title="No roles found." />
+        ) : (
+          <Data>
+            {roles.map((role) => (
+              <Entry key={role.id} label={role.name}>
+                {role.user.name}
+              </Entry>
+            ))}
+          </Data>
+        )}
       </Flex>
     </Modal>
   );

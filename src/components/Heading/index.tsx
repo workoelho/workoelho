@@ -20,12 +20,18 @@ type AcceptableElementType =
 
 type Props = {
   size: "massive" | "large" | "medium" | "small";
-  variant?: "neutral" | "positive" | "negative" | "attentive" | "muted";
+  variant?:
+    | "neutral"
+    | "positive"
+    | "negative"
+    | "attentive"
+    | "muted"
+    | "ghost";
 };
 
 function Heading<E extends AcceptableElementType>(
   { as, size, variant, children, ...props }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  ref: PolymorphicRef<E>
 ) {
   const Component = as ?? ("span" as ElementType);
 

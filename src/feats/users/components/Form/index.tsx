@@ -88,7 +88,7 @@ export function Form({ cancelUrl, destroy, ...props }: Props) {
             </Button>
           ) : null}
 
-          <Submit>Save person</Submit>
+          <Submit>Save</Submit>
         </Flex>
       </Flex>
     </Flex>

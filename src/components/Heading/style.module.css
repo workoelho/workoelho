@@ -41,3 +41,7 @@
 .heading.muted {
   color: var(--neutral-3);
 }
+
+.heading.ghost {
+  color: var(--neutral-4);
+}

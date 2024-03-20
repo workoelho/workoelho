@@ -1,11 +1,16 @@
 .container {
   margin-inline: auto;
+  width: 100%;
 }
 
 .container.small {
-  max-width: 24rem;
+  max-width: 20rem;
+}
+
+.container.medium {
+  max-width: 30rem;
 }
 
 .container.large {
-  max-width: 64rem;
+  max-width: 60rem;
 }
