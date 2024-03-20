@@ -22,6 +22,8 @@ function getModelUrlPrefix(model: { $type: string }) {
       return "providers";
     case "service":
       return "services";
+    case "role":
+      return "roles";
     case "tag":
       return "tags";
     case "activity":

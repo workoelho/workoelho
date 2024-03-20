@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { get } from "~/src/feats/applications/api";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
+import { Close, Modal } from "~/src/components/Modal";
+import { get } from "~/src/feats/applications/api";
+import { create } from "~/src/feats/roles/api";
+import { Form } from "~/src/feats/roles/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
+import { getFormProps } from "~/src/lib/shared/form";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
-import { getFormProps } from "~/src/lib/shared/form";
-import { create } from "~/src/feats/roles/api";
-import { Close, Modal } from "~/src/components/Modal";
-import { Form } from "~/src/feats/roles/components/Form";
 
 export const metadata: Metadata = {
   title: "New role at Workoelho",
@@ -56,12 +56,7 @@ export default async function Page({
   return (
     <Modal closeUrl={listingUrl}>
       <Flex direction="column" gap="3rem">
-        <Flex
-          as="header"
-          alignItems="center"
-          justifyContent="space-between"
-          style={{ height: "1.5rem" }}
-        >
+        <Flex as="header" justifyContent="space-between">
           <Heading as="h1" size="medium">
             New role for {application.name}
           </Heading>

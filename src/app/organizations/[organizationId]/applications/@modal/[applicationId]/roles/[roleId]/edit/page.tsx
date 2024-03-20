@@ -5,30 +5,37 @@ import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { Close, Modal } from "~/src/components/Modal";
 import * as Applications from "~/src/feats/applications/api";
-import { Form } from "~/src/feats/applications/components/Form";
+import * as Roles from "~/src/feats/roles/api";
+import { Form } from "~/src/feats/roles/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getFormProps } from "~/src/lib/shared/form";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
-  title: "Editing application at Workoelho",
+  title: "Editing role at Workoelho",
 };
 
 type Props = {
   params: {
     organizationId: string;
     applicationId: string;
+    roleId: string;
   };
 };
 
 export default async function Page({
-  params: { organizationId, applicationId },
+  params: { organizationId, applicationId, roleId },
 }: Props) {
   const session = await authorize({ organizationId });
 
   const application = await Applications.get({
     payload: { id: getPrivateId(applicationId) },
+    session,
+  });
+
+  const role = await Roles.get({
+    payload: { id: getPrivateId(roleId) },
     session,
   });
 
@@ -41,21 +48,18 @@ export default async function Page({
 
       const session = await authorize({ organizationId });
 
-      await Applications.update({
+      await Roles.update({
         payload: {
-          id: getPrivateId(applicationId),
+          id: getPrivateId(roleId),
           name: payload.get("name"),
+          userId: payload.get("userId"),
         },
         session,
       });
 
       redirect(applicationUrl);
     },
-    {
-      values: {
-        name: application.name,
-      },
-    }
+    { values: { name: role.name, userId: String(role.userId) } }
   );
 
   const destroy = async () => {
@@ -63,12 +67,12 @@ export default async function Page({
 
     const session = await authorize({ organizationId });
 
-    await Applications.destroy({
-      payload: { id: getPrivateId(applicationId) },
+    await Roles.destroy({
+      payload: { id: getPrivateId(roleId) },
       session,
     });
 
-    redirect(listingUrl);
+    redirect(applicationUrl);
   };
 
   return (
@@ -76,13 +80,13 @@ export default async function Page({
       <Flex direction="column" gap="3rem">
         <Flex as="header" justifyContent="space-between">
           <Heading as="h1" size="medium">
-            Editing application
+            Editing role for {application.name}
           </Heading>
 
           <Close />
         </Flex>
 
-        <Form {...form} destroy={destroy} cancelUrl={applicationUrl} />
+        <Form {...form} cancelUrl={applicationUrl} destroy={destroy} />
       </Flex>
     </Modal>
   );

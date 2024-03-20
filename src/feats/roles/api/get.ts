@@ -14,14 +14,14 @@ const payloadSchema = superstruct.object({
 type Payload = superstruct.Infer<typeof payloadSchema>;
 
 /**
- * Get one application.
+ * Get one role.
  */
 export async function get(context: Context<Payload>) {
   const payload = superstruct.create(context.payload, payloadSchema);
 
   validate(context.session);
 
-  return await db.application.findUniqueOrThrow({
+  return await db.role.findUniqueOrThrow({
     where: {
       id: payload.id,
       organizationId: context.session.organizationId,

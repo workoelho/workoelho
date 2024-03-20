@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { list } from "~/src/feats/applications/api/list";
 import { Button } from "~/src/components/Button";
 import { Card } from "~/src/components/Card";
 import { Container } from "~/src/components/Container";
+import { Empty } from "~/src/components/Empty";
 import { Flex } from "~/src/components/Flex";
 import { Grid } from "~/src/components/Grid";
 import { Header } from "~/src/components/Header";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Text } from "~/src/components/Text";
+import { list } from "~/src/feats/applications/api/list";
 import { authorize } from "~/src/lib/server/authorization";
 import { formatDateTime } from "~/src/lib/shared/formatting";
 import { getUrl } from "~/src/lib/shared/url";
-import { Empty } from "~/src/components/Empty";
 
 export const metadata: Metadata = {
   title: "Applications at Workoelho",
@@ -66,8 +66,8 @@ export default async function Page({ params: { organizationId } }: Props) {
             applications.map((application) => (
               <li key={application.id}>
                 <Link href={getUrl(session.organization, application)}>
-                  <Card as="article" key={application.id}>
-                    <Heading as="h1" size="small">
+                  <Card as="article">
+                    <Heading as="h1" size="tiny">
                       {application.name}
                     </Heading>
                     <Text as="p" variant="muted">

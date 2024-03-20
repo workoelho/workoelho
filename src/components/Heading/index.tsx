@@ -19,7 +19,7 @@ type AcceptableElementType =
   | "legend";
 
 type Props = {
-  size: "massive" | "large" | "medium" | "small";
+  size: "massive" | "large" | "medium" | "small" | "tiny";
   variant?:
     | "neutral"
     | "positive"
@@ -50,6 +50,7 @@ function Heading<E extends AcceptableElementType>(
     </Component>
   );
 }
+
 const forwardRefHeading = forwardRef(Heading) as typeof Heading;
 
 export { forwardRefHeading as Heading };

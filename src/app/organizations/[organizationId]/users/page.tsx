@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { list } from "~/src/feats/users/api/list";
 import { Button } from "~/src/components/Button";
 import { Card } from "~/src/components/Card";
 import { Container } from "~/src/components/Container";
+import { Empty } from "~/src/components/Empty";
 import { Flex } from "~/src/components/Flex";
 import { Grid } from "~/src/components/Grid";
 import { Header } from "~/src/components/Header";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
-import { Menu, Option } from "~/src/components/Menu";
-import { Popover } from "~/src/components/Popover";
 import { Text } from "~/src/components/Text";
+import { list } from "~/src/feats/users/api/list";
 import { authorize } from "~/src/lib/server/authorization";
 import { getUrl } from "~/src/lib/shared/url";
-import { Empty } from "~/src/components/Empty";
 
 export const metadata: Metadata = {
   title: "People at Workoelho",
@@ -67,7 +65,7 @@ export default async function Page({ params: { organizationId } }: Props) {
               <li key={user.id}>
                 <Link href={getUrl(session.organization, user)}>
                   <Card as="article" key={user.id}>
-                    <Heading as="h1" size="small">
+                    <Heading as="h1" size="tiny">
                       {user.name}
                     </Heading>
                     <Text as="p" variant="muted">

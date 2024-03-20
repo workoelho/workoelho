@@ -110,13 +110,7 @@ CREATE TABLE "activity" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "organizations_name_key" ON "organizations"("name");
-
--- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "applications_name_key" ON "applications"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "providers_name_key" ON "providers"("name");
