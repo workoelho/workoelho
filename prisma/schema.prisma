@@ -11,7 +11,7 @@ model Organization {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    name      String   @unique
+    name      String
 
     activity     Activity[]
     applications Application[]
@@ -35,7 +35,7 @@ model User {
     level     String
 
     organizationId Int
-    organization   Organization @relation(fields: [organizationId], references: [id])
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
     sessions Session[]
     activity Activity[]
@@ -53,10 +53,10 @@ model Session {
     userAgent     String
 
     organizationId Int
-    organization   Organization @relation(fields: [organizationId], references: [id])
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
     userId Int
-    user   User @relation(fields: [userId], references: [id])
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@map("sessions")
 }
@@ -65,10 +65,10 @@ model Application {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    name      String   @unique
+    name      String
 
     organizationId Int
-    organization   Organization @relation(fields: [organizationId], references: [id])
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
     services Service[]
     roles    Role[]
@@ -83,13 +83,13 @@ model Role {
     name      String
 
     organizationId Int
-    organization   Organization @relation(fields: [organizationId], references: [id])
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
     userId Int
-    user   User @relation(fields: [userId], references: [id])
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     applicationId Int
-    application   Application @relation(fields: [applicationId], references: [id])
+    application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
     @@map("roles")
 }
@@ -102,7 +102,7 @@ model Provider {
     url       String
 
     organizationId Int
-    organization   Organization @relation(fields: [organizationId], references: [id])
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
     services Service[]
 
@@ -117,13 +117,13 @@ model Service {
     estimatedMonthlyCost Float
 
     organizationId Int
-    organization   Organization @relation(fields: [organizationId], references: [id])
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
     providerId Int
-    provider   Provider @relation(fields: [providerId], references: [id])
+    provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
 
     applicationId Int
-    application   Application @relation(fields: [applicationId], references: [id])
+    application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
     @@map("services")
 }
@@ -136,7 +136,7 @@ model Tag {
     value     String
 
     organizationId Int
-    organization   Organization @relation(fields: [organizationId], references: [id])
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
     objectType String
     objectId   Int
@@ -151,13 +151,13 @@ model Activity {
     name      String
 
     organizationId Int
-    organization   Organization @relation(fields: [organizationId], references: [id])
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
     objectType String
     objectId   Int
 
     subjectId Int
-    subject   User @relation(fields: [subjectId], references: [id])
+    subject   User @relation(fields: [subjectId], references: [id], onDelete: Cascade)
 
     @@index([objectType, objectId])
     @@map("activity")
