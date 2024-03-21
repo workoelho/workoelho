@@ -3,7 +3,7 @@
  */
 export function formatNumber(
   value: number,
-  { locale, ...options }: Intl.NumberFormatOptions & { locale?: string } = {},
+  { locale, ...options }: Intl.NumberFormatOptions & { locale?: string } = {}
 ) {
   return new Intl.NumberFormat(locale, options).format(value);
 }
@@ -13,7 +13,7 @@ export function formatNumber(
  */
 export function formatDateTime(
   value: Date,
-  { locale, ...options }: Intl.DateTimeFormatOptions & { locale?: string } = {},
+  { locale, ...options }: Intl.DateTimeFormatOptions & { locale?: string } = {}
 ) {
   return new Intl.DateTimeFormat(locale, options).format(value);
 }
@@ -23,7 +23,7 @@ export function formatDateTime(
  */
 export function formatList(
   values: string[],
-  { locale, ...options }: Intl.ListFormatOptions & { locale?: string } = {},
+  { locale, ...options }: Intl.ListFormatOptions & { locale?: string } = {}
 ) {
   return new Intl.ListFormat(locale, options).format(values);
 }
@@ -52,6 +52,7 @@ export function formatText(value: string, options: TextFormatOptions) {
     if (parts.length === 1) {
       return value;
     }
-    return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+    // return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+    return parts[0];
   }
 }
