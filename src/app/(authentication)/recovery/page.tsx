@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
 import * as superstruct from "superstruct";
 
-import * as schema from "~/src/lib/shared/schema";
-import * as Sessions from "~/src/feats/sessions/api";
-import * as Users from "~/src/feats/users/api";
+import { send } from "~/src/emails/recovery";
+import * as Sessions from "~/src/feats/session/api";
+import * as Users from "~/src/feats/user/api";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { getFormProps } from "~/src/lib/shared/form";
-import { send } from "~/src/emails/recovery";
+import * as schema from "~/src/lib/shared/schema";
 import { getUrl } from "~/src/lib/shared/url";
 
 import { Form } from "./form";

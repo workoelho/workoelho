@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import * as Users from "~/src/feats/users/api";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
+import { Close, Modal } from "~/src/components/Modal";
+import * as Users from "~/src/feats/user/api";
+import { Form } from "~/src/feats/user/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
+import { getFormProps } from "~/src/lib/shared/form";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
-import { getFormProps } from "~/src/lib/shared/form";
-import { Close, Modal } from "~/src/components/Modal";
-import { Form } from "~/src/feats/users/components/Form";
 
 export const metadata: Metadata = {
   title: "Editing person at Workoelho",
@@ -53,7 +53,7 @@ export default async function Page({
 
       redirect(userUrl);
     },
-    { values: { name: user.name, email: user.email, level: user.level } }
+    { values: { name: user.name, email: user.email, level: user.level } },
   );
 
   const destroy = async () => {

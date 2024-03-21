@@ -9,7 +9,6 @@ import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
-import { Select } from "~/src/components/Select";
 import { Submit } from "~/src/components/Submit";
 import { Props as FormProps } from "~/src/lib/shared/form";
 
@@ -31,8 +30,8 @@ export function Form({ cancelUrl, destroy, ...props }: Props) {
 
       <Flex as="fieldset" direction="column" gap="1rem">
         <Field
-          label="Name"
-          hint="Role name, e.g. front-end developer, designer, lead, etc."
+          label="Title"
+          hint="e.g. lead, front-end developer, designer, QA, etc."
         >
           {(props) => (
             <Input
@@ -53,7 +52,20 @@ export function Form({ cancelUrl, destroy, ...props }: Props) {
               type="text"
               placeholder="1"
               required
-              defaultValue={state.values?.email}
+              defaultValue={state.values?.userId}
+              {...props}
+            />
+          )}
+        </Field>
+
+        <Field label="Application" hint="Application this role is assigned to.">
+          {(props) => (
+            <Input
+              name="applicationId"
+              type="text"
+              placeholder="1"
+              required
+              defaultValue={state.values?.applicationId}
               {...props}
             />
           )}

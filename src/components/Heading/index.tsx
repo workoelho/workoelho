@@ -31,7 +31,7 @@ type Props = {
 
 function Heading<E extends AcceptableElementType>(
   { as, size, variant, children, ...props }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("span" as ElementType);
 

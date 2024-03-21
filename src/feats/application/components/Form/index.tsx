@@ -31,7 +31,7 @@ export function Form({ cancelUrl, destroy, ...props }: Props) {
       <Flex as="fieldset" direction="column" gap="1rem">
         <Field
           label="Name"
-          hint="Could be a website, a mobile application, a front-end, a microservice, etc."
+          hint="e.g. a website, a mobile application, a front-end, a microservice, etc."
         >
           {(props) => (
             <Input

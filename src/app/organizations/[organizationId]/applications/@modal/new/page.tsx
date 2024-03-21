@@ -3,12 +3,12 @@ import { redirect } from "next/navigation";
 
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
+import { Close, Modal } from "~/src/components/Modal";
+import { create } from "~/src/feats/application/api/create";
+import { Form } from "~/src/feats/application/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
-import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
-import { create } from "~/src/feats/applications/api/create";
-import { Modal, Close } from "~/src/components/Modal";
-import { Form } from "~/src/feats/applications/components/Form";
+import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
   title: "New application at Workoelho",

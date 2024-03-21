@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-import * as Sessions from "~/src/feats/sessions/api";
-import { setSessionCookie } from "~/src/lib/server/session";
+import * as Sessions from "~/src/feats/session/api";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
+import { setSessionCookie } from "~/src/lib/server/session";
 import { getUrl } from "~/src/lib/shared/url";
 
 import { Form } from "./form";

@@ -6,7 +6,7 @@ import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { getUrl } from "~/src/lib/shared/url";
 
 export type State = {
-  values?: Record<string, string | undefined>;
+  values?: Record<string, string | number | undefined>;
   status?: "positive" | "negative";
   message?: string;
 };

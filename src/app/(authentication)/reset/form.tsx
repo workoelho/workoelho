@@ -7,9 +7,9 @@ import { Field } from "~/src/components/Field";
 import { Flex } from "~/src/components/Flex";
 import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
-import { Props, State } from "~/src/lib/shared/form";
+import { Props } from "~/src/lib/shared/form";
 
-export function Form(props: Props<State>) {
+export function Form(props: Props) {
   const [state, action] = useFormState(props.action, props.initialState);
 
   return (

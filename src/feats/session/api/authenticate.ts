@@ -2,12 +2,12 @@
 
 import * as superstruct from "superstruct";
 
-import { Context } from "~/src/lib/server/actions";
-import { db } from "~/src/lib/server/prisma";
-import * as password from "~/src/lib/server/password";
-import * as schema from "~/src/lib/shared/schema";
+import * as Sessions from "~/src/feats/session/api";
 import { ValidationError } from "~/src/lib/server/ValidationError";
-import * as Sessions from "~/src/feats/sessions/api";
+import { Context } from "~/src/lib/server/actions";
+import * as password from "~/src/lib/server/password";
+import { db } from "~/src/lib/server/prisma";
+import * as schema from "~/src/lib/shared/schema";
 
 const payloadSchema = superstruct.object({
   email: schema.email,

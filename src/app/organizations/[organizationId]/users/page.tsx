@@ -11,7 +11,7 @@ import { Header } from "~/src/components/Header";
 import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Text } from "~/src/components/Text";
-import { list } from "~/src/feats/users/api/list";
+import * as api from "~/src/feats/api";
 import { authorize } from "~/src/lib/server/authorization";
 import { getUrl } from "~/src/lib/shared/url";
 
@@ -27,7 +27,7 @@ type Props = {
 
 export default async function Page({ params: { organizationId } }: Props) {
   const session = await authorize({ organizationId });
-  const users = await list({ payload: { page: 1 }, session });
+  const users = await api.user.list({ payload: { page: 1 }, session });
 
   return (
     <Container size="large" padding="3rem">

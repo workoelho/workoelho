@@ -3,12 +3,12 @@ import { redirect } from "next/navigation";
 
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
+import { Close, Modal } from "~/src/components/Modal";
+import * as Users from "~/src/feats/user/api";
+import { Form } from "~/src/feats/user/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
-import { getUrl } from "~/src/lib/shared/url";
 import { getFormProps } from "~/src/lib/shared/form";
-import * as Users from "~/src/feats/users/api";
-import { Modal, Close } from "~/src/components/Modal";
-import { Form } from "~/src/feats/users/components/Form";
+import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
   title: "New person at Workoelho",

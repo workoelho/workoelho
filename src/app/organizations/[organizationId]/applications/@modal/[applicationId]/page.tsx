@@ -11,8 +11,7 @@ import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Close, Modal } from "~/src/components/Modal";
 import { Text } from "~/src/components/Text";
-import * as Applications from "~/src/feats/applications/api";
-import * as Roles from "~/src/feats/roles/api";
+import * as api from "~/src/feats/api";
 import { authorize } from "~/src/lib/server/authorization";
 import { formatDateTime } from "~/src/lib/shared/formatting";
 import { getPrivateId } from "~/src/lib/shared/publicId";
@@ -33,7 +32,7 @@ export default async function Page({
   params: { organizationId, applicationId },
 }: Props) {
   const session = await authorize({ organizationId });
-  const application = await Applications.get({
+  const application = await api.application.get({
     payload: { id: getPrivateId(applicationId) },
     session,
   });
@@ -42,7 +41,7 @@ export default async function Page({
   const applicationUrl = getUrl(listingUrl, applicationId);
   const editUrl = getUrl(applicationUrl, "edit");
 
-  const roles = await Roles.list({
+  const roles = await api.role.list({
     payload: { applicationId: getPrivateId(applicationId), page: 1 },
     session,
   });

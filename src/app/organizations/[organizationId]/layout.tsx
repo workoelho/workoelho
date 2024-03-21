@@ -1,24 +1,24 @@
-import type { ReactNode } from "react";
-import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import type { ReactNode } from "react";
 
 import pkg from "~/package.json";
-import * as Sessions from "~/src/feats/sessions/api";
 import { Button } from "~/src/components/Button";
 import { Flex } from "~/src/components/Flex";
 import { Footer } from "~/src/components/Footer";
 import { Icon } from "~/src/components/Icon";
-import { Popover } from "~/src/components/Popover";
-import { Topbar } from "~/src/components/Topbar";
-import { clearSessionCookie, setSessionCookie } from "~/src/lib/server/session";
-import { authorize } from "~/src/lib/server/authorization";
-import { getShortName } from "~/src/lib/shared/api";
-import { getDeviceId } from "~/src/lib/server/deviceId";
-import { UnauthorizedError } from "~/src/lib/shared/errors";
-import { getUrl } from "~/src/lib/shared/url";
 import { Menu, Option, Separator } from "~/src/components/Menu";
+import { Popover } from "~/src/components/Popover";
 import { Text } from "~/src/components/Text";
+import { Topbar } from "~/src/components/Topbar";
+import * as api from "~/src/feats/api";
+import { authorize } from "~/src/lib/server/authorization";
+import { getDeviceId } from "~/src/lib/server/deviceId";
+import { clearSessionCookie, setSessionCookie } from "~/src/lib/server/session";
+import { UnauthorizedError } from "~/src/lib/shared/errors";
+import { formatText } from "~/src/lib/shared/formatting";
+import { getUrl } from "~/src/lib/shared/url";
 
 import classes from "./layout.module.css";
 
@@ -33,7 +33,7 @@ export default async function Layout({ params, children, modal }: Props) {
 
   const session = await authorize({ organizationId });
 
-  const sessions = await Sessions.listByDevice({
+  const sessions = await api.session.listByDevice({
     payload: {
       deviceId: getDeviceId(cookies()),
     },
@@ -43,7 +43,7 @@ export default async function Layout({ params, children, modal }: Props) {
   const switchSession = async (sessionId: string) => {
     "use server";
 
-    const session = await Sessions.get({ payload: { id: sessionId } });
+    const session = await api.session.get({ payload: { id: sessionId } });
 
     if (!session) {
       throw new UnauthorizedError();
@@ -57,7 +57,7 @@ export default async function Layout({ params, children, modal }: Props) {
   const signOut = async (sessionId: string) => {
     "use server";
 
-    await Sessions.invalidate({
+    await api.session.invalidate({
       payload: { sessionId },
     });
 
@@ -141,7 +141,8 @@ export default async function Layout({ params, children, modal }: Props) {
               placement="right"
               trigger={
                 <Button shape="text">
-                  {getShortName(session.user.name)} ({session.organization.name}
+                  {formatText(session.user.name, { shortName: true })} (
+                  {session.organization.name}
                   )
                   <Icon variant="chevron-down" />
                 </Button>

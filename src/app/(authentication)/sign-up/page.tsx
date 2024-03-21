@@ -2,16 +2,16 @@ import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import * as Organizations from "~/src/feats/organizations/api";
-import * as Sessions from "~/src/feats/sessions/api";
-import { setSessionCookie } from "~/src/lib/server/session";
-import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
-import { getDeviceId } from "~/src/lib/server/deviceId";
-import { getUrl } from "~/src/lib/shared/url";
-import { Link } from "~/src/components/Link";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
+import { Link } from "~/src/components/Link";
+import * as Organizations from "~/src/feats/organization/api";
+import * as Sessions from "~/src/feats/session/api";
+import { getDeviceId } from "~/src/lib/server/deviceId";
+import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
+import { setSessionCookie } from "~/src/lib/server/session";
 import { getFormProps } from "~/src/lib/shared/form";
+import { getUrl } from "~/src/lib/shared/url";
 
 import { Form } from "./form";
 

@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { getRequestSession, setSessionCookie } from "~/src/lib/server/session";
-import * as Users from "~/src/feats/users/api";
-import * as Sessions from "~/src/feats/sessions/api";
-import { UnauthorizedError } from "~/src/lib/shared/errors";
-import { getDeviceId } from "~/src/lib/server/deviceId";
-import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
-import { getUrl } from "~/src/lib/shared/url";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { Link } from "~/src/components/Link";
+import * as Sessions from "~/src/feats/session/api";
+import * as Users from "~/src/feats/user/api";
+import { getDeviceId } from "~/src/lib/server/deviceId";
+import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
+import { getRequestSession, setSessionCookie } from "~/src/lib/server/session";
+import { UnauthorizedError } from "~/src/lib/shared/errors";
 import { getFormProps } from "~/src/lib/shared/form";
+import { getUrl } from "~/src/lib/shared/url";
 
 import { Form } from "./form";
 

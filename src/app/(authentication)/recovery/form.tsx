@@ -10,9 +10,9 @@ import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Link } from "~/src/components/Link";
 import { Submit } from "~/src/components/Submit";
-import { Props, State } from "~/src/lib/shared/form";
+import { Props } from "~/src/lib/shared/form";
 
-export function Form(props: Props<State>) {
+export function Form(props: Props) {
   const [state, action] = useFormState(props.action, props.initialState);
 
   return (

@@ -2,10 +2,10 @@
 
 import * as superstruct from "superstruct";
 
+import { create } from "~/src/feats/session/api";
+import { ValidationError } from "~/src/lib/server/ValidationError";
 import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
-import { ValidationError } from "~/src/lib/server/ValidationError";
-import { create } from "~/src/feats/sessions/api";
 
 const payloadSchema = superstruct.object({
   sessionId: superstruct.string(),

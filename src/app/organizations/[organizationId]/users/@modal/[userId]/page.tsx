@@ -11,8 +11,7 @@ import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import { Close, Modal } from "~/src/components/Modal";
 import { Text } from "~/src/components/Text";
-import * as Roles from "~/src/feats/roles/api";
-import * as Users from "~/src/feats/users/api";
+import * as api from "~/src/feats/api";
 import { authorize } from "~/src/lib/server/authorization";
 import { formatDateTime, formatText } from "~/src/lib/shared/formatting";
 import { getPrivateId } from "~/src/lib/shared/publicId";
@@ -33,7 +32,7 @@ export default async function Page({
   params: { organizationId, userId },
 }: Props) {
   const session = await authorize({ organizationId });
-  const user = await Users.get({
+  const user = await api.user.get({
     payload: { id: getPrivateId(userId) },
     session,
   });
@@ -42,7 +41,7 @@ export default async function Page({
   const userUrl = getUrl(listingUrl, userId);
   const editUrl = getUrl(userUrl, "edit");
 
-  const roles = await Roles.list({
+  const roles = await api.role.list({
     payload: { userId: getPrivateId(userId), page: 1 },
     session,
   });

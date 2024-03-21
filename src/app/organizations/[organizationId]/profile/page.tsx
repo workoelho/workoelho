@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
-import { getRequestSession, validate } from "~/src/lib/server/session";
-import { getFormProps } from "~/src/lib/shared/form";
-import { update } from "~/src/feats/users/api/update";
 import { Container } from "~/src/components/Container";
 import { Flex } from "~/src/components/Flex";
 import { Header } from "~/src/components/Header";
 import { Heading } from "~/src/components/Heading";
+import * as api from "~/src/feats/api";
+import { Form } from "~/src/feats/user/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
-import { Form } from "~/src/feats/users/components/Form";
+import { getRequestSession, validate } from "~/src/lib/server/session";
+import { getFormProps } from "~/src/lib/shared/form";
 
 export const metadata: Metadata = {
   title: "My profile at Workoelho",
@@ -30,7 +30,7 @@ export default async function Page({ params: { organizationId } }: Props) {
       const session = await getRequestSession();
       validate(session);
 
-      await update({
+      await api.user.update({
         payload: {
           id: session.user.id,
           name: form.get("name"),
@@ -48,7 +48,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         email: session.user.email,
         level: session.user.level,
       },
-    }
+    },
   );
 
   return (

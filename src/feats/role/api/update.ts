@@ -4,14 +4,14 @@ import * as superstruct from "superstruct";
 
 import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
-import * as schema from "~/src/lib/shared/schema";
 import { validate } from "~/src/lib/server/session";
+import * as schema from "~/src/lib/shared/schema";
 
 const payloadSchema = superstruct.object({
   id: schema.id,
   name: superstruct.optional(schema.name),
-  userId: superstruct.optional(schema.id),
-  applicationId: superstruct.optional(schema.id),
+  userId: superstruct.optional(schema.parseId),
+  applicationId: superstruct.optional(schema.parseId),
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;

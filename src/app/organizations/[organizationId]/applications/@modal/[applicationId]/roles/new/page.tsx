@@ -4,9 +4,8 @@ import { redirect } from "next/navigation";
 import { Flex } from "~/src/components/Flex";
 import { Heading } from "~/src/components/Heading";
 import { Close, Modal } from "~/src/components/Modal";
-import { get } from "~/src/feats/applications/api";
-import { create } from "~/src/feats/roles/api";
-import { Form } from "~/src/feats/roles/components/Form";
+import * as api from "~/src/feats/api";
+import { Form } from "~/src/feats/role/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getFormProps } from "~/src/lib/shared/form";
 import { getPrivateId } from "~/src/lib/shared/publicId";
@@ -28,7 +27,7 @@ export default async function Page({
 }: Props) {
   const session = await authorize({ organizationId });
 
-  const application = await get({
+  const application = await api.application.get({
     payload: { id: getPrivateId(applicationId) },
     session,
   });
@@ -36,22 +35,25 @@ export default async function Page({
   const listingUrl = getUrl(session.organization, "applications");
   const applicationUrl = getUrl(listingUrl, applicationId);
 
-  const form = getFormProps(async (state, payload) => {
-    "use server";
+  const form = getFormProps(
+    async (state, payload) => {
+      "use server";
 
-    const session = await authorize({ organizationId });
+      const session = await authorize({ organizationId });
 
-    await create({
-      payload: {
-        name: payload.get("name"),
-        userId: payload.get("userId"),
-        applicationId: getPrivateId(applicationId),
-      },
-      session,
-    });
+      await api.role.create({
+        payload: {
+          name: payload.get("name"),
+          userId: payload.get("userId"),
+          applicationId: payload.get("applicationId"),
+        },
+        session,
+      });
 
-    redirect(applicationUrl);
-  });
+      redirect(applicationUrl);
+    },
+    { values: { applicationId: getPrivateId(applicationId) } },
+  );
 
   return (
     <Modal closeUrl={listingUrl}>
