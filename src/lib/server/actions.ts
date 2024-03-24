@@ -1,6 +1,6 @@
 import { Prisma } from "~/src/lib/server/prisma";
 
-type Session = Prisma.SessionGetPayload<{
+export type Session = Prisma.SessionGetPayload<{
   include: { user: true; organization: true };
 }>;
 

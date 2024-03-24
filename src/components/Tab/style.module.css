@@ -1,0 +1,54 @@
+.tab {
+  align-items: center;
+  /* border-radius: var(--radius); */
+  border-end-end-radius: var(--radius);
+  border-end-start-radius: var(--radius);
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: bolder;
+  gap: 0.25rem;
+  height: 2.25rem;
+  padding-inline: 0.75rem;
+  position: relative;
+}
+
+.tab.active::before,
+.tab.active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: var(--radius);
+  height: var(--radius);
+}
+
+.tab.active::before {
+  /* The 66% figure is the percentage of the diagonal that makes the circle touch the edges of the element. */
+  background: radial-gradient(
+    circle at bottom left,
+    transparent 66%,
+    var(--neutral-5) 66%
+  );
+  right: 100%;
+}
+
+.tab.active::after {
+  /* The 66% figure is the percentage of the diagonal that makes the circle touch the edges of the element. */
+  background: radial-gradient(
+    circle at bottom right,
+    transparent 66%,
+    var(--neutral-5) 66%
+  );
+  left: 100%;
+}
+
+.tab.active {
+  background-color: var(--neutral-5);
+}
+
+.tab:is(:hover, :focus-visible) {
+  color: var(--neutral-3);
+}
+
+.tab:active:not(:disabled) {
+  padding-block-start: 0.125rem;
+}

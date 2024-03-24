@@ -55,13 +55,13 @@ export default async function Page({ params: { organizationId } }: Props) {
           </Flex>
         </Header>
 
-        <Grid
-          as="ul"
-          template="auto / repeat(auto-fit, minmax(30%, 1fr))"
-          gap=".75rem"
-        >
-          {users.length > 0 ? (
-            users.map((user) => (
+        {users.length > 0 ? (
+          <Grid
+            as="ul"
+            template="auto / repeat(auto-fit, minmax(30%, 1fr))"
+            gap=".75rem"
+          >
+            {users.map((user) => (
               <li key={user.id}>
                 <Link href={getUrl(session.organization, user)}>
                   <Card as="article" key={user.id}>
@@ -74,13 +74,13 @@ export default async function Page({ params: { organizationId } }: Props) {
                   </Card>
                 </Link>
               </li>
-            ))
-          ) : (
-            <Flex justifyContent="center">
-              <Empty size="large" title="No people found." />
-            </Flex>
-          )}
-        </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Flex justifyContent="center">
+            <Empty size="large" title="No people found." />
+          </Flex>
+        )}
       </Flex>
     </Container>
   );

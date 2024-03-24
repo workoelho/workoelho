@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 export * from "@prisma/client";
+export { Prisma } from "@prisma/client";
 
 declare const global: { prisma: PrismaClient };
 
@@ -25,7 +26,7 @@ const brandExtension = Prisma.defineExtension((client) => {
   const result = Object.fromEntries(
     Object.keys(client)
       .filter((key) => !key.startsWith("$"))
-      .map((key) => [key, { $type: { needs: {}, compute: () => key } }]),
+      .map((key) => [key, { $type: { needs: {}, compute: () => key } }])
   );
 
   return client.$extends({ result });

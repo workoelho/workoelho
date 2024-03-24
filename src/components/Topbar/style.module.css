@@ -1,8 +1,11 @@
 .topbar {
   align-items: center;
-  background-color: var(--background);
-  height: 5rem;
+  /* background-color: var(--background); */
+  display: grid;
+  gap: 1.5rem;
+  grid-template: auto / 1fr auto 1fr;
+  height: 6rem;
   padding-inline: 1.5rem;
   position: sticky;
-  top: 0;
+  /* top: 0; */
 }

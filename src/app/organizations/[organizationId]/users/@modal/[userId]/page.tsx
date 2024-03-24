@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Button } from "~/src/components/Button";
 import { Card } from "~/src/components/Card";
-import { Data, Entry } from "~/src/components/Data";
+import { Entry } from "~/src/components/Entry";
 import { Empty } from "~/src/components/Empty";
 import { Flex } from "~/src/components/Flex";
 import { Grid } from "~/src/components/Grid";
@@ -68,7 +68,7 @@ export default async function Page({
             </Button>
           </Flex>
 
-          <Data>
+          <Grid template="repeat(2, 1fr)" gap="0.75rem">
             <Entry label="Created on">
               {formatDateTime(user.createdAt, {
                 dateStyle: "long",
@@ -86,7 +86,7 @@ export default async function Page({
             <Entry label="Level">
               {formatText(user.level, { titleCase: true })}
             </Entry>
-          </Data>
+          </Grid>
         </Flex>
 
         <Flex direction="column" gap="1.5rem">
@@ -118,9 +118,9 @@ export default async function Page({
                   <Link href={getUrl(userUrl, role, "edit")}>
                     <Card as="article">
                       <Heading as="h1" size="tiny">
-                        {role.user.name}
+                        {role.name}
                       </Heading>
-                      <Text variant="muted">{role.name}</Text>
+                      <Text variant="muted">{role.application.name}</Text>
                     </Card>
                   </Link>
                 </li>

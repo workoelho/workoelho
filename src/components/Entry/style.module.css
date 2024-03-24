@@ -1,0 +1,21 @@
+.entry {
+  display: flex;
+  flex-direction: column;
+}
+
+.default .label {
+  font-size: 0.875rem;
+  font-weight: bolder;
+}
+
+.default .value {
+}
+
+.swap .label {
+  font-weight: bolder;
+}
+
+.swap .value {
+  color: var(--neutral-3);
+  font-size: 0.875rem;
+}

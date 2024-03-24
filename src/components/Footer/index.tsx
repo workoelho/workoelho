@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { Button } from "~/src/components/Button";
-import { Text } from "~/src/components/Text";
 import { ClassList } from "~/src/lib/shared/ClassList";
 
 import classes from "./style.module.css";

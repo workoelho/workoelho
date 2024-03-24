@@ -2,8 +2,8 @@
   background-color: var(--background);
   border-radius: var(--radius);
   inset-inline: 0;
-  top: 5%;
-  margin: auto;
+  top: 0;
+  margin: 1.5rem auto;
   max-width: 50rem;
   overflow: auto;
   padding: 1.5rem;

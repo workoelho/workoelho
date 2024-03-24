@@ -4,31 +4,29 @@ import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
 import pkg from "~/package.json";
+import * as api from "~/src/feats/api";
+import { authorize } from "~/src/lib/server/authorization";
+import { UnauthorizedError } from "~/src/lib/shared/errors";
+import { clearSessionCookie, setSessionCookie } from "~/src/lib/server/session";
+import { formatText } from "~/src/lib/shared/formatting";
+import { getDeviceId } from "~/src/lib/server/deviceId";
+import { getUrl } from "~/src/lib/shared/url";
 import { Button } from "~/src/components/Button";
 import { Flex } from "~/src/components/Flex";
 import { Footer } from "~/src/components/Footer";
+import { Grid } from "~/src/components/Grid";
 import { Icon } from "~/src/components/Icon";
 import { Menu, Option, Separator } from "~/src/components/Menu";
 import { Popover } from "~/src/components/Popover";
 import { Text } from "~/src/components/Text";
 import { Topbar } from "~/src/components/Topbar";
-import * as api from "~/src/feats/api";
-import { authorize } from "~/src/lib/server/authorization";
-import { getDeviceId } from "~/src/lib/server/deviceId";
-import { clearSessionCookie, setSessionCookie } from "~/src/lib/server/session";
-import { UnauthorizedError } from "~/src/lib/shared/errors";
-import { formatText } from "~/src/lib/shared/formatting";
-import { getUrl } from "~/src/lib/shared/url";
-
-import classes from "./layout.module.css";
 
 type Props = {
   params: { organizationId: string };
   children: ReactNode;
-  modal: ReactNode;
 };
 
-export default async function Layout({ params, children, modal }: Props) {
+export default async function Layout({ params, children }: Props) {
   const { organizationId } = params;
 
   const session = await authorize({ organizationId });
@@ -40,7 +38,7 @@ export default async function Layout({ params, children, modal }: Props) {
     session,
   });
 
-  const switchSession = async (sessionId: string) => {
+  const swapCurrentSession = async (sessionId: string) => {
     "use server";
 
     const session = await api.session.get({ payload: { id: sessionId } });
@@ -67,8 +65,8 @@ export default async function Layout({ params, children, modal }: Props) {
   };
 
   return (
-    <div className={classes.layout}>
-      <Topbar className={classes.topbar}>
+    <Grid template="auto 1fr auto / 1fr" style={{ height: "100vh" }}>
+      <Topbar>
         <Flex as="menu" gap="1.5rem">
           <li>
             <Button
@@ -95,15 +93,6 @@ export default async function Layout({ params, children, modal }: Props) {
               shape="text"
             >
               Applications
-            </Button>
-          </li>
-          <li>
-            <Button
-              as={Link}
-              href={getUrl(session.organization, "services")}
-              shape="text"
-            >
-              Services
             </Button>
           </li>
           <li>
@@ -164,7 +153,7 @@ export default async function Layout({ params, children, modal }: Props) {
                 {sessions.map((session) => (
                   <Option
                     key={session.id}
-                    action={switchSession.bind(null, session.id)}
+                    action={swapCurrentSession.bind(null, session.id)}
                   >
                     <Flex direction="column">
                       {session.organization.name}
@@ -183,12 +172,9 @@ export default async function Layout({ params, children, modal }: Props) {
         </Flex>
       </Topbar>
 
-      <main className={classes.main}>
-        {children}
-        {modal}
-      </main>
+      <main>{children}</main>
 
-      <Footer className={classes.footer} version={pkg.version} />
-    </div>
+      <Footer version={pkg.version} />
+    </Grid>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useLayoutEffect, useRef } from "react";
 import { useFormState } from "react-dom";
 
 import { Alert } from "~/src/components/Alert";
@@ -10,6 +11,7 @@ import { Flex } from "~/src/components/Flex";
 import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
+import { useAutoFocus } from "~/src/lib/client/autoFocus";
 import { Props as FormProps } from "~/src/lib/shared/form";
 
 type Props = FormProps & {
@@ -19,6 +21,7 @@ type Props = FormProps & {
 
 export function Form({ cancelUrl, destroy, ...props }: Props) {
   const [state, action] = useFormState(props.action, props.initialState);
+  const autoFocusRef = useAutoFocus();
 
   return (
     <Flex as="form" action={action} direction="column" gap="3rem">
@@ -28,10 +31,10 @@ export function Form({ cancelUrl, destroy, ...props }: Props) {
         </Alert>
       ) : null}
 
-      <Flex as="fieldset" direction="column" gap="1rem">
+      <Flex as="fieldset" direction="column" gap="1.5rem">
         <Field
           label="Name"
-          hint="e.g. a website, a mobile application, a front-end, a microservice, etc."
+          hint="e.g. Super app, Website, iOS app, Front-end, API, etc."
         >
           {(props) => (
             <Input
@@ -41,6 +44,7 @@ export function Form({ cancelUrl, destroy, ...props }: Props) {
               minLength={1}
               defaultValue={state.values?.name}
               {...props}
+              ref={autoFocusRef}
             />
           )}
         </Field>

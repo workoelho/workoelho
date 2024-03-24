@@ -21,7 +21,7 @@ export function Form(props: Props) {
         </Alert>
       ) : null}
 
-      <Flex as="fieldset" direction="column" gap="1rem">
+      <Flex as="fieldset" direction="column" gap="1.5rem">
         <Field label="Organization" hint="Name of your team or company.">
           {(props) => (
             <Input

@@ -1,3 +1,4 @@
+import "./reset.css";
 import "./global.css";
 
 import type { Metadata, Viewport } from "next";
@@ -15,7 +16,7 @@ export const viewport: Viewport = {
 };
 
 const font = Libre_Franklin({
-  weight: ["400", "700"],
+  weight: ["400", "700", "900"],
   style: ["normal", "italic"],
   subsets: ["latin-ext"],
   display: "swap",

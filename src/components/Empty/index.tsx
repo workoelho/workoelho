@@ -22,7 +22,7 @@ const sizeHeadingMap = {
 
 export function Empty({ title = "Empty", size = "small", children }: Props) {
   return (
-    <Card as="aside" size="large">
+    <Card as="aside" size="large" style={{ paddingInline: "3rem" }}>
       <Flex direction="column" alignItems="center" gap={sizeGapMap[size]}>
         <Heading variant="ghost" size={sizeHeadingMap[size]}>
           {title}

@@ -28,7 +28,7 @@ export function Form({ cancelUrl, destroy, ...props }: Props) {
         </Alert>
       ) : null}
 
-      <Flex as="fieldset" direction="column" gap="1rem">
+      <Flex as="fieldset" direction="column" gap="1.5rem">
         <Field
           label="Title"
           hint="e.g. lead, front-end developer, designer, QA, etc."

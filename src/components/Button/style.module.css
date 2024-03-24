@@ -1,6 +1,7 @@
 .button {
   align-items: center;
   display: flex;
+  gap: 0.25rem;
   font-weight: 700;
 }
 
@@ -10,16 +11,14 @@
 
 .button.rectangle {
   border-radius: var(--radius);
-  gap: 0.25rem;
-  height: 2.125rem;
+  height: 2.25rem;
   padding-inline: 0.75rem;
 }
 
 .button.pill {
-  border-radius: 2.125rem;
-  gap: 0.25rem;
-  height: 2.125rem;
-  padding-inline: 1rem;
+  border-radius: 2.25rem;
+  height: 2.25rem;
+  padding-inline: 0.875rem;
 }
 
 .button.text {

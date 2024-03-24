@@ -104,27 +104,25 @@ model Provider {
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-    services Service[]
-
     @@map("providers")
 }
 
 model Service {
-    id                   Int      @id @default(autoincrement())
-    createdAt            DateTime @default(now())
-    updatedAt            DateTime @updatedAt
-    name                 String
-    estimatedMonthlyCost Float
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    name      String
 
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-    providerId Int
-    provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+    providerType String
+    providerId   Int
 
     applicationId Int
     application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
+    @@index([providerType, providerId])
     @@map("services")
 }
 
