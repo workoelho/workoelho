@@ -10,7 +10,7 @@ import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/service/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getFormProps } from "~/src/lib/shared/form";
-import { getPrivateId } from "~/src/lib/shared/publicId";
+import { getPublicId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
@@ -31,12 +31,12 @@ export default async function Page({
   const session = await authorize({ organizationId });
 
   const application = await api.application.get({
-    payload: { id: getPrivateId(applicationId) },
+    payload: { id: applicationId },
     session,
   });
 
   const service = await api.service.get({
-    payload: { id: getPrivateId(serviceId) },
+    payload: { id: serviceId },
     session,
   });
 
@@ -51,7 +51,7 @@ export default async function Page({
 
       await api.service.update({
         payload: {
-          id: getPrivateId(serviceId),
+          id: serviceId,
           name: payload.get("name"),
           applicationId: payload.get("applicationId"),
           providerType: payload.get("providerType"),
@@ -65,11 +65,14 @@ export default async function Page({
     {
       values: {
         name: service.name,
-        applicationId: service.applicationId,
+        applicationId: getPublicId(service.application),
         providerType: service.providerType,
-        providerId: service.providerId,
+        providerId: getPublicId({
+          $type: service.providerType,
+          id: service.providerId,
+        }),
       },
-    }
+    },
   );
 
   const destroy = async () => {
@@ -78,7 +81,7 @@ export default async function Page({
     const session = await authorize({ organizationId });
 
     await api.service.destroy({
-      payload: { id: getPrivateId(serviceId) },
+      payload: { id: serviceId },
       session,
     });
 

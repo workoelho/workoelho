@@ -11,69 +11,78 @@ import { Header } from "~/src/components/Header";
 import { Icon } from "~/src/components/Icon";
 import * as api from "~/src/feats/api";
 import { authorize } from "~/src/lib/server/authorization";
+import { formatText } from "~/src/lib/shared/formatting";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
-  title: "People at Workoelho",
+  title: "User's roles at Workoelho",
 };
 
 type Props = {
   params: {
     organizationId: string;
+    userId: string;
   };
 };
 
-export default async function Page({ params: { organizationId } }: Props) {
+export default async function Page({
+  params: { organizationId, userId },
+}: Props) {
   const session = await authorize({ organizationId });
 
-  const users = await api.user.list({
-    payload: { page: 1 },
+  const user = await api.user.get({
+    payload: { id: userId },
     session,
   });
+
+  const roles = await api.role.list({
+    payload: { userId, page: 1 },
+    session,
+  });
+
+  const userUrl = getUrl(session.organization, user);
 
   return (
     <Flex direction="column" gap="3rem">
       <Header
-        title="People"
-        description="Listing people."
+        title={formatText(user.name, { shortName: true })}
+        description="Listing user's roles."
         right={
           <Flex as="menu">
             <li>
               <Button
                 as={Link}
-                href={getUrl(session.organization, "users", "new")}
+                href={getUrl(userUrl, "roles", "new")}
                 shape="pill"
               >
-                Add user <Icon variant="plus" />
+                Add role <Icon variant="plus" />
               </Button>
             </li>
           </Flex>
         }
       />
 
-      {users.length > 0 ? (
+      {roles.length === 0 ? (
+        <Flex justifyContent="center">
+          <Empty title="No roles found." />
+        </Flex>
+      ) : (
         <Grid
           as="ul"
           template="auto / repeat(auto-fit, minmax(30%, 1fr))"
           gap=".75rem"
           justifyContent="center"
         >
-          {users.map((user) => (
-            <li key={user.id}>
-              <Link href={getUrl(session.organization, user)}>
+          {roles.map((role) => (
+            <li key={role.id}>
+              <Link href={getUrl(userUrl, role, "edit")}>
                 <Card>
-                  <Entry variant="swap" label={user.name}>
-                    {user.email}
-                  </Entry>
+                  <Entry label={role.application.name}>{role.name}</Entry>
                 </Card>
               </Link>
             </li>
           ))}
         </Grid>
-      ) : (
-        <Flex justifyContent="center">
-          <Empty size="large" title="No people found." />
-        </Flex>
       )}
     </Flex>
   );

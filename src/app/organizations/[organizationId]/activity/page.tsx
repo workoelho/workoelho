@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 
-import { Card } from "~/src/components/Card";
 import { Container } from "~/src/components/Container";
 import { Empty } from "~/src/components/Empty";
 import { Flex } from "~/src/components/Flex";
 import { Header } from "~/src/components/Header";
-import { Heading } from "~/src/components/Heading";
 import { authorize } from "~/src/lib/server/authorization";
 
 export const metadata: Metadata = {
@@ -24,20 +22,10 @@ export default async function Page({ params: { organizationId } }: Props) {
   return (
     <Container size="large" padding="3rem">
       <Flex direction="column" gap="3rem">
-        <Header>
-          <div />
-
-          <Flex direction="column" alignItems="center" gap="0.5rem">
-            <Heading as="h1" size="large">
-              Activity
-            </Heading>
-
-            <p>Log of actions taken in your organization.</p>
-          </Flex>
-        </Header>
+        <Header title="Activity" description="Organization's activity log." />
 
         <Flex justifyContent="center">
-          <Empty size="large" title="Not implemented" />
+          <Empty size="large" title="Not implemented." />
         </Flex>
       </Flex>
     </Container>

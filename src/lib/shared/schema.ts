@@ -10,31 +10,57 @@ import {
   enums,
   coerce,
   unknown,
+  optional,
 } from "superstruct";
 
 import { Time } from "~/src/lib/shared/Time";
+import { getPrivateId } from "~/src/lib/shared/publicId";
 
 /**
- * Database ID.
+ * Parse an ID.
  */
-export const id = number();
-
-/**
- * Parse database ID.
- */
-export const parseId = coerce(number(), unknown(), (value) => {
-  const int = parseInt(String(value), 10);
-  if (isNaN(int)) {
-    throw new Error(`Can't parse ID ${JSON.stringify(value)}`);
+function parseId(value: unknown) {
+  switch (typeof value) {
+    case "number":
+      return value;
+    case "string":
+      return getPrivateId(value);
+    default:
+      throw new Error(`Can't parse ID "${JSON.stringify(value)}"`);
   }
-  return int;
-});
+}
+
+/**
+ * ID.
+ */
+export const id = coerce(number(), unknown(), parseId);
+
+/**
+ * Optional ID.
+ */
+export const optionalId = coerce(
+  optional(number()),
+  unknown(),
+  (value: unknown) => {
+    if (value === undefined) {
+      return undefined;
+    }
+    return parseId(value);
+  },
+);
 
 /**
  * UUID.
  */
 export const uuid = define<string>("uuid", (value: unknown) =>
   isUuid(String(value)),
+);
+
+/**
+ * URL.
+ */
+export const url = define<string>("url", (value: unknown) =>
+  new URL(String(value)).toString(),
 );
 
 /**

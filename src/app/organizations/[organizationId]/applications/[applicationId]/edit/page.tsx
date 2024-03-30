@@ -5,13 +5,11 @@ import { redirect } from "next/navigation";
 import { Button } from "~/src/components/Button";
 import { Flex } from "~/src/components/Flex";
 import { Header } from "~/src/components/Header";
-import { Heading } from "~/src/components/Heading";
 import { Icon } from "~/src/components/Icon";
 import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/application/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getFormProps } from "~/src/lib/shared/form";
-import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
@@ -31,12 +29,12 @@ export default async function Page({
   const session = await authorize({ organizationId });
 
   const application = await api.application.get({
-    payload: { id: getPrivateId(applicationId) },
+    payload: { id: applicationId },
     session,
   });
 
   const listingUrl = getUrl(session.organization, "applications");
-  const applicationUrl = getUrl(listingUrl, applicationId);
+  const applicationUrl = getUrl(session.organization, application);
 
   const form = getFormProps(
     async (state, payload) => {
@@ -46,7 +44,7 @@ export default async function Page({
 
       await api.application.update({
         payload: {
-          id: getPrivateId(applicationId),
+          id: applicationId,
           name: payload.get("name"),
         },
         session,
@@ -58,7 +56,7 @@ export default async function Page({
       values: {
         name: application.name,
       },
-    }
+    },
   );
 
   const destroy = async () => {
@@ -67,7 +65,7 @@ export default async function Page({
     const session = await authorize({ organizationId });
 
     await api.application.destroy({
-      payload: { id: getPrivateId(applicationId) },
+      payload: { id: applicationId },
       session,
     });
 

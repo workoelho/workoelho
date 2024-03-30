@@ -26,5 +26,6 @@ export async function get(context: Context<Payload>) {
       id: payload.id,
       organizationId: context.session.organizationId,
     },
+    include: { user: true, application: true },
   });
 }

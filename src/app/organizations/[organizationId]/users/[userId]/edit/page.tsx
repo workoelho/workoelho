@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Button } from "~/src/components/Button";
 import { Flex } from "~/src/components/Flex";
-import { Heading } from "~/src/components/Heading";
-import { Close, Modal } from "~/src/components/Modal";
-import * as Users from "~/src/feats/user/api";
+import { Header } from "~/src/components/Header";
+import { Icon } from "~/src/components/Icon";
+import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/user/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getFormProps } from "~/src/lib/shared/form";
-import { getPrivateId } from "~/src/lib/shared/publicId";
+import { formatText } from "~/src/lib/shared/formatting";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
-  title: "Editing person at Workoelho",
+  title: "Editing user at Workoelho",
 };
 
 type Props = {
@@ -27,13 +29,13 @@ export default async function Page({
 }: Props) {
   const session = await authorize({ organizationId });
 
-  const user = await Users.get({
-    payload: { id: getPrivateId(userId) },
+  const user = await api.user.get({
+    payload: { id: userId },
     session,
   });
 
   const listingUrl = getUrl(session.organization, "users");
-  const userUrl = getUrl(listingUrl, userId);
+  const userUrl = getUrl(session.organization, user);
 
   const form = getFormProps(
     async (state, payload) => {
@@ -41,9 +43,9 @@ export default async function Page({
 
       const session = await authorize({ organizationId });
 
-      await Users.update({
+      await api.user.update({
         payload: {
-          id: getPrivateId(userId),
+          id: userId,
           name: payload.get("name"),
           email: payload.get("email"),
           level: payload.get("level"),
@@ -53,7 +55,13 @@ export default async function Page({
 
       redirect(userUrl);
     },
-    { values: { name: user.name, email: user.email, level: user.level } },
+    {
+      values: {
+        name: user.name,
+        email: user.email,
+        level: user.level,
+      },
+    },
   );
 
   const destroy = async () => {
@@ -61,24 +69,32 @@ export default async function Page({
 
     const session = await authorize({ organizationId });
 
-    await Users.destroy({ payload: { id: getPrivateId(userId) }, session });
+    await api.user.destroy({
+      payload: { id: userId },
+      session,
+    });
 
     redirect(listingUrl);
   };
 
   return (
-    <Modal closeUrl={listingUrl}>
-      <Flex direction="column" gap="3rem">
-        <Flex as="header" alignItems="center" justifyContent="space-between">
-          <Heading as="h1" size="medium">
-            Editing person
-          </Heading>
+    <Flex direction="column" gap="3rem">
+      <Header
+        title={formatText(user.name, { shortName: true })}
+        description="Editing user."
+        right={
+          <Flex as="menu">
+            <li>
+              <Button as={Link} href={userUrl} shape="pill">
+                <Icon variant="arrow-left" />
+                Back
+              </Button>
+            </li>
+          </Flex>
+        }
+      />
 
-          <Close />
-        </Flex>
-
-        <Form {...form} destroy={destroy} cancelUrl={userUrl} />
-      </Flex>
-    </Modal>
+      <Form {...form} destroy={destroy} />
+    </Flex>
   );
 }

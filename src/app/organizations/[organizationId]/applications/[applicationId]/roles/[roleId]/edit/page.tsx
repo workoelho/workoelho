@@ -10,7 +10,7 @@ import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/role/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getFormProps } from "~/src/lib/shared/form";
-import { getPrivateId } from "~/src/lib/shared/publicId";
+import { getPublicId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
@@ -31,12 +31,12 @@ export default async function Page({
   const session = await authorize({ organizationId });
 
   const application = await api.application.get({
-    payload: { id: getPrivateId(applicationId) },
+    payload: { id: applicationId },
     session,
   });
 
   const role = await api.role.get({
-    payload: { id: getPrivateId(roleId) },
+    payload: { id: roleId },
     session,
   });
 
@@ -51,7 +51,7 @@ export default async function Page({
 
       await api.role.update({
         payload: {
-          id: getPrivateId(roleId),
+          id: roleId,
           name: payload.get("name"),
           userId: payload.get("userId"),
           applicationId: payload.get("applicationId"),
@@ -64,10 +64,10 @@ export default async function Page({
     {
       values: {
         name: role.name,
-        userId: role.userId,
-        applicationId: role.applicationId,
+        userId: getPublicId(role.user),
+        applicationId: getPublicId(role.application),
       },
-    }
+    },
   );
 
   const destroy = async () => {
@@ -76,7 +76,7 @@ export default async function Page({
     const session = await authorize({ organizationId });
 
     await api.role.destroy({
-      payload: { id: getPrivateId(roleId) },
+      payload: { id: roleId },
       session,
     });
 

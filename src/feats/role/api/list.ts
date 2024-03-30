@@ -8,8 +8,8 @@ import { validate } from "~/src/lib/server/session";
 import * as schema from "~/src/lib/shared/schema";
 
 const payloadSchema = superstruct.object({
-  userId: superstruct.optional(schema.id),
-  applicationId: superstruct.optional(schema.id),
+  userId: schema.optionalId,
+  applicationId: schema.optionalId,
   page: superstruct.defaulted(superstruct.number(), 1),
 });
 

@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Container } from "~/src/components/Container";
 import { Flex } from "~/src/components/Flex";
 import { Header } from "~/src/components/Header";
-import { Heading } from "~/src/components/Heading";
 import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/user/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
@@ -54,17 +53,10 @@ export default async function Page({ params: { organizationId } }: Props) {
   return (
     <Container size="large" padding="3rem">
       <Flex direction="column" gap="3rem">
-        <Header>
-          <div />
-
-          <Flex direction="column" alignItems="center" gap="0.5rem">
-            <Heading as="h1" size="large">
-              My profile
-            </Heading>
-
-            <p>Update your personal information.</p>
-          </Flex>
-        </Header>
+        <Header
+          title="My profile"
+          description="Update your personal information."
+        />
 
         <Container size="medium">
           <Form {...form} />

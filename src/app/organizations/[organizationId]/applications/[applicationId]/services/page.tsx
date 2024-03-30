@@ -11,7 +11,6 @@ import { Header } from "~/src/components/Header";
 import { Icon } from "~/src/components/Icon";
 import * as api from "~/src/feats/api";
 import { authorize } from "~/src/lib/server/authorization";
-import { getPrivateId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
@@ -31,17 +30,16 @@ export default async function Page({
   const session = await authorize({ organizationId });
 
   const application = await api.application.get({
-    payload: { id: getPrivateId(applicationId) },
+    payload: { id: applicationId },
     session,
   });
 
   const services = await api.service.list({
-    payload: { applicationId: getPrivateId(applicationId), page: 1 },
+    payload: { applicationId: applicationId, page: 1 },
     session,
   });
 
-  const listingUrl = getUrl(session.organization, "applications");
-  const applicationUrl = getUrl(listingUrl, applicationId);
+  const applicationUrl = getUrl(session.organization, application);
 
   return (
     <Flex direction="column" gap="3rem">

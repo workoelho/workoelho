@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Button } from "~/src/components/Button";
 import { Flex } from "~/src/components/Flex";
-import { Heading } from "~/src/components/Heading";
-import { Close, Modal } from "~/src/components/Modal";
+import { Header } from "~/src/components/Header";
+import { Icon } from "~/src/components/Icon";
 import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/role/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getFormProps } from "~/src/lib/shared/form";
-import { getPrivateId } from "~/src/lib/shared/publicId";
+import { formatText } from "~/src/lib/shared/formatting";
+import { getPublicId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
-  title: "Editing role at Workoelho",
+  title: "Editing user's role at Workoelho",
 };
 
 type Props = {
@@ -29,17 +32,17 @@ export default async function Page({
   const session = await authorize({ organizationId });
 
   const user = await api.user.get({
-    payload: { id: getPrivateId(userId) },
+    payload: { id: userId },
     session,
   });
 
   const role = await api.role.get({
-    payload: { id: getPrivateId(roleId) },
+    payload: { id: roleId },
     session,
   });
 
-  const listingUrl = getUrl(session.organization, "users");
-  const userUrl = getUrl(listingUrl, userId);
+  const userUrl = getUrl(session.organization, user);
+  const listingUrl = getUrl(userUrl, "roles");
 
   const form = getFormProps(
     async (state, payload) => {
@@ -49,7 +52,7 @@ export default async function Page({
 
       await api.role.update({
         payload: {
-          id: getPrivateId(roleId),
+          id: roleId,
           name: payload.get("name"),
           userId: payload.get("userId"),
           applicationId: payload.get("applicationId"),
@@ -62,8 +65,8 @@ export default async function Page({
     {
       values: {
         name: role.name,
-        userId: role.userId,
-        applicationId: role.applicationId,
+        userId: getPublicId(role.user),
+        applicationId: getPublicId(role.application),
       },
     },
   );
@@ -74,7 +77,7 @@ export default async function Page({
     const session = await authorize({ organizationId });
 
     await api.role.destroy({
-      payload: { id: getPrivateId(roleId) },
+      payload: { id: roleId },
       session,
     });
 
@@ -82,18 +85,23 @@ export default async function Page({
   };
 
   return (
-    <Modal closeUrl={listingUrl}>
-      <Flex direction="column" gap="3rem">
-        <Flex as="header" justifyContent="space-between">
-          <Heading as="h1" size="medium">
-            Editing role for {user.name}
-          </Heading>
+    <Flex direction="column" gap="3rem">
+      <Header
+        title={formatText(role.name, { shortName: true })}
+        description="Editing role."
+        right={
+          <Flex as="menu">
+            <li>
+              <Button as={Link} href={listingUrl} shape="pill">
+                <Icon variant="arrow-left" />
+                Back
+              </Button>
+            </li>
+          </Flex>
+        }
+      />
 
-          <Close />
-        </Flex>
-
-        <Form {...form} cancelUrl={userUrl} destroy={destroy} />
-      </Flex>
-    </Modal>
+      <Form {...form} destroy={destroy} />
+    </Flex>
   );
 }

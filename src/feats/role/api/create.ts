@@ -9,8 +9,8 @@ import { validate } from "~/src/lib/server/session";
 
 const payloadSchema = superstruct.object({
   name: schema.name,
-  userId: schema.parseId,
-  applicationId: schema.parseId,
+  userId: schema.id,
+  applicationId: schema.id,
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;

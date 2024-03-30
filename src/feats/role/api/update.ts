@@ -10,8 +10,8 @@ import * as schema from "~/src/lib/shared/schema";
 const payloadSchema = superstruct.object({
   id: schema.id,
   name: superstruct.optional(schema.name),
-  userId: superstruct.optional(schema.parseId),
-  applicationId: superstruct.optional(schema.parseId),
+  userId: schema.optionalId,
+  applicationId: schema.optionalId,
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;

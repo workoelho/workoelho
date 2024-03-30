@@ -10,7 +10,7 @@ import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/service/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getFormProps } from "~/src/lib/shared/form";
-import { getPrivateId } from "~/src/lib/shared/publicId";
+import { getPublicId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export default async function Page({
   const session = await authorize({ organizationId });
 
   const application = await api.application.get({
-    payload: { id: getPrivateId(applicationId) },
+    payload: { id: applicationId },
     session,
   });
 
@@ -55,7 +55,7 @@ export default async function Page({
 
       redirect(applicationUrl);
     },
-    { values: { applicationId: getPrivateId(applicationId) } }
+    { values: { applicationId: getPublicId(application) } },
   );
 
   return (

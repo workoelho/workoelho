@@ -1,15 +1,11 @@
 import type { ReactNode } from "react";
 
+import { Paper } from "~/src/components/Paper";
+
 type Props = {
   children: ReactNode;
-  modal: ReactNode;
 };
 
-export default function Layout({ children, modal }: Props) {
-  return (
-    <>
-      {children}
-      {modal}
-    </>
-  );
+export default async function Layout({ children }: Props) {
+  return <Paper>{children}</Paper>;
 }

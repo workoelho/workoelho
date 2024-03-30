@@ -1,13 +1,22 @@
 import { getPublicId } from "~/src/lib/shared/publicId";
 
+/**
+ * Typecheck if given value is a model object.
+ */
 function isModel(value: object | null): value is { id: number; $type: string } {
   return hasId(value) && "$type" in value;
 }
 
+/**
+ * Typecheck if given value is an object with an ID.
+ */
 function hasId(value: object | null): value is { id: number } {
   return value !== null && "id" in value && typeof value.id === "number";
 }
 
+/**
+ * Get URL segment prefix for given model type.
+ */
 function getModelUrlPrefix(model: { $type: string }) {
   switch (model.$type) {
     case "organization":
@@ -29,25 +38,23 @@ function getModelUrlPrefix(model: { $type: string }) {
     case "activity":
       return "activity";
     default:
-      throw new Error("Model has no corresponding URL prefix");
+      throw new Error(`No URL segment prefix for ${JSON.stringify(model)}`);
   }
 }
 
-function getUrlSegment(segment: unknown): string {
-  switch (typeof segment) {
-    case "number": {
-      return getPublicId(segment);
-    }
+/**
+ * Validate and parse value into an URL segment.
+ */
+function getUrlSegment(value: unknown): string {
+  switch (typeof value) {
+    case "string":
+      return value;
     case "object":
-      if (isModel(segment)) {
-        return [getModelUrlPrefix(segment), getPublicId(segment.id)].join("/");
+      if (isModel(value)) {
+        return [getModelUrlPrefix(value), getPublicId(value)].join("/");
       }
-      if (hasId(segment)) {
-        return getPublicId(segment.id);
-      }
-      throw new Error("Bad URL segment");
     default:
-      return String(segment);
+      throw new Error(`Bad URL segment ${value}`);
   }
 }
 

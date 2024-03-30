@@ -2,7 +2,6 @@
   "extends": "@tsconfig/next/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "strictNullChecks": true,
     "paths": {
       "~/*": ["./*"]
     }

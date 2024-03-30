@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Button } from "~/src/components/Button";
 import { Flex } from "~/src/components/Flex";
-import { Heading } from "~/src/components/Heading";
-import { Close, Modal } from "~/src/components/Modal";
+import { Header } from "~/src/components/Header";
+import { Icon } from "~/src/components/Icon";
 import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/role/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getFormProps } from "~/src/lib/shared/form";
-import { getPrivateId } from "~/src/lib/shared/publicId";
+import { formatText } from "~/src/lib/shared/formatting";
 import { getUrl } from "~/src/lib/shared/url";
 
 export const metadata: Metadata = {
@@ -23,17 +25,17 @@ type Props = {
 };
 
 export default async function Page({
-  params: { organizationId, userId },
+  params: { organizationId, userId: publicUserId },
 }: Props) {
   const session = await authorize({ organizationId });
 
   const user = await api.user.get({
-    payload: { id: getPrivateId(userId) },
+    payload: { id: publicUserId },
     session,
   });
 
-  const listingUrl = getUrl(session.organization, "users");
-  const userUrl = getUrl(listingUrl, userId);
+  const userUrl = getUrl(session.organization, user);
+  const rolesUrl = getUrl(userUrl, "roles");
 
   const form = getFormProps(
     async (state, payload) => {
@@ -52,22 +54,27 @@ export default async function Page({
 
       redirect(userUrl);
     },
-    { values: { userId: getPrivateId(userId) } },
+    { values: { userId: publicUserId } },
   );
 
   return (
-    <Modal closeUrl={listingUrl}>
-      <Flex direction="column" gap="3rem">
-        <Flex as="header" justifyContent="space-between">
-          <Heading as="h1" size="medium">
-            New role for {user.name}
-          </Heading>
+    <Flex direction="column" gap="3rem">
+      <Header
+        title={formatText(user.name, { shortName: true })}
+        description="Adding new role."
+        right={
+          <Flex as="menu">
+            <li>
+              <Button as={Link} href={rolesUrl} shape="pill">
+                <Icon variant="arrow-left" />
+                Back
+              </Button>
+            </li>
+          </Flex>
+        }
+      />
 
-          <Close />
-        </Flex>
-
-        <Form {...form} cancelUrl={userUrl} />
-      </Flex>
-    </Modal>
+      <Form {...form} />
+    </Flex>
   );
 }

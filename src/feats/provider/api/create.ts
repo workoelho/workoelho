@@ -9,6 +9,7 @@ import { validate } from "~/src/lib/server/session";
 
 const payloadSchema = superstruct.object({
   name: schema.name,
+  url: schema.url,
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
@@ -25,6 +26,7 @@ export async function create({ session, ...context }: Context<Payload>) {
     data: {
       organizationId: session.organizationId,
       name: payload.name,
+      url: payload.url,
     },
   });
 }

@@ -10,26 +10,25 @@ import { Tab } from "~/src/components/Tab";
 type Props = {
   params: {
     organizationId: string;
-    applicationId: string;
+    userId: string;
   };
   children: ReactNode;
 };
 
 export default async function Layout({
-  params: { organizationId, applicationId },
+  params: { organizationId, userId },
   children,
 }: Props) {
   const session = await authorize({ organizationId });
 
-  const application = await api.application.get({
-    payload: { id: applicationId },
+  const user = await api.user.get({
+    payload: { id: userId },
     session,
   });
 
-  const backUrl = getUrl(session.organization, "applications");
-  const applicationUrl = getUrl(session.organization, application);
-  const servicesUrl = getUrl(applicationUrl, "services");
-  const rolesUrl = getUrl(applicationUrl, "roles");
+  const backUrl = getUrl(session.organization, "users");
+  const userUrl = getUrl(session.organization, user);
+  const rolesUrl = getUrl(userUrl, "roles");
 
   return (
     <Flex direction="column">
@@ -40,15 +39,12 @@ export default async function Layout({
           </Tab>
         </li>
         <li>
-          <Tab href={applicationUrl} exact>
+          <Tab href={userUrl} exact>
             Inspect
           </Tab>
         </li>
         <li>
-          <Tab href={servicesUrl}>Services</Tab>
-        </li>
-        <li>
-          <Tab href={rolesUrl}>People</Tab>
+          <Tab href={rolesUrl}>Roles</Tab>
         </li>
       </Flex>
 

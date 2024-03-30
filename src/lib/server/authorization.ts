@@ -1,5 +1,5 @@
 import { getRequestSession, validate } from "~/src/lib/server/session";
-import { ForbiddenError, UnauthorizedError } from "~/src/lib/shared/errors";
+import { ForbiddenError } from "~/src/lib/shared/errors";
 import { getPrivateId } from "~/src/lib/shared/publicId";
 
 type Context = {
