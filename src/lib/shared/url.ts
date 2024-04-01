@@ -1,45 +1,65 @@
 import { getPublicId } from "~/src/lib/shared/publicId";
 
 /**
- * Typecheck if given value is a model object.
+ * Guard that given value has type.
  */
-function isModel(value: object | null): value is { id: number; $type: string } {
-  return hasId(value) && "$type" in value;
+function hasType(value: unknown): value is { $type: string } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "$type" in value &&
+    typeof value.$type === "string"
+  );
 }
 
 /**
- * Typecheck if given value is an object with an ID.
+ * Guard that given value has a private ID.
  */
-function hasId(value: object | null): value is { id: number } {
-  return value !== null && "id" in value && typeof value.id === "number";
+function hasPrivateId(value: unknown): value is { id: number } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    typeof value.id === "number"
+  );
 }
 
 /**
- * Get URL segment prefix for given model type.
+ * Guard that given value has a public ID.
  */
-function getModelUrlPrefix(model: { $type: string }) {
-  switch (model.$type) {
-    case "organization":
-      return "organizations";
-    case "user":
-      return "users";
-    case "session":
-      return "sessions";
-    case "application":
-      return "applications";
-    case "provider":
-      return "providers";
-    case "service":
-      return "services";
-    case "role":
-      return "roles";
-    case "tag":
-      return "tags";
-    case "activity":
-      return "activity";
-    default:
-      throw new Error(`No URL segment prefix for ${JSON.stringify(model)}`);
+function hasPublicId(value: unknown): value is { publicId: string } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "publicId" in value &&
+    typeof value.publicId === "string"
+  );
+}
+
+const modelUrlMap: Record<string, string> = {
+  organization: "organizations",
+  user: "users",
+  session: "sessions",
+  application: "applications",
+  provider: "providers",
+  service: "services",
+  role: "roles",
+  tag: "tags",
+  activity: "activity",
+};
+
+for (const [key, value] of Object.entries(modelUrlMap)) {
+  modelUrlMap[value] = key;
+}
+
+/**
+ * Get mapped model type from URL prefix or vice-versa.
+ */
+export function getMappedModelUrl(value: string) {
+  if (value in modelUrlMap) {
+    return modelUrlMap[value];
   }
+  throw new Error(`No URL segment prefix for ${value}`);
 }
 
 /**
@@ -50,11 +70,16 @@ function getUrlSegment(value: unknown): string {
     case "string":
       return value;
     case "object":
-      if (isModel(value)) {
-        return [getModelUrlPrefix(value), getPublicId(value)].join("/");
+      if (hasType(value)) {
+        if (hasPrivateId(value)) {
+          return [getMappedModelUrl(value.$type), getPublicId(value)].join("/");
+        }
+        if (hasPublicId(value)) {
+          return [getMappedModelUrl(value.$type), value.publicId].join("/");
+        }
       }
     default:
-      throw new Error(`Bad URL segment ${value}`);
+      throw new Error(`Bad URL segment: ${JSON.stringify(value)}`);
   }
 }
 

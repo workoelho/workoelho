@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 
-import { Paper } from "~/src/components/Paper";
+import { Container } from "~/src/components/Container";
 
 type Props = {
   children: ReactNode;
 };
 
 export default async function Layout({ children }: Props) {
-  return <Paper>{children}</Paper>;
+  return <Container paddingBlock="3rem">{children}</Container>;
 }

@@ -4,13 +4,6 @@ import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
 import pkg from "~/package.json";
-import * as api from "~/src/feats/api";
-import { authorize } from "~/src/lib/server/authorization";
-import { UnauthorizedError } from "~/src/lib/shared/errors";
-import { clearSessionCookie, setSessionCookie } from "~/src/lib/server/session";
-import { formatText } from "~/src/lib/shared/formatting";
-import { getDeviceId } from "~/src/lib/server/deviceId";
-import { getUrl } from "~/src/lib/shared/url";
 import { Button } from "~/src/components/Button";
 import { Flex } from "~/src/components/Flex";
 import { Footer } from "~/src/components/Footer";
@@ -20,6 +13,15 @@ import { Menu, Option, Separator } from "~/src/components/Menu";
 import { Popover } from "~/src/components/Popover";
 import { Text } from "~/src/components/Text";
 import { Topbar } from "~/src/components/Topbar";
+import * as api from "~/src/feats/api";
+import { authorize } from "~/src/lib/server/authorization";
+import { getDeviceId } from "~/src/lib/server/deviceId";
+import { clearSessionCookie, setSessionCookie } from "~/src/lib/server/session";
+import { UnauthorizedError } from "~/src/lib/shared/errors";
+import { formatText } from "~/src/lib/shared/formatting";
+import { getUrl } from "~/src/lib/shared/url";
+
+import { Nav } from "./nav";
 
 type Props = {
   params: { organizationId: string };
@@ -67,62 +69,7 @@ export default async function Layout({ params, children }: Props) {
   return (
     <Grid template="auto 1fr auto / 1fr" style={{ height: "100vh" }}>
       <Topbar>
-        <Flex as="menu" gap="1.5rem">
-          <li>
-            <Button
-              as={Link}
-              href={getUrl(session.organization, "summary")}
-              shape="text"
-            >
-              Summary
-            </Button>
-          </li>
-          <li>
-            <Button
-              as={Link}
-              href={getUrl(session.organization, "activity")}
-              shape="text"
-            >
-              Activity
-            </Button>
-          </li>
-          <li>
-            <Button
-              as={Link}
-              href={getUrl(session.organization, "applications")}
-              shape="text"
-            >
-              Applications
-            </Button>
-          </li>
-          <li>
-            <Button
-              as={Link}
-              href={getUrl(session.organization, "users")}
-              shape="text"
-            >
-              People
-            </Button>
-          </li>
-          <li>
-            <Button
-              as={Link}
-              href={getUrl(session.organization, "providers")}
-              shape="text"
-            >
-              Providers
-            </Button>
-          </li>
-          <li>
-            <Button
-              as={Link}
-              href={getUrl(session.organization, "tags")}
-              shape="text"
-            >
-              Tags
-            </Button>
-          </li>
-        </Flex>
+        <Nav session={session} />
 
         <Flex as="menu" gap="1.5rem" style={{ justifySelf: "end" }}>
           <li>
