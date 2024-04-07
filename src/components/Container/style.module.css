@@ -4,11 +4,11 @@
 }
 
 .container.small {
-  max-width: 20rem;
+  max-width: 30rem;
 }
 
 .container.medium {
-  max-width: 30rem;
+  max-width: 40rem;
 }
 
 .container.large {

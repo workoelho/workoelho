@@ -56,7 +56,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         <Grid
           as="ul"
           template="auto / repeat(auto-fit, minmax(30%, 1fr))"
-          gap=".75rem"
+          gap=".375rem"
           justifyContent="center"
         >
           {applications.map((application) => (

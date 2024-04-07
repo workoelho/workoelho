@@ -1,14 +1,17 @@
 .card {
   background-color: var(--neutral-5);
+  border-radius: var(--radius);
+}
+
+.card.negative {
+  background-color: var(--background);
 }
 
 .card.medium {
-  border-radius: var(--radius);
-  padding: 0.75rem 0.75rem;
+  padding: 0.75rem;
 }
 
 .card.large {
-  border-radius: var(--radius);
   padding: 1.5rem;
 }
 

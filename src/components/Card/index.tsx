@@ -25,20 +25,25 @@ type AcceptableElementType =
 
 type Props = {
   size?: "medium" | "large";
+  negative?: boolean;
 };
 
 function Card<E extends AcceptableElementType = "div">(
   {
     as,
     children,
+    negative,
     size = "medium",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  ref: PolymorphicRef<E>
 ) {
   const Component = as ?? ("div" as ElementType);
 
   const classList = new ClassList(classes.card, classes[size]);
+  if (negative) {
+    classList.add(classes.negative);
+  }
   if (props.className) {
     classList.add(props.className);
   }
@@ -50,6 +55,7 @@ function Card<E extends AcceptableElementType = "div">(
     </Component>
   );
 }
+
 const forwardRefCard = forwardRef(Card) as typeof Card;
 
 export { forwardRefCard as Card };

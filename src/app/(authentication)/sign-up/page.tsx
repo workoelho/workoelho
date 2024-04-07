@@ -3,7 +3,6 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { Flex } from "~/src/components/Flex";
-import { Heading } from "~/src/components/Heading";
 import { Link } from "~/src/components/Link";
 import * as Organizations from "~/src/feats/organization/api";
 import * as Sessions from "~/src/feats/session/api";
@@ -12,6 +11,8 @@ import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { setSessionCookie } from "~/src/lib/server/session";
 import { getFormProps } from "~/src/lib/shared/form";
 import { getUrl } from "~/src/lib/shared/url";
+import { Container } from "~/src/components/Container";
+import { Header } from "~/src/components/Header";
 
 import { Form } from "./form";
 
@@ -48,18 +49,19 @@ export default async function Page() {
   });
 
   return (
-    <>
-      <Flex direction="column" gap="1rem">
-        <Heading as="h2" size="large">
-          Sign up
-        </Heading>
+    <Container size="medium" padding="3rem">
+      <Flex direction="column" gap="3rem">
+        <Header
+          title="Sign in"
+          description={
+            <p>
+              Already signed up? <Link href="/sign-in">Sign in, instead</Link>.
+            </p>
+          }
+        />
 
-        <p>
-          Already signed up? <Link href="/sign-in">Sign in, instead</Link>.
-        </p>
+        <Form {...form} />
       </Flex>
-
-      <Form {...form} />
-    </>
+    </Container>
   );
 }

@@ -29,18 +29,21 @@ type Props = {
 function Container<E extends AcceptableElementType = "div">(
   {
     as,
-    size = "large",
+    size,
     padding,
     paddingBlock,
     paddingInline,
     children,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  ref: PolymorphicRef<E>
 ) {
   const Component = as ?? ("div" as ElementType);
 
-  const classList = new ClassList(classes.container, classes[size]);
+  const classList = new ClassList(classes.container);
+  if (size) {
+    classList.add(classes[size]);
+  }
   if (props.className) {
     classList.add(props.className);
   }
@@ -59,6 +62,7 @@ function Container<E extends AcceptableElementType = "div">(
     </Component>
   );
 }
+
 const forwardRefContainer = forwardRef(Container) as typeof Container;
 
 export { forwardRefContainer as Container };

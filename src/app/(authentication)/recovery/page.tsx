@@ -11,6 +11,10 @@ import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { getFormProps } from "~/src/lib/shared/form";
 import * as schema from "~/src/lib/shared/schema";
 import { getUrl } from "~/src/lib/shared/url";
+import { Container } from "~/src/components/Container";
+import { Flex } from "~/src/components/Flex";
+import { Header } from "~/src/components/Header";
+import { Link } from "~/src/components/Link";
 
 import { Form } from "./form";
 
@@ -43,5 +47,21 @@ export default async function Page() {
     redirect(getUrl("recovery", "result"));
   });
 
-  return <Form {...form} />;
+  return (
+    <Container size="medium" padding="3rem">
+      <Flex direction="column" gap="3rem">
+        <Header
+          title="Recovery"
+          description={
+            <p>
+              Remembered your password? Go{" "}
+              <Link href="/sign-in">back to sign in</Link>.
+            </p>
+          }
+        />
+
+        <Form {...form} />
+      </Flex>
+    </Container>
+  );
 }

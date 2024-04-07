@@ -10,12 +10,12 @@ type Props = {
   children?: ReactNode;
 };
 
-const sizeGapMap = {
+const gapSizeMap = {
   small: undefined,
   large: "1rem",
 } as const;
 
-const sizeHeadingMap = {
+const headingSizeMap = {
   small: "medium",
   large: "large",
 } as const;
@@ -23,8 +23,8 @@ const sizeHeadingMap = {
 export function Empty({ title = "Empty", size = "small", children }: Props) {
   return (
     <Card as="aside" size="large" style={{ paddingInline: "3rem" }}>
-      <Flex direction="column" alignItems="center" gap={sizeGapMap[size]}>
-        <Heading variant="ghost" size={sizeHeadingMap[size]}>
+      <Flex direction="column" alignItems="center" gap={gapSizeMap[size]}>
+        <Heading variant="ghost" size={headingSizeMap[size]}>
           {title}
         </Heading>
 

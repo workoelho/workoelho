@@ -15,7 +15,7 @@ type AcceptableElementType = "div" | "aside" | "header" | "section";
 
 type Props = {
   title: ReactNode;
-  description: ReactNode;
+  description?: ReactNode;
   left?: ReactNode;
   right?: ReactNode;
   children?: ReactNode;
@@ -30,7 +30,7 @@ function Header<E extends AcceptableElementType = "header">(
     right = <div />,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  ref: PolymorphicRef<E>
 ) {
   const Component = as ?? ("header" as ElementType);
 
@@ -58,4 +58,5 @@ function Header<E extends AcceptableElementType = "header">(
 }
 
 const forwardRefHeader = forwardRef(Header);
+
 export { forwardRefHeader as Header };

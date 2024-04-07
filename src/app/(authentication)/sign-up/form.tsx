@@ -16,7 +16,7 @@ export function Form(props: Props) {
   return (
     <Flex as="form" action={action} direction="column" gap="3rem">
       {state.message ? (
-        <Alert variant={state.status ?? "neutral"}>
+        <Alert variant="negative">
           <p>{state.message}</p>
         </Alert>
       ) : null}

@@ -18,11 +18,15 @@ function getModel(pathname: string) {
   return { publicId, $type: getMappedModelUrl(type) };
 }
 
-export function Nav({ session }) {
+type Props = {
+  session: {
+    organization: string;
+  };
+};
+
+export function Nav({ session }: Props) {
   const pathname = usePathname();
   const model = getModel(pathname);
-
-  console.log({ pathname, model });
 
   if (model.$type === "application") {
     const applicationUrl = getUrl(session.organization, model);
@@ -34,7 +38,7 @@ export function Nav({ session }) {
       <Flex as="menu" gap="1.5rem" justifyContent="center">
         <li>
           <Button as={Link} href={backUrl} shape="text">
-            <Icon variant="arrow-left" /> Back
+            <Icon variant="arrow-left" />
           </Button>
         </li>
         <li>
@@ -50,6 +54,32 @@ export function Nav({ session }) {
         <li>
           <Button as={Link} href={rolesUrl} shape="text">
             People
+          </Button>
+        </li>
+      </Flex>
+    );
+  }
+
+  if (model.$type === "user") {
+    const userUrl = getUrl(session.organization, model);
+    const backUrl = getUrl(session.organization, "users");
+    const rolesUrl = getUrl(userUrl, "roles");
+
+    return (
+      <Flex as="menu" gap="1.5rem" justifyContent="center">
+        <li>
+          <Button as={Link} href={backUrl} shape="text">
+            <Icon variant="arrow-left" />
+          </Button>
+        </li>
+        <li>
+          <Button as={Link} href={userUrl} shape="text">
+            Inspect
+          </Button>
+        </li>
+        <li>
+          <Button as={Link} href={rolesUrl} shape="text">
+            Roles
           </Button>
         </li>
       </Flex>

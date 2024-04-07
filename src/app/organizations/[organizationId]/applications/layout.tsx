@@ -7,5 +7,9 @@ type Props = {
 };
 
 export default async function Layout({ children }: Props) {
-  return <Container paddingBlock="3rem">{children}</Container>;
+  return (
+    <Container size="large" padding="3rem">
+      {children}
+    </Container>
+  );
 }

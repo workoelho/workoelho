@@ -25,12 +25,12 @@ type Props = {
 };
 
 export default async function Page({
-  params: { organizationId, userId: publicUserId },
+  params: { organizationId, userId },
 }: Props) {
   const session = await authorize({ organizationId });
 
   const user = await api.user.get({
-    payload: { id: publicUserId },
+    payload: { id: userId },
     session,
   });
 
@@ -54,7 +54,7 @@ export default async function Page({
 
       redirect(userUrl);
     },
-    { values: { userId: publicUserId } },
+    { values: { userId: userId } },
   );
 
   return (
