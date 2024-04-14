@@ -18,7 +18,7 @@ export type Props = {
 
 export function getFormProps(
   action: (state: State, payload: FormData) => Promise<State>,
-  initialState: State = {} as State,
+  initialState: State = {} as State
 ) {
   return {
     action: async (state: State, payload: FormData): Promise<State> => {
@@ -46,7 +46,6 @@ export function getFormProps(
         throw error;
       }
     },
-
     initialState,
   } as const;
 }

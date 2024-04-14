@@ -9,7 +9,16 @@ import { validate } from "~/src/lib/server/session";
 
 const payloadSchema = superstruct.object({
   page: superstruct.defaulted(superstruct.number(), 1),
-  applicationId: schema.id,
+  relator: superstruct.optional(
+    superstruct.union([
+      superstruct.object({
+        applicationId: schema.id,
+      }),
+      superstruct.object({
+        projectId: schema.id,
+      }),
+    ])
+  ),
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
@@ -25,10 +34,24 @@ export async function list(context: Context<Payload>) {
   const take = 10;
   const skip = (payload.page - 1) * take;
 
-  return await db.service.findMany({
+  return await db.relation.findMany({
+    include: {
+      relator: {
+        include: {
+          application: true,
+          project: true,
+        },
+      },
+      relatable: {
+        include: {
+          application: true,
+          provider: true,
+        },
+      },
+    },
     where: {
       organizationId: context.session.organizationId,
-      applicationId: payload.applicationId,
+      relator: payload.relator,
     },
     orderBy: {
       id: "asc",

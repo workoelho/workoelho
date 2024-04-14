@@ -7,7 +7,7 @@ import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/user/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
 import { getRequestSession, validate } from "~/src/lib/server/session";
-import { getFormProps } from "~/src/lib/shared/form";
+import { getFormProps } from "~/src/lib/server/form";
 
 export const metadata: Metadata = {
   title: "My profile at Workoelho",
@@ -47,7 +47,7 @@ export default async function Page({ params: { organizationId } }: Props) {
         email: session.user.email,
         level: session.user.level,
       },
-    },
+    }
   );
 
   return (

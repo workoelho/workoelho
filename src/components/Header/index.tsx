@@ -30,7 +30,7 @@ function Header<E extends AcceptableElementType = "header">(
     right = <div />,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("header" as ElementType);
 
@@ -49,7 +49,7 @@ function Header<E extends AcceptableElementType = "header">(
           {title}
         </Heading>
 
-        {description ? <p>{description}</p> : null}
+        {description}
       </Flex>
 
       {right}

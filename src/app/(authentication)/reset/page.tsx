@@ -11,7 +11,7 @@ import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
 import { getRequestSession, setSessionCookie } from "~/src/lib/server/session";
 import { UnauthorizedError } from "~/src/lib/shared/errors";
-import { getFormProps } from "~/src/lib/shared/form";
+import { getFormProps } from "~/src/lib/server/form";
 import { getUrl } from "~/src/lib/shared/url";
 
 import { Form } from "./form";

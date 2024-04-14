@@ -8,7 +8,7 @@ import { Flex } from "~/src/components/Flex";
 import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
-import { Props } from "~/src/lib/shared/form";
+import { Props } from "~/src/lib/server/form";
 
 export function Form(props: Props) {
   const [state, action] = useFormState(props.action, props.initialState);

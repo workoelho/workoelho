@@ -8,7 +8,7 @@ import * as Sessions from "~/src/feats/session/api";
 import * as Users from "~/src/feats/user/api";
 import { getDeviceId } from "~/src/lib/server/deviceId";
 import { getRemoteAddress } from "~/src/lib/server/remoteAddress";
-import { getFormProps } from "~/src/lib/shared/form";
+import { getFormProps } from "~/src/lib/server/form";
 import * as schema from "~/src/lib/shared/schema";
 import { getUrl } from "~/src/lib/shared/url";
 import { Container } from "~/src/components/Container";

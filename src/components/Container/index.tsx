@@ -36,7 +36,7 @@ function Container<E extends AcceptableElementType = "div">(
     children,
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("div" as ElementType);
 

@@ -9,7 +9,7 @@ import { Icon } from "~/src/components/Icon";
 import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/role/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
-import { getFormProps } from "~/src/lib/shared/form";
+import { getFormProps } from "~/src/lib/server/form";
 import { formatText } from "~/src/lib/shared/formatting";
 import { getUrl } from "~/src/lib/shared/url";
 
@@ -54,7 +54,7 @@ export default async function Page({
 
       redirect(userUrl);
     },
-    { values: { userId: userId } },
+    { values: { userId: userId } }
   );
 
   return (

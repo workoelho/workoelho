@@ -9,7 +9,7 @@ import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Link } from "~/src/components/Link";
 import { Submit } from "~/src/components/Submit";
-import { Props } from "~/src/lib/shared/form";
+import { Props } from "~/src/lib/server/form";
 
 export function Form({ action, initialState }: Props) {
   const [state, dispatch] = useFormState(action, initialState);

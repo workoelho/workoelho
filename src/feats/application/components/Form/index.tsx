@@ -12,7 +12,7 @@ import { Icon } from "~/src/components/Icon";
 import { Input } from "~/src/components/Input";
 import { Submit } from "~/src/components/Submit";
 import { useAutoFocus } from "~/src/lib/client/autoFocus";
-import { Props as FormProps } from "~/src/lib/shared/form";
+import { Props as FormProps } from "~/src/lib/server/form";
 
 type Props = FormProps & {
   destroy?: () => Promise<void>;

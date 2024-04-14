@@ -36,8 +36,8 @@ export default async function Page({
     session,
   });
 
-  const services = await api.service.list({
-    payload: { applicationId: applicationId, page: 1 },
+  const relations = await api.relation.list({
+    payload: { relator: { applicationId: applicationId }, page: 1 },
     session,
   });
 
@@ -93,23 +93,23 @@ export default async function Page({
       </Container>
 
       <Flex gap="3rem" justifyContent="space-between">
-        <p>Listing linked applications.</p>
+        <p>Listing application's relations.</p>
 
         <Flex as="menu">
           <li>
             <Button
               as={Link}
-              href={getUrl(applicationUrl, "services", "new")}
+              href={getUrl(applicationUrl, "relations", "new")}
               shape="text"
             >
-              Add application <Icon variant="plus" />
+              Add relation <Icon variant="plus" />
             </Button>
           </li>
         </Flex>
       </Flex>
 
-      {services.length === 0 ? (
-        <Empty title="No applications have been linked." />
+      {relations.length === 0 ? (
+        <Empty title="No relations have been added." />
       ) : (
         <Grid
           as="ul"
@@ -117,22 +117,50 @@ export default async function Page({
           gap=".375rem"
           justifyContent="center"
         >
-          {services.map((service) => (
-            <li key={service.id}>
-              <Link href={getUrl(applicationUrl, service, "edit")}>
-                <Card>
-                  <Entry variant="swap" label={service.name}>
-                    {service.providerType}-{service.providerId}
+          {relations.map((relation) => (
+            <li key={relation.id}>
+              <Card>
+                <Flex gap="0.75rem" justifyContent="space-between">
+                  <Entry variant="swap" label={relation.name}>
+                    {relation.relatable.application?.name ??
+                      relation.relatable.provider?.name}
                   </Entry>
-                </Card>
-              </Link>
+                  <Flex as="nav" gap="0.375rem">
+                    <li>
+                      <Button
+                        as={Link}
+                        variant="ghost"
+                        href={getUrl(
+                          session.organization,
+                          relation.relatable.application ||
+                            relation.relatable.provider
+                        )}
+                      >
+                        <Icon
+                          variant="looking-glass"
+                          label="Inspect resource"
+                        />
+                      </Button>
+                    </li>
+                    <li>
+                      <Button
+                        as={Link}
+                        variant="ghost"
+                        href={getUrl(applicationUrl, relation, "edit")}
+                      >
+                        <Icon variant="pencil" label="Edit relation" />
+                      </Button>
+                    </li>
+                  </Flex>
+                </Flex>
+              </Card>
             </li>
           ))}
         </Grid>
       )}
 
       <Flex gap="3rem" justifyContent="space-between">
-        <p>Listing people involved with the application.</p>
+        <p>Listing people's roles.</p>
 
         <Flex as="menu">
           <li>
@@ -158,13 +186,16 @@ export default async function Page({
         >
           {roles.map((role) => (
             <li key={role.id}>
-              <Link href={getUrl(applicationUrl, role, "edit")}>
-                <Card>
+              <Card>
+                <Flex gap="0.75rem" justifyContent="space-between">
                   <Entry variant="swap" label={role.name}>
                     {role.user.name}
                   </Entry>
-                </Card>
-              </Link>
+                  <Button as={Link} href={getUrl(applicationUrl, role, "edit")}>
+                    <Icon variant="pencil" label="Edit role" />
+                  </Button>
+                </Flex>
+              </Card>
             </li>
           ))}
         </Grid>

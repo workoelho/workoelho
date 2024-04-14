@@ -15,10 +15,12 @@
   outline: 0;
 }
 
-.select:invalid {
-  color: var(--neutral-3);
+.select option,
+.select optgroup {
+  color: var(--neutral-2);
 }
 
-.select option {
-  color: var(--neutral-2);
+.select.empty,
+.select option[value=""] {
+  color: var(--neutral-4);
 }

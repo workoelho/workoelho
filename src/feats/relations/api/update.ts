@@ -10,31 +10,49 @@ import { validate } from "~/src/lib/server/session";
 const payloadSchema = superstruct.object({
   id: schema.id,
   name: superstruct.optional(schema.name),
-  applicationId: schema.optionalId,
-  providerType: superstruct.optional(superstruct.string()),
-  providerId: schema.optionalId,
+  url: superstruct.optional(schema.url),
+  relator: superstruct.optional(
+    superstruct.union([
+      superstruct.object({
+        applicationId: schema.id,
+      }),
+      superstruct.object({
+        projectId: schema.id,
+      }),
+    ])
+  ),
+  relatable: superstruct.optional(
+    superstruct.union([
+      superstruct.object({
+        applicationId: schema.id,
+      }),
+      superstruct.object({
+        providerId: schema.id,
+      }),
+    ])
+  ),
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
 
 /**
- * Update service.
+ * Update relation.
  */
 export async function update(context: Context<Payload>) {
   const payload = superstruct.create(context.payload, payloadSchema);
 
   validate(context.session);
 
-  return await db.service.update({
+  return await db.relation.update({
     where: {
       id: payload.id,
       organizationId: context.session.organizationId,
     },
     data: {
       name: payload.name,
-      applicationId: payload.applicationId,
-      providerType: payload.providerType,
-      providerId: payload.providerId,
+      url: payload.url,
+      relator: { update: payload.relator },
+      relatable: { update: payload.relatable },
     },
   });
 }

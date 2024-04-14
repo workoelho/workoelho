@@ -5,9 +5,11 @@ import * as superstruct from "superstruct";
 import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
 import { validate } from "~/src/lib/server/session";
+import * as schema from "~/src/lib/shared/schema";
 
 const payloadSchema = superstruct.object({
   page: superstruct.defaulted(superstruct.number(), 1),
+  id: superstruct.optional(superstruct.array(schema.id)),
 });
 
 type Payload = superstruct.Infer<typeof payloadSchema>;
@@ -26,6 +28,11 @@ export async function list(context: Context<Payload>) {
   return await db.application.findMany({
     where: {
       organizationId: context.session.organizationId,
+      id: payload.id
+        ? {
+            in: payload.id,
+          }
+        : undefined,
     },
     orderBy: {
       id: "asc",

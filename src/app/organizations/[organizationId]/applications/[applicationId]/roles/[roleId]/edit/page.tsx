@@ -9,7 +9,7 @@ import { Icon } from "~/src/components/Icon";
 import * as api from "~/src/feats/api";
 import { Form } from "~/src/feats/role/components/Form";
 import { authorize } from "~/src/lib/server/authorization";
-import { getFormProps } from "~/src/lib/shared/form";
+import { getFormProps } from "~/src/lib/server/form";
 import { getPublicId } from "~/src/lib/shared/publicId";
 import { getUrl } from "~/src/lib/shared/url";
 
@@ -67,7 +67,7 @@ export default async function Page({
         userId: getPublicId(role.user),
         applicationId: getPublicId(role.application),
       },
-    },
+    }
   );
 
   const destroy = async () => {

@@ -1,40 +1,9 @@
-import { getPublicId } from "~/src/lib/shared/publicId";
-
-/**
- * Guard that given value has type.
- */
-function hasType(value: unknown): value is { $type: string } {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "$type" in value &&
-    typeof value.$type === "string"
-  );
-}
-
-/**
- * Guard that given value has a private ID.
- */
-function hasPrivateId(value: unknown): value is { id: number } {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "id" in value &&
-    typeof value.id === "number"
-  );
-}
-
-/**
- * Guard that given value has a public ID.
- */
-function hasPublicId(value: unknown): value is { publicId: string } {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "publicId" in value &&
-    typeof value.publicId === "string"
-  );
-}
+import {
+  getPublicId,
+  hasType,
+  hasPrivateId,
+  hasPublicId,
+} from "~/src/lib/shared/publicId";
 
 const modelUrlMap: Record<string, string> = {
   organization: "organizations",
@@ -46,6 +15,7 @@ const modelUrlMap: Record<string, string> = {
   role: "roles",
   tag: "tags",
   activity: "activity",
+  relation: "relations",
 };
 
 for (const [key, value] of Object.entries(modelUrlMap)) {

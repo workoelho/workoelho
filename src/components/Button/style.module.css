@@ -73,3 +73,9 @@
   --default-color: var(--attentive-3);
   --active-color: var(--attentive-4);
 }
+
+.button.ghost {
+  --default-color: var(--neutral-5);
+  --active-color: var(--neutral-4);
+  color: inherit;
+}

@@ -10,7 +10,7 @@ import { getUrl } from "~/src/lib/shared/url";
 import { Flex } from "~/src/components/Flex";
 import { Link } from "~/src/components/Link";
 import { Container } from "~/src/components/Container";
-import { getFormProps } from "~/src/lib/shared/form";
+import { getFormProps } from "~/src/lib/server/form";
 import { Header } from "~/src/components/Header";
 
 import { Form } from "./form";

@@ -36,7 +36,7 @@ function Card<E extends AcceptableElementType = "div">(
     size = "medium",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>
+  ref: PolymorphicRef<E>,
 ) {
   const Component = as ?? ("div" as ElementType);
 

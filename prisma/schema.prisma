@@ -13,14 +13,15 @@ model Organization {
     updatedAt DateTime @updatedAt
     name      String
 
-    activity     Activity[]
-    applications Application[]
-    providers    Provider[]
-    roles        Role[]
-    services     Service[]
     sessions     Session[]
-    tags         Tag[]
     users        User[]
+    applications Application[]
+    roles        Role[]
+    related      Relation[]
+    providers    Provider[]
+    activity     Activity[]
+    tags         Tag[]
+    project      Project[]
 
     @@map("organizations")
 }
@@ -37,9 +38,10 @@ model User {
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-    sessions Session[]
-    activity Activity[]
-    roles    Role[]
+    sessions    Session[]
+    activity    Activity[]
+    roles       Role[]
+    actionables Actionable[]
 
     @@map("users")
 }
@@ -61,6 +63,22 @@ model Session {
     @@map("sessions")
 }
 
+model Project {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    name      String
+
+    organizationId Int
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+    relators    Relator[]
+    actionables Actionable[]
+    taggables   Taggable[]
+
+    @@map("projects")
+}
+
 model Application {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
@@ -70,8 +88,11 @@ model Application {
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-    services Service[]
-    roles    Role[]
+    roles       Role[]
+    relatables  Relatable[]
+    relators    Relator[]
+    taggables   Taggable[]
+    actionables Actionable[]
 
     @@map("applications")
 }
@@ -104,26 +125,61 @@ model Provider {
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
+    relatables  Relatable[]
+    taggables   Taggable[]
+    actionables Actionable[]
+
     @@map("providers")
 }
 
-model Service {
+model Relation {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     name      String
+    url       String?
 
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-    providerType String
-    providerId   Int
+    relatorId Int
+    relator   Relator @relation(fields: [relatorId], references: [id], onDelete: Cascade)
 
-    applicationId Int
-    application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+    relatableId Int
+    relatable   Relatable @relation(fields: [relatableId], references: [id], onDelete: Cascade)
 
-    @@index([providerType, providerId])
-    @@map("services")
+    actionable Actionable[]
+
+    @@map("relations")
+}
+
+model Relator {
+    id Int @id @default(autoincrement())
+
+    applicationId Int?
+    application   Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+    projectId Int?
+    project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    relations Relation[]
+
+    @@map("relators")
+}
+
+// Relatable is a polymorphic proxy for resources that are related to other resources.
+model Relatable {
+    id Int @id @default(autoincrement())
+
+    applicationId Int?
+    application   Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+    providerId Int?
+    provider   Provider? @relation(fields: [providerId], references: [id])
+
+    relations Relation[]
+
+    @@map("relatables")
 }
 
 model Tag {
@@ -136,11 +192,57 @@ model Tag {
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-    objectType String
-    objectId   Int
+    taggableId Int
+    taggable   Taggable @relation(fields: [taggableId], references: [id])
 
-    @@index([objectType, objectId])
+    actionables Actionable[]
+
     @@map("tags")
+}
+
+// Taggable is a polynmorphic proxy for things that can have tags.
+model Taggable {
+    id Int @id @default(autoincrement())
+
+    tags Tag[]
+
+    applicationId Int?
+    application   Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+    providerId Int?
+    provider   Provider? @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+    projectId Int?
+    project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    @@map("taggables")
+}
+
+// Actionable is a polymorphic proxy for things that can be acted upon.
+model Actionable {
+    id Int @id @default(autoincrement())
+
+    activity Activity[]
+
+    applicationId Int?
+    application   Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+    providerId Int?
+    provider   Provider? @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+    tagId Int?
+    tag   Tag? @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+    projectId Int?
+    project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    userId Int?
+    user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    relationId Int?
+    relation   Relation? @relation(fields: [relationId], references: [id], onDelete: Cascade)
+
+    @@map("actionables")
 }
 
 model Activity {
@@ -151,12 +253,11 @@ model Activity {
     organizationId Int
     organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-    objectType String
-    objectId   Int
+    userId Int
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    subjectId Int
-    subject   User @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    actionableId Int?
+    actionable   Actionable? @relation(fields: [actionableId], references: [id], onDelete: Cascade)
 
-    @@index([objectType, objectId])
     @@map("activity")
 }

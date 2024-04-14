@@ -6,5 +6,5 @@
 }
 
 .header > *:first-child {
-  justify-self: center;
+  justify-self: end;
 }

@@ -4,8 +4,8 @@ import * as superstruct from "superstruct";
 
 import { Context } from "~/src/lib/server/actions";
 import { db } from "~/src/lib/server/prisma";
-import * as schema from "~/src/lib/shared/schema";
 import { validate } from "~/src/lib/server/session";
+import * as schema from "~/src/lib/shared/schema";
 
 const payloadSchema = superstruct.object({
   id: schema.id,
@@ -14,17 +14,31 @@ const payloadSchema = superstruct.object({
 type Payload = superstruct.Infer<typeof payloadSchema>;
 
 /**
- * Delete an service.
+ * Get one relation.
  */
-export async function destroy(context: Context<Payload>) {
+export async function get(context: Context<Payload>) {
   const payload = superstruct.create(context.payload, payloadSchema);
 
   validate(context.session);
 
-  return await db.service.delete({
+  return await db.relation.findUniqueOrThrow({
     where: {
       id: payload.id,
       organizationId: context.session.organizationId,
+    },
+    include: {
+      relator: {
+        include: {
+          application: true,
+          project: true,
+        },
+      },
+      relatable: {
+        include: {
+          application: true,
+          provider: true,
+        },
+      },
     },
   });
 }

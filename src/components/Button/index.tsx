@@ -15,7 +15,13 @@ type AcceptableElementType = "a" | "button" | typeof Link;
 
 export type Props = {
   action?: () => Promise<unknown>;
-  variant?: "neutral" | "interactive" | "positive" | "negative" | "attentive";
+  variant?:
+    | "neutral"
+    | "interactive"
+    | "positive"
+    | "negative"
+    | "attentive"
+    | "ghost";
   shape?: "text" | "rectangle" | "pill";
   fill?: "solid" | "outline";
 };
@@ -30,7 +36,7 @@ function Button<E extends AcceptableElementType = "button">(
     fill = "solid",
     ...props
   }: PolymorphicPropsWithRef<E, Props>,
-  ref: PolymorphicRef<E>,
+  ref: PolymorphicRef<E>
 ) {
   const Component = as ?? ("button" as ElementType);
 

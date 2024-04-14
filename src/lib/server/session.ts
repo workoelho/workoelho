@@ -29,7 +29,7 @@ export async function getRequestSession() {
  * Validate session.
  */
 export function validate<T extends Session>(
-  session: Nullable<T>
+  session: Nullable<T>,
 ): asserts session is NonNullable<T> {
   if (!session) {
     throw new UnauthorizedError("Session is missing");
