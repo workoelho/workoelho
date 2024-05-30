@@ -1,11 +1,11 @@
-import { test, expect } from "bun:test";
 import { Database } from "bun:sqlite";
+import { expect, test } from "bun:test";
 
 import {
+  database,
   getInsertValues,
   getPrefixedBindings,
   getUpdateValues,
-  database,
 } from ".";
 
 test("database", () => {

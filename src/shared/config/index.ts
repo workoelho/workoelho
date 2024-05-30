@@ -8,7 +8,7 @@ const config = {
  */
 export function getConfig(): typeof config;
 export function getConfig<T extends keyof typeof config>(
-  key?: T
+  key?: T,
 ): (typeof config)[T];
 export function getConfig<T extends keyof typeof config>(key?: T) {
   return key ? config[key] : config;

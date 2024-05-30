@@ -2,6 +2,8 @@ import type { SQLQueryBindings } from "bun:sqlite";
 import { Database } from "bun:sqlite";
 import { getConfig } from "~/src/shared/config";
 
+export type { SQLQueryBindings as Bindings } from "bun:sqlite";
+
 /**
  * Id type.
  */
@@ -18,7 +20,7 @@ export type Session = {
  * Context for database operations.
  */
 export type Context<
-  T extends Record<string, unknown> = Record<string, unknown>
+  T extends Record<string, unknown> = Record<string, unknown>,
 > = T extends undefined
   ? { session?: Session; options?: Record<string, unknown> }
   : { session?: Session; options?: Record<string, unknown>; payload: T };
@@ -34,7 +36,7 @@ let instance: Database;
 export function open(url: URL) {
   if (url.protocol !== "sqlite:") {
     throw new Error(
-      `Unsupported database protocol ${JSON.stringify(url.protocol)}`
+      `Unsupported database protocol ${JSON.stringify(url.protocol)}`,
     );
   }
 
@@ -80,9 +82,9 @@ export function getUpdateValues<T extends Record<string, unknown>>(data: T) {
  * Bun's SQLite require prefixed bindings, i.e. { $value: ... }.
  */
 export function getPrefixedBindings<
-  T extends Record<string, string | bigint | number | boolean | null>
+  T extends Record<string, string | bigint | number | boolean | null>,
 >(data: T) {
   return Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [`$${key}`, value])
+    Object.entries(data).map(([key, value]) => [`$${key}`, value]),
   ) as SQLQueryBindings;
 }

@@ -1,4 +1,4 @@
-import type { Context, Id } from "~/src/shared/database";
+import type { Bindings, Context, Id } from "~/src/shared/database";
 import {
   database,
   getInsertValues,
@@ -17,12 +17,12 @@ export function migrate() {
     .query(
       `
         create table if not exists organizations (
-            id integer primary key,
-            createdAt text not null,
-            updatedAt text not null,
-            name text not null
+          id integer primary key,
+          createdAt text not null,
+          updatedAt text not null,
+          name text not null
         );
-      `
+      `,
     )
     .run();
 }
@@ -37,8 +37,8 @@ export async function create(context: Context<Pick<Organization, "name">>) {
   };
 
   const result = database()
-    .query<Organization, any>(
-      `insert into organizations ${getInsertValues(data)} returning *;`
+    .query<Organization, Bindings>(
+      `insert into organizations ${getInsertValues(data)} returning *;`,
     )
     .get(getPrefixedBindings(data));
 

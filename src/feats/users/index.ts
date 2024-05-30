@@ -1,6 +1,6 @@
 import * as Bun from "bun";
 
-import type { Context, Id } from "~/src/shared/database";
+import type { Bindings, Context, Id } from "~/src/shared/database";
 import {
   database,
   getInsertValues,
@@ -22,15 +22,15 @@ export function migrate() {
     .query(
       `
         create table if not exists users (
-            id integer primary key,
-            createdAt text not null,
-            updatedAt text not null,
-            organizationId references organizations(id),
-            name text not null,
-            email text not null,
-            password text not null
+          id integer primary key,
+          createdAt text not null,
+          updatedAt text not null,
+          organizationId references organizations(id),
+          name text not null,
+          email text not null,
+          password text not null
         );
-      `
+      `,
     )
     .run();
 }
@@ -46,7 +46,9 @@ export const password = {
 };
 
 export async function create(
-  context: Context<Pick<User, "name" | "email" | "password" | "organizationId">>
+  context: Context<
+    Pick<User, "name" | "email" | "password" | "organizationId">
+  >,
 ) {
   const now = new Date();
 
@@ -59,7 +61,9 @@ export async function create(
   data.password = await password.hash(data.password);
 
   const result = database()
-    .query<User, any>(`insert into users ${getInsertValues(data)} returning *;`)
+    .query<User, Bindings>(
+      `insert into users ${getInsertValues(data)} returning *;`,
+    )
     .get(getPrefixedBindings(data));
 
   if (!result) {
