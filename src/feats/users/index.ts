@@ -58,13 +58,13 @@ export async function create(
 
   data.password = await password.hash(data.password);
 
-  const user = database()
+  const result = database()
     .query<User, any>(`insert into users ${getInsertValues(data)} returning *;`)
-    .get(...getPrefixedBindings(data));
+    .get(getPrefixedBindings(data));
 
-  if (!user) {
+  if (!result) {
     throw new Error("Query failed");
   }
 
-  return user;
+  return result;
 }

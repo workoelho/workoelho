@@ -36,15 +36,15 @@ export async function create(context: Context<Pick<Organization, "name">>) {
     updatedAt: now.toISOString(),
   };
 
-  const organization = database()
+  const result = database()
     .query<Organization, any>(
       `insert into organizations ${getInsertValues(data)} returning *;`
     )
-    .get(...getPrefixedBindings(data));
+    .get(getPrefixedBindings(data));
 
-  if (!organization) {
+  if (!result) {
     throw new Error("Query failed");
   }
 
-  return organization;
+  return result;
 }

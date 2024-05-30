@@ -61,8 +61,8 @@ export function database() {
 /**
  * Get SQL for insert values.
  */
-export function getInsertValues<T extends Record<string, unknown>>(payload: T) {
-  return `(${Object.keys(payload).join(", ")}) values (${Object.keys(payload)
+export function getInsertValues<T extends Record<string, unknown>>(data: T) {
+  return `(${Object.keys(data).join(", ")}) values (${Object.keys(data)
     .map((key) => `$${key}`)
     .join(", ")})`;
 }
@@ -70,8 +70,8 @@ export function getInsertValues<T extends Record<string, unknown>>(payload: T) {
 /**
  * Get SQL for update values.
  */
-export function getUpdateValues<T extends Record<string, unknown>>(payload: T) {
-  return Object.keys(payload)
+export function getUpdateValues<T extends Record<string, unknown>>(data: T) {
+  return Object.keys(data)
     .map((key) => `${key} = $${key}`)
     .join(", ");
 }
@@ -79,16 +79,10 @@ export function getUpdateValues<T extends Record<string, unknown>>(payload: T) {
 /**
  * Bun's SQLite require prefixed bindings, i.e. { $value: ... }.
  */
-export function getPrefixedBindings<T extends SQLQueryBindings[]>(
-  ...values: T
-) {
-  return values.map((value) => {
-    if (typeof value === "object" && value !== null) {
-      return Object.fromEntries(
-        Object.entries(value).map(([key, value]) => [`$${key}`, value])
-      ) as SQLQueryBindings;
-    }
-
-    return value;
-  });
+export function getPrefixedBindings<
+  T extends Record<string, string | bigint | number | boolean | null>
+>(data: T) {
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [`$${key}`, value])
+  ) as SQLQueryBindings;
 }

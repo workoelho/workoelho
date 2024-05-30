@@ -39,11 +39,9 @@ test("getPrefixedBindings", () => {
     c: 3,
   });
 
-  expect(bindings).toEqual([
-    {
-      $a: 1,
-      $b: 2,
-      $c: 3,
-    },
-  ]);
+  expect(bindings).toEqual({
+    $a: 1,
+    $b: 2,
+    $c: 3,
+  });
 });
