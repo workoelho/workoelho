@@ -4,7 +4,7 @@
   "type": "module",
   "module": "src/index.ts",
   "scripts": {
-    "start": "bun src/index.ts",
+    "start": "bun --hot src/index.ts",
     "test": "bun test"
   },
   "devDependencies": {
