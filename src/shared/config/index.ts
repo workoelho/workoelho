@@ -13,13 +13,3 @@ export function getConfig<T extends keyof typeof config>(
 export function getConfig<T extends keyof typeof config>(key?: T) {
   return key ? config[key] : config;
 }
-
-/**
- * Change configuration.
- */
-export function setConfig<T extends keyof typeof config>(
-  key: T,
-  value: (typeof config)[T]
-) {
-  config[key] = value;
-}

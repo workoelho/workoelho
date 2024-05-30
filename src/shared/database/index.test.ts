@@ -3,13 +3,10 @@ import { Database } from "bun:sqlite";
 
 import {
   getInsertValues,
-  open,
   getPrefixedBindings,
   getUpdateValues,
   database,
 } from ".";
-
-open(new URL("sqlite:///"));
 
 test("database", () => {
   expect(database()).toBeInstanceOf(Database);

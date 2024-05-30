@@ -27,10 +27,10 @@ export function migrate() {
     .run();
 }
 
-export function create(context: Context<Pick<Organization, "name">>) {
+export async function create(context: Context<Pick<Organization, "name">>) {
   const now = new Date();
 
-  const payload = {
+  const data = {
     ...context.payload,
     createdAt: now.toISOString(),
     updatedAt: now.toISOString(),
@@ -38,9 +38,13 @@ export function create(context: Context<Pick<Organization, "name">>) {
 
   const organization = database()
     .query<Organization, any>(
-      `insert into organizations ${getInsertValues(payload)} returning *;`
+      `insert into organizations ${getInsertValues(data)} returning *;`
     )
-    .get(...getPrefixedBindings(payload));
+    .get(...getPrefixedBindings(data));
+
+  if (!organization) {
+    throw new Error("Query failed");
+  }
 
   return organization;
 }

@@ -5,7 +5,7 @@
   "module": "src/index.ts",
   "scripts": {
     "start": "bun src/index.ts",
-    "test": "DATABASE_URL=sqlite:/// bun test"
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/bun": "latest"

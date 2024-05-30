@@ -1,12 +1,8 @@
 import { test, expect } from "bun:test";
 
-import { setConfig, getConfig } from ".";
+import { getConfig } from ".";
 
 test("getConfig", () => {
+  expect(getConfig()).toEqual({ env: "test", databaseUrl: expect.any(URL) });
   expect(getConfig("env")).toBe("test");
-});
-
-test("setConfig", () => {
-  setConfig("env", "development");
-  expect(getConfig("env")).toBe("development");
 });
