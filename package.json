@@ -5,9 +5,12 @@
   "module": "src/index.ts",
   "scripts": {
     "start": "bun --hot src/index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "fix": "biome check --apply .",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.7.3",
     "@types/bun": "latest"
   },
   "peerDependencies": {
