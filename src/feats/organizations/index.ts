@@ -7,8 +7,8 @@ import {
 
 export type Organization = {
   id: Id;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   name: string;
 };
 
