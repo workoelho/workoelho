@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 
 import * as organizations from "~/src/feats/organizations";
 
+import { ZodError } from "zod";
 import { create, password } from ".";
 
 test("password", async () => {
@@ -19,18 +20,27 @@ test("create", async () => {
     },
   });
 
-  const user = await create({
-    payload: {
-      name: "Test",
-      email: "test@example.com",
-      password: "password",
-      organizationId: organization.id,
-    },
-  });
+  expect(async () => {
+    await create({
+      payload: {
+        organizationId: 0,
+        email: "",
+        name: "",
+        password: "",
+      },
+    });
+  }).toThrowError(ZodError);
 
-  if (!user) {
-    throw new Error();
-  }
+  const payload = {
+    name: "Test",
+    email: "test@example.com",
+    password: "password1234567",
+    organizationId: organization.id,
+  };
+
+  const user = await create({
+    payload,
+  });
 
   expect(user).toEqual({
     id: expect.any(Number),
@@ -42,5 +52,5 @@ test("create", async () => {
     password: expect.any(String),
   });
 
-  expect(await password.verify("password", user.password)).toBeTrue();
+  expect(await password.verify(payload.password, user.password)).toBeTrue();
 });

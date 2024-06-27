@@ -1,16 +1,20 @@
-import type { Bindings, Context, Id } from "~/src/shared/database";
+import z from "zod";
+import type { Bindings, Context } from "~/src/shared/database";
 import {
   database,
   getInsertValues,
   getPrefixedBindings,
 } from "~/src/shared/database";
+import { Id, Name } from "~/src/shared/schema";
 
-export type Organization = {
-  id: Id;
-  createdAt: string;
-  updatedAt: string;
-  name: string;
-};
+export const Organization = z.object({
+  id: Id,
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  name: Name,
+});
+
+export type Organization = z.infer<typeof Organization>;
 
 export function migrate() {
   database()
@@ -28,23 +32,23 @@ export function migrate() {
 }
 
 export async function create(context: Context<Pick<Organization, "name">>) {
-  const now = new Date();
+  const createdAt = new Date().toISOString();
 
-  const data = {
+  const data = Organization.omit({ id: true }).parse({
     ...context.payload,
-    createdAt: now.toISOString(),
-    updatedAt: now.toISOString(),
-  };
+    createdAt,
+    updatedAt: createdAt,
+  });
 
-  const result = database()
+  const organization = database()
     .query<Organization, Bindings>(
       `insert into organizations ${getInsertValues(data)} returning *;`,
     )
     .get(getPrefixedBindings(data));
 
-  if (!result) {
+  if (!organization) {
     throw new Error("Query failed");
   }
 
-  return result;
+  return organization;
 }

@@ -1,29 +1,24 @@
 import type { SQLQueryBindings } from "bun:sqlite";
 import { Database } from "bun:sqlite";
+import type { z } from "zod";
 import { getConfig } from "~/src/shared/config";
+import type { Id } from "~/src/shared/schema";
 
 export type { SQLQueryBindings as Bindings } from "bun:sqlite";
-
-/**
- * Id type.
- */
-export type Id = number;
 
 /**
  * Session type.
  */
 export type Session = {
-  userId: Id;
+  userId: z.infer<typeof Id>;
 };
 
 /**
  * Context for database operations.
  */
-export type Context<
-  T extends Record<string, unknown> = Record<string, unknown>,
-> = T extends undefined
-  ? { session?: Session; options?: Record<string, unknown> }
-  : { session?: Session; options?: Record<string, unknown>; payload: T };
+export type Context<T = never> = T extends Record<string, unknown>
+  ? { session?: Session; options?: Record<string, unknown>; payload: T }
+  : { session?: Session; options?: Record<string, unknown> };
 
 /**
  * Database instance.
@@ -79,7 +74,7 @@ export function getUpdateValues<T extends Record<string, unknown>>(data: T) {
 }
 
 /**
- * Bun's SQLite require prefixed bindings, i.e. { $value: ... }.
+ * Bun's SQLite require prefixed bindings, i.e. { $value: ... } instead of { value: ... }.
  */
 export function getPrefixedBindings<
   T extends Record<string, string | bigint | number | boolean | null>,

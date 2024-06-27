@@ -1,21 +1,25 @@
 import * as Bun from "bun";
+import { z } from "zod";
 
-import type { Bindings, Context, Id } from "~/src/shared/database";
+import type { Bindings, Context } from "~/src/shared/database";
 import {
   database,
   getInsertValues,
   getPrefixedBindings,
 } from "~/src/shared/database";
+import { Email, Id, Name } from "~/src/shared/schema";
 
-export type User = {
-  id: Id;
-  createdAt: Date;
-  updatedAt: Date;
-  organizationId: Id;
-  name: string;
-  email: string;
-  password: string;
-};
+export const User = z.object({
+  id: Id,
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  organizationId: Id,
+  name: Name,
+  email: Email,
+  password: z.string().min(15),
+});
+
+export type User = z.infer<typeof User>;
 
 export function migrate() {
   database()
@@ -47,28 +51,28 @@ export const password = {
 
 export async function create(
   context: Context<
-    Pick<User, "name" | "email" | "password" | "organizationId">
+    Pick<User, "organizationId" | "name" | "email" | "password">
   >,
 ) {
-  const now = new Date();
+  const createdAt = new Date().toISOString();
 
-  const data = {
+  const data = User.omit({ id: true }).parse({
     ...context.payload,
-    createdAt: now.toISOString(),
-    updatedAt: now.toISOString(),
-  };
+    createdAt,
+    updatedAt: createdAt,
+  });
 
   data.password = await password.hash(data.password);
 
-  const result = database()
+  const user = database()
     .query<User, Bindings>(
       `insert into users ${getInsertValues(data)} returning *;`,
     )
     .get(getPrefixedBindings(data));
 
-  if (!result) {
+  if (!user) {
     throw new Error("Query failed");
   }
 
-  return result;
+  return user;
 }
