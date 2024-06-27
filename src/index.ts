@@ -1,7 +1,7 @@
 import type { Serve } from "bun";
 
 export default {
-  fetch(request) {
+  fetch() {
     return Response.json({ data: "Hello, Bun!" });
   },
   error(err) {
