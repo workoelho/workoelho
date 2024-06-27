@@ -6,7 +6,7 @@
   "scripts": {
     "start": "bun --hot src/index.ts",
     "test": "bun test",
-    "fix": "biome check --apply .",
+    "fix": "biome check --write .",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
