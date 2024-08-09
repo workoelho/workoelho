@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { create } from ".";
+import { create } from "./api";
 
 test("create", async () => {
   const organization = await create({

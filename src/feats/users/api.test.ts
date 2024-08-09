@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
-
-import * as organizations from "~/src/feats/organizations";
-
 import { ZodError } from "zod";
-import { create, password } from ".";
+
+import * as organizations from "~/src/feats/organizations/api";
+
+import { password, create } from "./api";
 
 test("password", async () => {
   const hash = await password.hash("password");
