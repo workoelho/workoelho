@@ -20,11 +20,11 @@ export function migrate() {
   database()
     .query(
       `
-        create table if not exists organizations (
-          id integer primary key,
-          createdAt text not null,
-          updatedAt text not null,
-          name text not null
+        CREATE TABLE IF NOT EXISTS organizations (
+          id INTEGER PRIMARY KEY,
+          createdAt TEXT NOT NULL,
+          updatedAt TEXT NOT NULL,
+          name TEXT NOT NULL
         );
       `,
     )
@@ -42,7 +42,7 @@ export async function create(context: Context<Pick<Organization, "name">>) {
 
   const organization = database()
     .query<Organization, Bindings>(
-      `insert into organizations ${getInsertValues(data)} returning *;`,
+      `INSERT INTO organizations ${getInsertValues(data)} RETURNING *;`,
     )
     .get(getPrefixedBindings(data));
 

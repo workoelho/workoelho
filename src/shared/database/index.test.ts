@@ -19,7 +19,7 @@ test("getInsertValues", () => {
     c: 3,
   });
 
-  expect(values).toEqual("(a, b, c) values ($a, $b, $c)");
+  expect(values).toEqual("(a, b, c) VALUES ($a, $b, $c)");
 });
 
 test("getUpdateValues", () => {

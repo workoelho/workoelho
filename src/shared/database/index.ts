@@ -46,7 +46,7 @@ export function open(url: URL) {
 }
 
 /**
- * Get database instance.
+ * Get the database instance, opening a new connection if needed.
  */
 export function database() {
   if (!instance) {
@@ -59,7 +59,7 @@ export function database() {
  * Get SQL for insert values.
  */
 export function getInsertValues<T extends Record<string, unknown>>(data: T) {
-  return `(${Object.keys(data).join(", ")}) values (${Object.keys(data)
+  return `(${Object.keys(data).join(", ")}) VALUES (${Object.keys(data)
     .map((key) => `$${key}`)
     .join(", ")})`;
 }

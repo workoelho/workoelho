@@ -20,5 +20,5 @@ export const Password = z.string().min(15);
  */
 export const Name = z.preprocess(
   (value) => String(value).replace(/\s+/g, " "),
-  z.string().min(1),
+  z.string().trim().min(1)
 );

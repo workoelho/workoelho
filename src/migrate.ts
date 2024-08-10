@@ -1,5 +1,5 @@
-import { migrate as organizations } from "~/src/feats/organizations";
-import { migrate as users } from "~/src/feats/users";
+import { migrate as migrateOrganizations } from "~/src/feats/organizations/api";
+import { migrate as migrateUsers } from "~/src/feats/users/api";
 
-organizations();
-users();
+migrateOrganizations();
+migrateUsers();
