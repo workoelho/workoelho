@@ -4,12 +4,9 @@
 # Node packages.
 node_modules
 
-# Local cache files.
-.eslintcache
+# Local tools.
+.mise.toml
 
 # Database file.
 *.sqlite3
 *.sqlite3-journal
-
-# Bundled files.
-dist/

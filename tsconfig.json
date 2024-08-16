@@ -1,10 +1,8 @@
 {
-  "extends": "@tsconfig/vite-react/tsconfig.json",
-  "compilerOptions": {
-    "lib": ["ESNext"], // Remove DOM libs from template.
-    "baseUrl": ".",
-    "paths": { "~/*": ["./*"] }
-  },
-  "include": ["."],
-  "exclude": ["node_modules"]
+	"extends": "@tsconfig/bun/tsconfig.json",
+	"compilerOptions": {
+		"noPropertyAccessFromIndexSignature": false,
+		"baseUrl": ".",
+		"paths": { "~/*": ["./*"] }
+	}
 }

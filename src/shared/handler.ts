@@ -1,14 +1,14 @@
-import "urlpattern-polyfill";
+import type { IncomingMessage, ServerResponse } from "node:http";
 
-import { IncomingMessage, ServerResponse } from "http";
+import "urlpattern-polyfill";
 
 /**
  * Request context.
  */
 export type Context = {
   request: IncomingMessage;
-  url: URLPatternResult;
   response: ServerResponse;
+  url: URLPatternResult;
 };
 
 /**

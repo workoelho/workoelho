@@ -1,14 +1,14 @@
 import log from "npmlog";
 
+import type { Handler } from "~/src/shared/handler";
 import { HttpError } from "~/src/shared/error";
-import { Handler } from "~/src/shared/handler";
 
 /**
  * Handle URL routes.
  */
-export function getUrlHandler(routes: Map<string, Handler>): Handler {
+export function getUrlHandler(map: Map<string, Handler>): Handler {
   return async (context, next) => {
-    for (const [pathname, handler] of routes) {
+    for (const [pathname, handler] of map) {
       const url = new URLPattern({ pathname }).exec(context.url.inputs[0]);
 
       if (url) {

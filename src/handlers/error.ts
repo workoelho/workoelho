@@ -1,7 +1,6 @@
-import log from "npmlog";
-
+import type { Handler } from "~/src/shared/handler";
 import { HttpError } from "~/src/shared/error";
-import { Handler } from "~/src/shared/handler";
+import { print } from "~/src/shared/log";
 
 /**
  * Handle uncaught errors.
@@ -15,9 +14,9 @@ export function getErrorHandler(routes: Map<number, Handler>): Handler {
       context.response.statusCode = statusCode ?? 500;
 
       if (statusCode) {
-        log.verbose("http", "Expected error", error);
+        print("log", "Expected error", error);
       } else {
-        log.error("http", "Unexpected error", error);
+        print("log", "Unexpected error", error);
       }
     }
 
@@ -25,13 +24,13 @@ export function getErrorHandler(routes: Map<number, Handler>): Handler {
 
     if (handler) {
       return await handler(context, next);
-    } else {
-      log.warn(
-        "http",
-        "No handler for status code",
-        context.response.statusCode
-      );
     }
+
+    print(
+      "error",
+      "No handler for status code",
+      context.response.statusCode
+    );
 
     context.response.end();
   };

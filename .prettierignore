@@ -1,1 +1,2 @@
-package-lock.json
+# Ignore everything, since we're using Biome.
+**
