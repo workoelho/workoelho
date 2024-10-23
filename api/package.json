@@ -1,0 +1,21 @@
+{
+  "version": "0.0.0",
+  "author": "Arthur <arthur@corenzan.com>",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "start": "bun --hot src/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.10",
+    "@types/luxon": "^3.4.2",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "hono": "^4.6.2",
+    "luxon": "^3.5.0",
+    "ulid": "^2.3.0",
+    "zod": "^3.23.8"
+  }
+}

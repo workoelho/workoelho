@@ -1,9 +1,18 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.6.4/schema.json",
-  "organizeImports": {
-    "enabled": true
+  "$schema": "https://biomejs.dev/schemas/1.9.2/schema.json",
+  "files": {
+    "ignore": ["dist", ".parcel-cache"]
   },
+  "organizeImports": {},
   "formatter": {
     "indentStyle": "space"
+  },
+  "linter": {
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "noBannedTypes": "warn"
+      }
+    }
   }
 }

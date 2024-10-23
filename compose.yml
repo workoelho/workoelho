@@ -1,0 +1,12 @@
+services:
+  api:
+    build: ./api
+    init: true
+    volumes:
+      - storage:/app/api/storage
+  client:
+    build: ./client
+    init: true
+
+volumes:
+  storage: {}

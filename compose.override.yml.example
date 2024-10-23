@@ -1,0 +1,25 @@
+services:
+  api:
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.totallyacurateexchange-api.rule=Host(`totallyacurateexchange.local.crz.li`) && PathPrefix(`/api/`)"
+  client:
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.totallyacurateexchange-client.rule=Host(`totallyacurateexchange.local.crz.li`)"
+
+networks:
+  traefik:
+    external: true
